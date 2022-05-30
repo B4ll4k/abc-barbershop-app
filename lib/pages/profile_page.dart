@@ -62,10 +62,10 @@ class ProfilePage extends StatelessWidget {
                         builder: (context) => const AppointmentPage())),
               ),
             ]),
-            const Citas1(),
-            const Citas2(),
-            const Citas1(),
-            const Citas2(),
+            // const Citas1(),
+            // const Citas2(),
+            // const Citas1(),
+            // const Citas2(),
           ],
         ));
   }

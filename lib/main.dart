@@ -1,16 +1,19 @@
-import 'package:barbershop_app/pages/appointment_page.dart';
-import 'package:barbershop_app/pages/gallery_page.dart';
-import 'package:barbershop_app/pages/auth_page.dart';
-import 'package:barbershop_app/pages/main_page.dart';
-import 'package:barbershop_app/pages/results_page.dart';
-import 'package:barbershop_app/pages/search_page.dart';
-import 'package:barbershop_app/pages/splash_screen.dart';
-import 'package:barbershop_app/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/user_provider.dart';
+import './pages/appointment_page.dart';
+import './pages/gallery_page.dart';
+import './pages/auth_page.dart';
+import './pages/main_page.dart';
+import './pages/results_page.dart';
+import './pages/search_page.dart';
+import './pages/splash_screen.dart';
+import '../pages/start_page.dart';
+import './providers/user_provider.dart';
+import './providers/appointment_provider.dart';
+import './providers/barber_provider.dart';
+import './providers/services_provider.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -31,12 +34,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => AppointmentProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ServicesProvider()),
+        ChangeNotifierProvider(create: (context) => BarberProvider()),
       ],
       child: MaterialApp(
-        home: SplashScreen(),
+        home: const SplashScreen(),
         debugShowCheckedModeBanner: false,
         title: 'BarberShop Booking',
-        //initialRoute: 'welcome',
+        //initialRoute: 'appointments',
         routes: {
           'home': (BuildContext context) => const MainPage(),
           'start': (BuildContext context) => StartPage(),
@@ -46,8 +53,6 @@ class MyApp extends StatelessWidget {
           'appointments': (BuildContext context) => const AppointmentPage(),
           'authPage': (BuildContext context) => const AuthPage(),
         },
-
-        //Theme de diseños general de la Aplicación
         theme: ThemeData(
           primaryColor: Colors.white,
           colorScheme: const ColorScheme(

@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
+import '../providers/appointment_provider.dart';
+import '../providers/services_provider.dart';
+import '../providers/barber_provider.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -49,9 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
       if (_isConnected!) {
         bool isAuth = await Provider.of<UserProvider>(context, listen: false)
             .tryAutoLogIn();
+        await initJobs();
         isAuth
             ? Navigator.pushReplacementNamed(context, 'home')
-            : Navigator.pushReplacementNamed(context, 'authPage');
+            : Navigator.pushReplacementNamed(context, 'home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -82,6 +88,15 @@ class _SplashScreenState extends State<SplashScreen> {
       _isConnected = false;
       print('not connected');
     }
+  }
+
+  Future<void> initJobs() async {
+    await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
+    await Provider.of<AppointmentProvider>(context, listen: false)
+        .fetchActiveAppointments();
+    await Provider.of<AppointmentProvider>(context, listen: false)
+        .fetchHistoryAppointments();
+    await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
   }
 
   @override

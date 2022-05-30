@@ -374,16 +374,16 @@ class GalleryPage extends StatelessWidget {
             ),
           )),
 
-      SizedBox(
+      const SizedBox(
         height: 15.0,
       ),
 
       //card Mediana
       Card(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             left: 13.5,
           ),
-          shape: BeveledRectangleBorder(),
+          shape: const BeveledRectangleBorder(),
           child: Container(
             width: 160.0,
             height: 210.0,
@@ -391,7 +391,7 @@ class GalleryPage extends StatelessWidget {
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.45), BlendMode.multiply),
-                  image: AssetImage('assets/images/2.jpg'),
+                  image: const AssetImage('assets/images/2.jpg'),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: const [
@@ -406,7 +406,7 @@ class GalleryPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
+                  children: const [
                     Text(
                       'Line Up',
                       style: TextStyle(
@@ -426,16 +426,16 @@ class GalleryPage extends StatelessWidget {
             ),
           )),
 
-      SizedBox(
+      const SizedBox(
         height: 15.0,
       ),
 
       //Card Pequeña
       Card(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             left: 13.5,
           ),
-          shape: BeveledRectangleBorder(),
+          shape: const BeveledRectangleBorder(),
           child: Container(
             width: 160.0,
             height: 150.0,
@@ -443,7 +443,7 @@ class GalleryPage extends StatelessWidget {
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.45), BlendMode.multiply),
-                image: AssetImage('assets/images/corte3.jpg'),
+                image: const AssetImage('assets/images/corte3.jpg'),
                 fit: BoxFit.cover,
               ),
               boxShadow: const [
@@ -459,7 +459,7 @@ class GalleryPage extends StatelessWidget {
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
+                  children: const [
                     Text(
                       'Flequillo',
                       style: TextStyle(

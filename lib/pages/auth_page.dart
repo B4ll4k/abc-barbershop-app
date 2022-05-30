@@ -166,6 +166,7 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
+          controller: _passwordController,
           decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
@@ -384,12 +385,10 @@ class _AuthPageState extends State<AuthPage> {
           keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.next,
           validator: (String? value) {
-            if (value == null ||
-                value.length >= 9 ||
-                value.isEmpty ||
-                value.substring(0, 2).compareTo('09') != 0) {
-              return 'Invalid Password';
+            if (value == null || value.length >= 9 || value.isEmpty) {
+              return 'Invalid Phone no';
             }
+            return null;
           },
           // onTap: () {
           //   setState(() {
@@ -496,7 +495,10 @@ class _AuthPageState extends State<AuthPage> {
         content: Text(message),
         actions: <Widget>[
           TextButton(
-            child: const Text('Okay'),
+            child: Text(
+              'Okay',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
             onPressed: () {
               Navigator.of(ctx).pop();
             },

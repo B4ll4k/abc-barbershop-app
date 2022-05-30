@@ -19,7 +19,7 @@ class _HomePageState extends State<MainPage> {
   //Valores para el HideBottomNavBar
   // ScrollController = _scrollControler;
   bool visible = true;
-  //Si la app no se cierra al dar click en los botones de regreso del Gallery podemos usar esta lista
+  //If the app does not close when clicking the back buttons of the Gallery we can use this list
   // List <Widget> _widgetOptions = <Widget>[
   //   StartPage(),
   //   SearchPage(),
@@ -55,7 +55,7 @@ class _HomePageState extends State<MainPage> {
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
-        //Si solo se quiere el mismo App bar para todas las páginas
+        //If you only want the same App bar for all pages
         // appBar: AppBar(
         //   title: Padding(
         //     padding: const EdgeInsets.only(left: 10.0, bottom: 25.0),
@@ -125,17 +125,17 @@ class _HomePageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             backgroundColor: Colors.white,
-            label: 'Inicio',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Buscar',
+            label: 'Search',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Galeria'),
+          BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.perm_identity), label: 'Perfil'),
+              icon: Icon(Icons.perm_identity), label: 'Profile'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.info_outline), label: 'Acerca'),
+              icon: Icon(Icons.info_outline), label: 'About'),
         ],
         onTap: (int index) {
           setState(() {
@@ -153,8 +153,8 @@ class _HomePageState extends State<MainPage> {
           StartPage(),
           SearchPage(),
           GalleryPage(),
-          ProfilePage(),
-          AboutPage(),
+          const ProfilePage(),
+          const AboutPage(),
         ].elementAt(index);
       },
     };

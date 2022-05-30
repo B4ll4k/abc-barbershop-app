@@ -1,3 +1,3 @@
 class EnviromentVariables {
-  static const String baseUrl = "https://127.0.0.1:8000/";
+  static const String baseUrl = "https://api.abc-barber.ch/";
 }

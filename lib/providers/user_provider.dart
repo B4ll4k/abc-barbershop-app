@@ -14,15 +14,14 @@ class UserProvider with ChangeNotifier {
     return _user!;
   }
 
-  Map<String, dynamic> _userData = {};
-
   Future<void> login(String email, String password) async {
     final Map<String, dynamic> user = {'username': email, 'password': password};
     try {
       final response = await http.post(
-        Uri.parse(EnviromentVariables.baseUrl + 'api/login'),
+        Uri.parse(EnviromentVariables.baseUrl + 'login'),
         body: json.encode(user),
       );
+      print(response.body);
       final responseMap = json.decode(response.body) as Map<String, dynamic>;
       if (responseMap['success'] == null) {
         throw HttpException(responseMap['failure']);
@@ -46,7 +45,7 @@ class UserProvider with ChangeNotifier {
     final responseMap = responseList as Map<String, dynamic>;
 
     _user = User(
-        id: responseMap["id"],
+        id: responseMap["id"].toString(),
         email: responseMap["email"],
         firstName: responseMap["firstName"],
         lastName: responseMap["lastName"],
@@ -94,6 +93,8 @@ class UserProvider with ChangeNotifier {
       if (responseBody['Success'] == null) {
         String error = responseBody['Failure'];
         throw HttpException(error);
+      } else {
+        await fetchUserInfo(userData['email']);
       }
       notifyListeners();
     } catch (e) {
