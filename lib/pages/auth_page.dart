@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
 import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
+import '../providers/appointment_provider.dart';
 
 enum AuthMode { logIn, signUp }
 
@@ -53,7 +54,7 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                     SizedBox(
-                      height: _authMode == AuthMode.signUp ? 70 : 100,
+                      height: _authMode == AuthMode.signUp ? 70 : 110,
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -87,7 +88,7 @@ class _AuthPageState extends State<AuthPage> {
                               children: [
                                 SizedBox(
                                   height:
-                                      _authMode == AuthMode.signUp ? 45 : 100,
+                                      _authMode == AuthMode.signUp ? 45 : 90,
                                 ),
                                 _authBtn(),
                                 SizedBox(
@@ -385,7 +386,7 @@ class _AuthPageState extends State<AuthPage> {
           keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.next,
           validator: (String? value) {
-            if (value == null || value.length >= 9 || value.isEmpty) {
+            if (value == null || value.length <= 9 || value.isEmpty) {
               return 'Invalid Phone no';
             }
             return null;
@@ -418,8 +419,13 @@ class _AuthPageState extends State<AuthPage> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: TextButton(
-              onPressed: () =>
-                  _authMode == AuthMode.logIn ? _login() : _signup(),
+              onPressed: () {
+                if (_authMode == AuthMode.logIn) {
+                  _login();
+                } else {
+                  _signup();
+                }
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text(
@@ -443,9 +449,16 @@ class _AuthPageState extends State<AuthPage> {
     try {
       await Provider.of<UserProvider>(context, listen: false)
           .login(_formData['email'], _formData['password']);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchActiveAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchHistoryAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
       setState(() {
         _isLoading = false;
       });
+      Navigator.pushReplacementNamed(context, 'home');
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;
@@ -469,7 +482,18 @@ class _AuthPageState extends State<AuthPage> {
     });
 
     try {
-      await Provider.of<UserProvider>(context, listen: false).signup(_formData);
+      await Provider.of<UserProvider>(context, listen: false).signup(
+          _formData["firstName"],
+          _formData["lastName"],
+          _formData["phoneNum"],
+          _formData["email"],
+          _formData["password"]);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchActiveAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchHistoryAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
       setState(() {
         _isLoading = false;
       });
@@ -483,6 +507,7 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
+      print(e.toString());
       _showErrorDialog('Something went wrong!');
     }
   }

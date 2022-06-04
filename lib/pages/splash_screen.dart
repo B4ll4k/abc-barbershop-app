@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
         await initJobs();
         isAuth
             ? Navigator.pushReplacementNamed(context, 'home')
-            : Navigator.pushReplacementNamed(context, 'home');
+            : Navigator.pushReplacementNamed(context, 'authPage');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -93,9 +93,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> initJobs() async {
     await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
     await Provider.of<AppointmentProvider>(context, listen: false)
-        .fetchActiveAppointments();
+        .fetchActiveAppointments(
+            Provider.of<UserProvider>(context, listen: false).user.id);
     await Provider.of<AppointmentProvider>(context, listen: false)
-        .fetchHistoryAppointments();
+        .fetchHistoryAppointments(
+            Provider.of<UserProvider>(context, listen: false).user.id);
     await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
   }
 

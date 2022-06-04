@@ -19,12 +19,12 @@ class AppointmentProvider with ChangeNotifier {
     return [..._historyAppointments];
   }
 
-  Future<void> fetchActiveAppointments() async {
+  Future<void> fetchActiveAppointments(String id) async {
     try {
       final response = await http.get(
-        Uri.parse(EnviromentVariables.baseUrl + "appointments"),
+        Uri.parse(EnviromentVariables.baseUrl + "appointments/$id"),
       );
-      print(response.body);
+      //print(response.body);
       final responseData = jsonDecode(response.body) as List<dynamic>;
 
       for (var data in responseData) {
@@ -45,12 +45,12 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchHistoryAppointments() async {
+  Future<void> fetchHistoryAppointments(String id) async {
     try {
       final response = await http.get(
-        Uri.parse(EnviromentVariables.baseUrl + "historyappointments"),
+        Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
       );
-      print(response.body);
+      //print(response.body);
       final responseData = jsonDecode(response.body) as List<dynamic>;
 
       for (var data in responseData) {
