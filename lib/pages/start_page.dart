@@ -1,7 +1,9 @@
+import 'package:barbershop_app/pages/barbers_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/services_provider.dart';
+import '../providers/user_provider.dart';
 import '../pages/gallery_page.dart';
 
 class StartPage extends StatelessWidget {
@@ -92,8 +94,10 @@ class StartPage extends StatelessWidget {
   }
 
   Widget _servicesBuilder(BuildContext context) {
-    final provider = Provider.of<ServicesProvider>(context, listen: false);
-    final services = provider.services;
+    final serviceProvider =
+        Provider.of<ServicesProvider>(context, listen: false);
+    final services = serviceProvider.services;
+
     return Column(
       children: <Widget>[
         Padding(
@@ -115,62 +119,62 @@ class StartPage extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, 'book');
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20.0),
-                    height: 95.0,
-                    width: double.infinity,
-                    // color: Colors.orange,
-                    child: ListView.builder(
-                      itemCount: services.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, i) => Column(
-                        children: <Widget>[
-                          Column(children: <Widget>[
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20.0),
+                  height: 95.0,
+                  width: double.infinity,
+                  // color: Colors.orange,
+                  child: ListView.builder(
+                    itemCount: services.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (ctx, i) => GestureDetector(
+                      onTap: () {
+                        // Navigator.pushNamed(context, 'appointments',
+                        //     arguments: services[i].id);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BarberPage(services[i].id),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                        width: 80.0,
+                        height: 80.0,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              offset: Offset(1.0, 2.0),
+                              blurRadius: 6.0,
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            const SizedBox(height: 10.0),
                             Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              width: 80.0,
-                              height: 80.0,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    offset: Offset(1.0, 2.0),
-                                    blurRadius: 6.0,
-                                  )
-                                ],
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  const SizedBox(height: 10.0),
-                                  Container(
-                                    width: 35.0,
-                                    height: 35.0,
-                                    child:
-                                        Image.network(services[i].pictureUrl),
-                                  ),
-                                  Container(
-                                    width: 50.0,
-                                    height: 25.0,
-                                    child: Center(
-                                        child: Text(
-                                      services[i].name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12.0,
-                                      ),
-                                    )),
-                                  )
-                                ],
-                              ),
+                              width: 35.0,
+                              height: 35.0,
+                              child: Image.network(services[i].pictureUrl),
                             ),
-                          ]),
-                        ],
+                            const SizedBox(height: 5.0),
+                            Container(
+                              width: 50.0,
+                              height: 25.0,
+                              child: Center(
+                                  child: Text(
+                                services[i].name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.0,
+                                ),
+                              )),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

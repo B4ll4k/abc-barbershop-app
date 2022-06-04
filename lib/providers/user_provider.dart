@@ -15,7 +15,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    final Map<String, dynamic> user = {'username': email, 'password': password};
+    final Map<String, dynamic> user = {'email': email, 'password': password};
     try {
       final response = await http.post(
         Uri.parse(EnviromentVariables.baseUrl + 'login'),
@@ -23,13 +23,15 @@ class UserProvider with ChangeNotifier {
       );
       print(response.body);
       final responseMap = json.decode(response.body) as Map<String, dynamic>;
-      if (responseMap['success'] == null) {
-        throw HttpException(responseMap['failure']);
+      print(responseMap['Success']);
+      if (responseMap['Success'] == null) {
+        throw HttpException(responseMap['Failure']);
       } else {
         await fetchUserInfo(email);
       }
+      notifyListeners();
     } catch (e) {
-      print(e);
+      print(e.toString());
       rethrow;
     }
   }
@@ -42,7 +44,7 @@ class UserProvider with ChangeNotifier {
       body: json.encode(requestData),
     );
     final responseList = json.decode(response.body) as List<dynamic>;
-    final responseMap = responseList as Map<String, dynamic>;
+    final responseMap = responseList[0] as Map<String, dynamic>;
 
     _user = User(
         id: responseMap["id"].toString(),
@@ -50,8 +52,6 @@ class UserProvider with ChangeNotifier {
         firstName: responseMap["firstName"],
         lastName: responseMap["lastName"],
         phoneNum: responseMap["phone"]);
-    print(_user);
-    notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     final userData = json.encode({
       'id': _user!.id,
@@ -81,12 +81,19 @@ class UserProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> signup(Map<String, dynamic> userData) async {
-    print(jsonEncode(userData));
+  Future<void> signup(String firstName, String lastName, String phoneNo,
+      String email, String password) async {
+    final userData = {
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNo': phoneNo,
+      'email': email,
+      'password': password,
+    };
     try {
       final response = await http.post(
-        Uri.parse(EnviromentVariables.baseUrl + 'signUp'),
-        body: json.encode(user),
+        Uri.parse(EnviromentVariables.baseUrl + 'signup'),
+        body: json.encode(userData),
       );
       print(response.body);
       final responseBody = (json.decode(response.body) as Map<String, dynamic>);
@@ -94,11 +101,18 @@ class UserProvider with ChangeNotifier {
         String error = responseBody['Failure'];
         throw HttpException(error);
       } else {
-        await fetchUserInfo(userData['email']);
+        await fetchUserInfo(email);
       }
       notifyListeners();
     } catch (e) {
+      print(e.toString());
       rethrow;
     }
+  }
+
+  void logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.clear();
   }
 }

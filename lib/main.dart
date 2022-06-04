@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import './pages/appointment_page.dart';
+import 'pages/barbers_page.dart';
 import './pages/gallery_page.dart';
 import './pages/auth_page.dart';
 import './pages/main_page.dart';
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           'search': (BuildContext context) => SearchPage(),
           'gallery': (BuildContext context) => GalleryPage(),
           'results': (BuildContext context) => ResultsPage(),
-          'appointments': (BuildContext context) => const AppointmentPage(),
+          //'appointments': (BuildContext context) => AppointmentPage(),
           'authPage': (BuildContext context) => const AuthPage(),
         },
         theme: ThemeData(

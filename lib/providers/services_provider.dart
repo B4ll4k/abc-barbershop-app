@@ -17,7 +17,7 @@ class ServicesProvider with ChangeNotifier {
     try {
       final response =
           await http.get(Uri.parse(EnviromentVariables.baseUrl + "services"));
-      print(response.body);
+      //print(response.body);
       final responseData = jsonDecode(response.body) as List<dynamic>;
       for (var data in responseData) {
         var service = data as Map<String, dynamic>;

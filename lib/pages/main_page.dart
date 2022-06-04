@@ -134,8 +134,8 @@ class _HomePageState extends State<MainPage> {
           BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
           BottomNavigationBarItem(
               icon: Icon(Icons.perm_identity), label: 'Profile'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.info_outline), label: 'About'),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.info_outline), label: 'About'),
         ],
         onTap: (int index) {
           setState(() {
@@ -154,7 +154,7 @@ class _HomePageState extends State<MainPage> {
           SearchPage(),
           GalleryPage(),
           const ProfilePage(),
-          const AboutPage(),
+          //const AboutPage(),
         ].elementAt(index);
       },
     };
