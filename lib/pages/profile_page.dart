@@ -1,8 +1,8 @@
 import 'package:barbershop_app/providers/barber_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:collection';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 import '../pages/barbers_page.dart';
 import '../models/apponitments.dart';
@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
               icon: const Icon(Icons.logout, color: Colors.black),
               onPressed: () {
                 Provider.of<UserProvider>(context, listen: false).logout();
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: ((context) => const AuthPage()),
@@ -263,7 +263,10 @@ class ProfilePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            '${barber.firstWhereOrNull((element) => element.id == activeAppointments[i].bookingStart.toString())} - ${barber.firstWhereOrNull((element) => element.id == activeAppointments[i].bookingEnd.toString())}',
+                            DateFormat.yMMMMd()
+                                .add_jms()
+                                .format(activeAppointments[i].bookingStart)
+                                .toString(),
                             style: const TextStyle(
                                 color: Colors.black54, fontSize: 13.5),
                           ),
@@ -387,7 +390,10 @@ class ProfilePage extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            '${barber.firstWhereOrNull((element) => element.id == historyAppointments[i].bookingStart.toString())} - ${barber.firstWhereOrNull((element) => element.id == historyAppointments[i].bookingEnd.toString())}',
+                            DateFormat.yMMMMd()
+                                .add_jms()
+                                .format(historyAppointments[i].bookingStart)
+                                .toString(),
                             style: const TextStyle(
                                 color: Colors.black54, fontSize: 13.5),
                           ),

@@ -83,30 +83,22 @@ class _HomePageState extends State<MainPage> {
             _buildOffstageNavigator(1),
             _buildOffstageNavigator(2),
             _buildOffstageNavigator(3),
-            _buildOffstageNavigator(4)
           ],
         ),
-        // _callPage(_currentIndex),
         bottomNavigationBar: _crearBottomNavigationBar(),
         // backgroundColor: Colors.white,
       ),
     );
   }
 
-  //Metodo para llamar las pa´ginas en el appbar por medio de switch y case
+  //Method to call the pages in the appbar through switch and case
   // Widget _callPage( int paginaActual ) {
 
   //   switch ( paginaActual ) {
   //     case 0 : return StartPage();
-  //       break;
   //     case 1 : return SearchPage();
-  //       break;
   //     case 2 : return GalleryPage();
-  //       break;
   //     case 3 : return ProfilePage();
-  //       break;
-  //     case 4 : return AboutPage();
-  //       break;
   //     default: return StartPage();
   //   }
 
@@ -176,18 +168,3 @@ class _HomePageState extends State<MainPage> {
     );
   }
 }
-
-// class HideBottomNavBar extends StatefulWidget {
-
-//   @override
-//   HideBottomNavBarState createState() {
-//     return new HideBottomNavBarState();
-//   }
-// }
-
-// class HideBottomNavBarState extends State>HideBottomNavBar> {
-
-//   String Text
-//   return
-
-// }

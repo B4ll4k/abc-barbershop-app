@@ -55,9 +55,17 @@ class _SplashScreenState extends State<SplashScreen> {
         bool isAuth = await Provider.of<UserProvider>(context, listen: false)
             .tryAutoLogIn();
         await initJobs();
-        isAuth
-            ? Navigator.pushReplacementNamed(context, 'home')
-            : Navigator.pushReplacementNamed(context, 'authPage');
+        if (isAuth) {
+          await Provider.of<AppointmentProvider>(context, listen: false)
+              .fetchActiveAppointments(
+                  Provider.of<UserProvider>(context, listen: false).user.id);
+          await Provider.of<AppointmentProvider>(context, listen: false)
+              .fetchHistoryAppointments(
+                  Provider.of<UserProvider>(context, listen: false).user.id);
+          Navigator.pushReplacementNamed(context, 'home');
+        } else {
+          Navigator.pushReplacementNamed(context, 'authPage');
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -92,12 +100,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> initJobs() async {
     await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
-    await Provider.of<AppointmentProvider>(context, listen: false)
-        .fetchActiveAppointments(
-            Provider.of<UserProvider>(context, listen: false).user.id);
-    await Provider.of<AppointmentProvider>(context, listen: false)
-        .fetchHistoryAppointments(
-            Provider.of<UserProvider>(context, listen: false).user.id);
     await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
   }
 
