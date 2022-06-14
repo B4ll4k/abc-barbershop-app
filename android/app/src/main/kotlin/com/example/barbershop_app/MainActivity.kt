@@ -1,4 +1,4 @@
-package com.example.abc_barbershop
+package com.kentechno.abc_barbershop
 
 import io.flutter.embedding.android.FlutterActivity
 

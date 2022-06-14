@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:423982770638:android:10120728cac9b8d2afa39f",
         "android_client_info": {
-          "package_name": "com.example.abc_barbershop"
+          "package_name": "com.kentechno.abc_barbershop"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "423982770638-2pd6100b411mgi0q141o512j2qm6giek.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.abc_barbershop",
+            "package_name": "com.kentechno.abc_barbershop",
             "certificate_hash": "6612676de4612bca66bfcfc033857054e3744d03"
           }
         },
