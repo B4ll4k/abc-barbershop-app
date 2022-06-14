@@ -479,7 +479,7 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.of(context, rootNavigator: true).pushNamed('home');
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;
@@ -518,7 +518,7 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.pushReplacementNamed(context, 'home');
+      Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;

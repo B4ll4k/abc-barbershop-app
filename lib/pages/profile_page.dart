@@ -34,6 +34,10 @@ class ProfilePage extends StatelessWidget {
                   const EdgeInsets.only(right: 10.0, bottom: 25.0, top: 5.0),
               icon: const Icon(Icons.logout, color: Colors.white),
               onPressed: () {
+                Provider.of<AppointmentProvider>(context, listen: false)
+                    .setActiveAppointment([]);
+                Provider.of<AppointmentProvider>(context, listen: false)
+                    .setHistoryAppointment([]);
                 Provider.of<UserProvider>(context, listen: false).logout();
                 Navigator.push(
                   context,
@@ -85,8 +89,8 @@ class ProfilePage extends StatelessWidget {
           Flexible(
             child: Container(
               // padding: EdgeInsets.only( top: 20.0 ),
-              width: 140.0,
-              height: 40.0,
+              width: 190.0,
+              height: 80.0,
               child: Column(
                 children: <Widget>[
                   Text(

@@ -7,16 +7,24 @@ import '../models/http_exception.dart';
 import '../models/apponitments.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  final List<Appointment> _activeAppointments = [];
+  List<Appointment> _activeAppointments = [];
 
   List<Appointment> get activeAppointments {
     return [..._activeAppointments];
+  }
+
+  void setActiveAppointment(List<Appointment> newActiveAppointment) {
+    _activeAppointments = newActiveAppointment;
   }
 
   final List<Appointment> _historyAppointments = [];
 
   List<Appointment> get historyAppointments {
     return [..._historyAppointments];
+  }
+
+  void setHistoryAppointment(List<Appointment> newHistoryAppointment) {
+    _activeAppointments = newHistoryAppointment;
   }
 
   Future<void> fetchActiveAppointments(String id) async {
