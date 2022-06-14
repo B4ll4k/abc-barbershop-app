@@ -146,7 +146,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _popularesBuscador() {
     return Container(
-      height: 900,
+      height: 1500,
       child: ListView.builder(
         itemCount: _hairStyleNames.length,
         itemBuilder: (context, index) => Column(
