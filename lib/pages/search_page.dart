@@ -1,35 +1,49 @@
 import 'package:flutter/material.dart';
-//Dirección a página de buscador
-import 'package:barbershop_app/pages/results_page.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final TextEditingController _searchTxtBoxController =
+      TextEditingController(text: "Search");
+  final Map<String, dynamic> _hairStyles = {
+    "Mid Fade": "corte1.jpg",
+    "High Fade": "corte2.jpg",
+    "Caesar": "corte3.jpg",
+    "Fringe": "corte4.jpg",
+    "Line Up": "corte5.jpg",
+    "Maxi Tupé": "corte6.jpg",
+    "Military Style": "corte7.jpg",
+    "Spiky": "corte8.jpg",
+    "Quiff": "corte9.jpg",
+    "Undercut": "corte10.jpg",
+    "Rizado": "rizado.jpg",
+    "Hair and Beard": "hairandbeard.jpg",
+    "Hair Color": "haircoloring.jpg",
+  };
+
+  List<String> _hairStyleNames = [];
   @override
   Widget build(BuildContext context) {
+    _hairStyleNames = _hairStyles.keys.toList();
     return Scaffold(
         appBar: AppBar(
           title: const Padding(
-            padding: EdgeInsets.only(left: 10.0, bottom: 25.0),
+            padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
             child: Text(
-              'Buscar',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+              'Search',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white),
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           elevation: 0.0,
-          actions: <Widget>[
-            IconButton(
-                padding: const EdgeInsets.only(right: 10.0, bottom: 25.0),
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
-                onPressed: () {})
-          ],
         ),
         body: ListView(
           children: <Widget>[
@@ -41,10 +55,9 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _buscadorSeccion(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Column(
-          children: <Widget>[Container(height: 100.0)],
-        ),
+        Container(height: 100.0),
         const SizedBox(
           width: 30.0,
         ),
@@ -58,84 +71,95 @@ class _SearchPageState extends State<SearchPage> {
                   blurRadius: 4.0)
             ]),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(
-                  width: 15.0,
-                ),
                 Flexible(
                   child: Container(
-                    width: 160.0,
-                    height: 35.0,
-                    child: Container(
-                        padding: EdgeInsets.only(top: 6.0),
-                        child: Text('Buscar...',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.w300))),
-                  ),
+                      width: 180.0,
+                      height: 35.0,
+                      child: TextField(
+                        controller: _searchTxtBoxController,
+                        onEditingComplete: () {
+                          if (_searchTxtBoxController.text.isEmpty) {
+                            _searchTxtBoxController.text = "Search";
+                          }
+                        },
+                        onChanged: (value) {
+                          if (value.isEmpty) {
+                            setState(() {
+                              _hairStyleNames = _hairStyles.keys.toList();
+                            });
+                          } else {
+                            setState(() {
+                              _hairStyleNames = _hairStyles.keys
+                                  .toList()
+                                  .where(
+                                    (element) => element
+                                        .toLowerCase()
+                                        .contains(value.toLowerCase()),
+                                  )
+                                  .toList();
+                            });
+                          }
+                        },
+                        onSubmitted: (value) {
+                          setState(() {
+                            _hairStyleNames = _hairStyles.keys
+                                .toList()
+                                .where(
+                                  (element) => element
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()),
+                                )
+                                .toList();
+                          });
+                        },
+                      )),
                 ),
-                SizedBox(width: 35.0),
                 Container(
                   width: 50.0,
                   height: 35.0,
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResultsPage()));
+                      setState(() {
+                        _hairStyleNames = _hairStyles.keys
+                            .toList()
+                            .where(
+                              (element) => element.toLowerCase().contains(
+                                  _searchTxtBoxController.text.toLowerCase()),
+                            )
+                            .toList();
+                      });
                     },
-                    child: Icon(Icons.search, size: 28.0),
+                    child: Icon(
+                      Icons.search,
+                      size: 28.0,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 )
               ],
             )),
-        const SizedBox(
-          width: 15.0,
-        ),
-        Flexible(
-          child: Container(
-            width: 45.0,
-            height: 45.0,
-            decoration: BoxDecoration(
-                color: Theme.of(context).bottomAppBarTheme.color,
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(0.0, 5.0),
-                      blurRadius: 4.0)
-                ]),
-            child: const Icon(
-              Icons.filter_list,
-              size: 28.0,
-            ),
-          ),
-        )
       ],
     );
   }
 
   Widget _popularesBuscador() {
-    return Column(children: <Widget>[
-      Container(
-          padding: const EdgeInsets.only(left: 30.0, bottom: 10.0),
-          alignment: Alignment.topLeft,
-          child: const Text('Busquedas populares',
-              style: TextStyle(
-                  color: Colors.black45,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w300))),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
+    return Container(
+      height: 900,
+      child: ListView.builder(
+        itemCount: _hairStyleNames.length,
+        itemBuilder: (context, index) => Column(
+          children: [
             Container(
-              width: 330.0,
-              height: 150.0,
+              width: 370.0,
+              height: 160.0,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       colorFilter: ColorFilter.mode(
                           Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte1.jpg'),
+                      image: AssetImage(
+                          'assets/images/${_hairStyles[_hairStyleNames[index]]}'),
                       fit: BoxFit.cover),
                   boxShadow: const [
                     BoxShadow(
@@ -150,12 +174,12 @@ class _SearchPageState extends State<SearchPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      const Text(
-                        'Mid Fade',
-                        style: TextStyle(
+                      Text(
+                        _hairStyleNames[index],
+                        style: const TextStyle(
                             color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400),
                       ),
                       Container(
                         width: 23.0,
@@ -163,297 +187,17 @@ class _SearchPageState extends State<SearchPage> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20.0,
+                    height: 10.0,
                   ),
                 ],
               ),
             ),
+            const SizedBox(
+              height: 20.0,
+            )
           ],
         ),
-      ]),
-      const SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte5.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Line Up',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte3.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Caesar',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte8.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Spiky',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/barba1.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Fade Beard',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte12.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Line Up Classic',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-      Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Container(
-              width: 330.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.45), BlendMode.multiply),
-                      image: AssetImage('assets/images/corte11.jpg'),
-                      fit: BoxFit.cover),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Mid Fade',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      Container(
-                        width: 23.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ]),
-      SizedBox(height: 10.0),
-    ]);
+      ),
+    );
   }
 }
