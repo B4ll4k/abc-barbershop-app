@@ -1,6 +1,6 @@
 {
-    "name": "barbershop_app",
-    "short_name": "barbershop_app",
+    "name": "abc_barbershop",
+    "short_name": "abc_barbershop",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

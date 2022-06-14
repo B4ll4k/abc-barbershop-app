@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'pages/barbers_page.dart';
 import './pages/gallery_page.dart';
 import './pages/auth_page.dart';
 import './pages/main_page.dart';
-import './pages/results_page.dart';
 import './pages/search_page.dart';
 import './pages/splash_screen.dart';
 import '../pages/start_page.dart';
@@ -47,11 +45,10 @@ class MyApp extends StatelessWidget {
         routes: {
           'home': (BuildContext context) => const MainPage(),
           'start': (BuildContext context) => StartPage(),
-          'search': (BuildContext context) => SearchPage(),
-          'gallery': (BuildContext context) => GalleryPage(),
-          'results': (BuildContext context) => ResultsPage(),
+          'search': (BuildContext context) => const SearchPage(),
+          'gallery': (BuildContext context) => const GalleryPage(),
           //'appointments': (BuildContext context) => AppointmentPage(),
-          'authPage': (BuildContext context) => const AuthPage(),
+          'authPage': (BuildContext context) => AuthPage(false),
         },
         theme: ThemeData(
           primaryColor: Colors.white,

@@ -1,11 +1,8 @@
-import 'package:barbershop_app/providers/barber_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 
-import '../pages/barbers_page.dart';
-import '../models/apponitments.dart';
+import '../providers/barber_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/appointment_provider.dart';
 import '../widgets/fonts/barber_icon_icons.dart';
@@ -22,11 +19,11 @@ class ProfilePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: const Padding(
-              padding: EdgeInsets.only(left: 10.0, bottom: 25.0, top: 5.0),
+              padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
               child: Text(
                 'Profile',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w400),
               )),
@@ -35,13 +32,13 @@ class ProfilePage extends StatelessWidget {
             IconButton(
               padding:
                   const EdgeInsets.only(right: 10.0, bottom: 25.0, top: 5.0),
-              icon: const Icon(Icons.logout, color: Colors.black),
+              icon: const Icon(Icons.logout, color: Colors.white),
               onPressed: () {
                 Provider.of<UserProvider>(context, listen: false).logout();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => const AuthPage()),
+                    builder: ((context) => AuthPage(true)),
                   ),
                 );
               },

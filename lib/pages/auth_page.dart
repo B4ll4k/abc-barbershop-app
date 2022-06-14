@@ -10,7 +10,8 @@ import '../providers/appointment_provider.dart';
 enum AuthMode { logIn, signUp }
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  bool _redirected;
+  AuthPage(this._redirected, {Key? key}) : super(key: key);
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -33,6 +34,10 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    Object? queryParams = ModalRoute.of(context)!.settings.arguments;
+    if (queryParams != null) {
+      widget._redirected = true;
+    }
     return Stack(
       children: [
         _buildBackgroundImage(),
@@ -78,17 +83,33 @@ class _AuthPageState extends State<AuthPage> {
                                 _authMode == AuthMode.signUp
                                     ? _buildConfirmPasswordTextField()
                                     : Container(),
-                                // const Text(
-                                //   'Forgot Password?',
-                                //   style: kBodyText,
-                                // ),
+                                (_authMode == AuthMode.logIn &&
+                                        !widget._redirected)
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushReplacementNamed(
+                                              context, 'home');
+                                        },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                              border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.white, width: 1),
+                                          )),
+                                          child: const Text(
+                                            "Proceed without signing in",
+                                            style: kBodyText,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
                               ],
                             ),
                             Column(
                               children: [
                                 SizedBox(
                                   height:
-                                      _authMode == AuthMode.signUp ? 45 : 90,
+                                      _authMode == AuthMode.signUp ? 45 : 80,
                                 ),
                                 _authBtn(),
                                 SizedBox(
@@ -507,7 +528,6 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      print(e.toString());
       _showErrorDialog('Something went wrong!');
     }
   }

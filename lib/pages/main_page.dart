@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //Switch Routes Pages
-import 'package:barbershop_app/pages/about_page.dart';
-import 'package:barbershop_app/pages/gallery_page.dart';
-import 'package:barbershop_app/pages/profile_page.dart';
-import 'package:barbershop_app/pages/start_page.dart';
-import 'package:barbershop_app/pages/search_page.dart';
+import './gallery_page.dart';
+import './profile_page.dart';
+import './start_page.dart';
+import './search_page.dart';
+import './auth_page.dart';
+import '../providers/user_provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -143,9 +145,11 @@ class _HomePageState extends State<MainPage> {
       '/': (context) {
         return [
           StartPage(),
-          SearchPage(),
-          GalleryPage(),
-          const ProfilePage(),
+          const SearchPage(),
+          const GalleryPage(),
+          Provider.of<UserProvider>(context).isAuth()
+              ? const ProfilePage()
+              : AuthPage(true),
           //const AboutPage(),
         ].elementAt(index);
       },

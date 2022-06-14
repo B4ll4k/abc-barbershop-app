@@ -1,6 +1,6 @@
-# barbershop_app
+# abc_barbershop
 
-A new Flutter project.
+Abc Barbershop's MOBILE APP.
 
 ## Getting Started
 

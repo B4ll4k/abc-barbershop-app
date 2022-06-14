@@ -1,5 +1,5 @@
-name: barbershop_app
-description: A new Flutter project.
+name: abc_barbershop
+description: Abc Barbershop's MOBILE APP.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.0.3
   shared_preferences: ^2.0.15
   intl: ^0.17.0
+  flutter_launcher_icons: ^0.9.3
 
 
 dev_dependencies:
@@ -51,6 +52,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon.png"
+  remove_alpha_ios: true
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

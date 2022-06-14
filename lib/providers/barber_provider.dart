@@ -8,7 +8,7 @@ import '../models/env.dart';
 import '../models/http_exception.dart';
 
 class BarberProvider with ChangeNotifier {
-  List<Barber> _barbers = [];
+  final List<Barber> _barbers = [];
 
   List<Barber> get barbers {
     return [..._barbers];

@@ -94,7 +94,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
       _isConnected = false;
-      print('not connected');
     }
   }
 

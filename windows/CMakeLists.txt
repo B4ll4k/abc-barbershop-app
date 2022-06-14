@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(barbershop_app LANGUAGES CXX)
+project(abc_barbershop LANGUAGES CXX)
 
-set(BINARY_NAME "barbershop_app")
+set(BINARY_NAME "abc_barbershop")
 
 cmake_policy(SET CMP0063 NEW)
 

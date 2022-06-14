@@ -21,9 +21,7 @@ class UserProvider with ChangeNotifier {
         Uri.parse(EnviromentVariables.baseUrl + 'login'),
         body: json.encode(user),
       );
-      print(response.body);
       final responseMap = json.decode(response.body) as Map<String, dynamic>;
-      print(responseMap['Success']);
       if (responseMap['Success'] == null) {
         throw HttpException(responseMap['Failure']);
       } else {
@@ -31,7 +29,6 @@ class UserProvider with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }
@@ -77,7 +74,6 @@ class UserProvider with ChangeNotifier {
         lastName: userData['lastName'].toString(),
         phoneNum: userData['phoneNum'].toString());
 
-    print(_user);
     return true;
   }
 
@@ -95,7 +91,6 @@ class UserProvider with ChangeNotifier {
         Uri.parse(EnviromentVariables.baseUrl + 'signup'),
         body: json.encode(userData),
       );
-      print(response.body);
       final responseBody = (json.decode(response.body) as Map<String, dynamic>);
       if (responseBody['Success'] == null) {
         String error = responseBody['Failure'];
@@ -105,14 +100,18 @@ class UserProvider with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }
 
   void logout() async {
     final prefs = await SharedPreferences.getInstance();
-
+    _user = null;
     prefs.clear();
+    notifyListeners();
+  }
+
+  bool isAuth() {
+    return _user == null ? false : true;
   }
 }

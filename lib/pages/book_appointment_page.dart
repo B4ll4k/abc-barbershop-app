@@ -1,10 +1,13 @@
-import 'package:barbershop_app/models/barber.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../models/http_exception.dart';
+import '../pages/auth_page.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
+import '../providers/user_provider.dart';
+import '../providers/services_provider.dart';
 
 class BookAppointmentPage extends StatefulWidget {
   String barberId;
@@ -46,7 +49,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     "19:30": false
   };
 
+  String _selectedTime = "";
+
   int _selectedTimeIndex = -1;
+
+  bool _isBookBtnLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +64,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         if (element.bookingStart.year == _selectedDate.value.year &&
             element.bookingStart.month == _selectedDate.value.month &&
             element.bookingStart.day == _selectedDate.value.day) {
-          var time = element.bookingStart.hour.toString() +
-              ":" +
-              element.bookingStart.minute.toString();
+          String minute = element.bookingStart.minute < 10
+              ? '0' + element.bookingStart.minute.toString()
+              : element.bookingStart.minute.toString();
+
+          var time = element.bookingStart.hour.toString() + ":" + minute;
           _workingTime[time] = true;
         }
       }
@@ -173,21 +182,73 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   Widget _buildBookBtn(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 55,
-      child: ElevatedButton(
-        onPressed: () {},
-        child: const Text(
-          "Book",
-          style: TextStyle(color: Colors.white, fontSize: 20),
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith(
-              (states) => Theme.of(context).colorScheme.secondary),
-        ),
-      ),
-    );
+    var userProvider = Provider.of<UserProvider>(context);
+    return _isBookBtnLoading
+        ? const CircularProgressIndicator()
+        : Container(
+            width: double.infinity,
+            height: 55,
+            child: ElevatedButton(
+              onPressed: () async {
+                if (!userProvider.isAuth()) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pushReplacement(MaterialPageRoute(
+                    builder: (context) => AuthPage(false),
+                  ));
+                } else if (_selectedTimeIndex > 1) {
+                  setState(() {
+                    _isBookBtnLoading = true;
+                  });
+                  final bookingStart = DateTime(
+                    _selectedDate.value.year,
+                    _selectedDate.value.month,
+                    _selectedDate.value.day,
+                    int.parse(_selectedTime.substring(0, 2)),
+                    int.parse(_selectedTime.substring(3)),
+                  );
+                  final bookingEnd =
+                      bookingStart.add(const Duration(minutes: 30));
+                  try {
+                    await Provider.of<AppointmentProvider>(context,
+                            listen: false)
+                        .bookAppointment(
+                      userId: Provider.of<UserProvider>(context, listen: false)
+                          .user
+                          .id,
+                      barberId: widget.barberId,
+                      serviceId: widget.serviceId,
+                      servicePrice:
+                          Provider.of<ServicesProvider>(context, listen: false)
+                              .services
+                              .firstWhere(
+                                  (element) => element.id == widget.serviceId)
+                              .price,
+                      bookingStart: bookingStart.toString(),
+                      bookingEnd: bookingEnd.toString(),
+                    );
+                    _selectedTime = "";
+                    _selectedTimeIndex = -1;
+                    _showDialog("Operation Successful!", true);
+                  } on HttpException catch (e) {
+                    _showDialog(e.toString(), false);
+                  } catch (e) {
+                    _showDialog("Ooops something went wrong!", false);
+                  }
+                  setState(() {
+                    _isBookBtnLoading = false;
+                  });
+                }
+              },
+              child: const Text(
+                "Book",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith(
+                    (states) => Theme.of(context).colorScheme.secondary),
+              ),
+            ),
+          );
   }
 
   Widget _buildTimeFrame(BuildContext context) {
@@ -207,6 +268,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 }
                 _workingTime[workingTime[i]] = true;
                 _selectedTimeIndex = i;
+                _selectedTime = workingTime[i];
               });
             }
           },
@@ -294,11 +356,41 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
-        ));
       });
     }
+  }
+
+  void _showDialog(String message, bool isSuccess) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isSuccess ? 'Successful' : 'An Error Occurred!'),
+        content: Row(children: [
+          Icon(
+            isSuccess ? Icons.check_circle : Icons.error,
+            color: isSuccess ? Colors.green : Colors.red,
+            size: 35.0,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(
+            message,
+            style: const TextStyle(color: Colors.black87),
+          ),
+        ]),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'Okay',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 }

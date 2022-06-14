@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:barbershop_app/models/env.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/services.dart';
 import '../models/http_exception.dart';
+import '../models/env.dart';
 
 class ServicesProvider with ChangeNotifier {
-  List<Service> _services = [];
+  final List<Service> _services = [];
 
   List<Service> get services {
     return [..._services];

@@ -1,9 +1,8 @@
-import 'package:barbershop_app/pages/book_appointment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/book_appointment_page.dart';
 import '../widgets/fonts/barber_icon_icons.dart';
-import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 
 class BarberPage extends StatelessWidget {

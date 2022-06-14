@@ -7,13 +7,13 @@ import '../models/http_exception.dart';
 import '../models/apponitments.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  List<Appointment> _activeAppointments = [];
+  final List<Appointment> _activeAppointments = [];
 
   List<Appointment> get activeAppointments {
     return [..._activeAppointments];
   }
 
-  List<Appointment> _historyAppointments = [];
+  final List<Appointment> _historyAppointments = [];
 
   List<Appointment> get historyAppointments {
     return [..._historyAppointments];
@@ -40,6 +40,7 @@ class AppointmentProvider with ChangeNotifier {
           ),
         );
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -65,9 +66,49 @@ class AppointmentProvider with ChangeNotifier {
             barberId: appointment["providerId"].toString(),
           ),
         );
+        notifyListeners();
       }
     } catch (e) {
       throw HttpException(e.toString());
+    }
+  }
+
+  Future<void> bookAppointment(
+      {required String userId,
+      required String barberId,
+      required String serviceId,
+      required double servicePrice,
+      required String bookingStart,
+      required String bookingEnd}) async {
+    try {
+      Map<String, dynamic> bodyMap = {
+        'customerId': userId,
+        'providerId': barberId,
+        'serviceId': serviceId,
+        'servicePrice': servicePrice,
+        'bookingStart': bookingStart,
+        'bookingEnd': bookingEnd
+      };
+      final response = await http.post(
+        Uri.parse(EnviromentVariables.baseUrl + 'bookappointments'),
+        body: jsonEncode(bodyMap),
+      );
+      final responseData = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (responseData['Success'] == null) {
+        throw HttpException(responseData['Failure']);
+      }
+      _activeAppointments.add(
+        Appointment(
+          id: DateTime.now().toString(),
+          bookingStart: DateTime.parse(bookingStart),
+          bookingEnd: DateTime.parse(bookingEnd),
+          serviceId: serviceId,
+          barberId: barberId,
+        ),
+      );
+    } catch (e) {
+      rethrow;
     }
   }
 }

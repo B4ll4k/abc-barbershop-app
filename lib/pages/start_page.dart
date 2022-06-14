@@ -1,9 +1,8 @@
-import 'package:barbershop_app/pages/barbers_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/barbers_page.dart';
 import '../providers/services_provider.dart';
-import '../providers/user_provider.dart';
 import '../pages/gallery_page.dart';
 
 class StartPage extends StatelessWidget {
@@ -29,24 +28,17 @@ class StartPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: const Padding(
-          padding: EdgeInsets.only(left: 10.0, bottom: 25.0),
+          padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
           child: Text(
             'Home',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 25.0,
-                fontWeight: FontWeight.w500),
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w400),
           ),
         ),
         // backgroundColor: Colors.white,
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            padding: const EdgeInsets.only(right: 10.0, bottom: 25.0),
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: ListView(
         children: <Widget>[
@@ -60,8 +52,10 @@ class StartPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: InkWell(
-                    onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => GalleryPage())),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GalleryPage())),
                     child: Container(
                       height: 48.0,
                       width: 300.0,
