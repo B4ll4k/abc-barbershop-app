@@ -18,7 +18,6 @@ class BarberProvider with ChangeNotifier {
     try {
       final response =
           await http.get(Uri.parse(EnviromentVariables.baseUrl + "barbers"));
-      //print(response.body);
       final responseData = json.decode(response.body) as List<dynamic>;
 
       for (var data in responseData) {

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../size_config.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -8,6 +12,8 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool _isSearch = false;
+
   final TextEditingController _searchTxtBoxController =
       TextEditingController(text: "Search");
   final Map<String, dynamic> _hairStyles = {
@@ -47,113 +53,82 @@ class _SearchPageState extends State<SearchPage> {
         ),
         body: ListView(
           children: <Widget>[
-            _buscadorSeccion(context),
+            _buildSearchBar(),
             _popularesBuscador(),
           ],
         ));
   }
 
-  Widget _buscadorSeccion(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(height: 100.0),
-        const SizedBox(
-          width: 30.0,
+  Widget _buildSearchBar() {
+    return Container(
+      height: getProportionateScreenHeight(50),
+      margin: EdgeInsets.all(SizeConfig.screenWidth * 0.03),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.black38.withAlpha(9),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20),
         ),
-        Container(
-            width: 270.0,
-            height: 45.0,
-            decoration: const BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0.0, 5.0),
-                  blurRadius: 4.0)
-            ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  child: Container(
-                      width: 180.0,
-                      height: 35.0,
-                      child: TextField(
-                        controller: _searchTxtBoxController,
-                        onEditingComplete: () {
-                          if (_searchTxtBoxController.text.isEmpty) {
-                            _searchTxtBoxController.text = "Search";
-                          }
-                        },
-                        onChanged: (value) {
-                          if (value.isEmpty) {
-                            setState(() {
-                              _hairStyleNames = _hairStyles.keys.toList();
-                            });
-                          } else {
-                            setState(() {
-                              _hairStyleNames = _hairStyles.keys
-                                  .toList()
-                                  .where(
-                                    (element) => element
-                                        .toLowerCase()
-                                        .contains(value.toLowerCase()),
-                                  )
-                                  .toList();
-                            });
-                          }
-                        },
-                        onSubmitted: (value) {
-                          setState(() {
-                            _hairStyleNames = _hairStyles.keys
-                                .toList()
-                                .where(
-                                  (element) => element
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()),
-                                )
-                                .toList();
-                          });
-                        },
-                      )),
-                ),
-                Container(
-                  width: 50.0,
-                  height: 35.0,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _hairStyleNames = _hairStyles.keys
-                            .toList()
-                            .where(
-                              (element) => element.toLowerCase().contains(
-                                  _searchTxtBoxController.text.toLowerCase()),
-                            )
-                            .toList();
-                      });
-                    },
-                    child: Icon(
-                      Icons.search,
-                      size: 28.0,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ),
-                )
-              ],
-            )),
-      ],
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: TextField(
+              onTap: () {
+                setState(() {
+                  _hairStyleNames = [];
+                });
+              },
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              decoration: InputDecoration(
+                errorStyle: const TextStyle(color: Colors.red),
+                hintText: "Search",
+                hintStyle: GoogleFonts.poppins(
+                    color: Theme.of(context).colorScheme.secondary),
+                border: InputBorder.none,
+              ),
+              onChanged: (String keyword) {
+                if (keyword.isEmpty) {
+                  setState(() {
+                    _hairStyleNames = _hairStyles.keys.toList();
+                  });
+                } else {
+                  setState(() {
+                    _hairStyleNames = _hairStyles.keys
+                        .where((element) =>
+                            element.toLowerCase() == keyword.toLowerCase())
+                        .toList();
+                  });
+                }
+              },
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isSearch = !_isSearch;
+              });
+            },
+            icon: Icon(
+              _isSearch ? Icons.close : Icons.search,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          )
+        ],
+      ),
     );
   }
 
   Widget _popularesBuscador() {
     return Container(
-      height: 1500,
+      height: SizeConfig.screenHeight * 0.8,
       child: ListView.builder(
         itemCount: _hairStyleNames.length,
         itemBuilder: (context, index) => Column(
           children: [
             Container(
-              width: 370.0,
-              height: 160.0,
+              width: SizeConfig.screenWidth * 0.84,
+              height: getProportionateScreenHeight(200),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       colorFilter: ColorFilter.mode(

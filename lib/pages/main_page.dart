@@ -93,19 +93,6 @@ class _HomePageState extends State<MainPage> {
     );
   }
 
-  //Method to call the pages in the appbar through switch and case
-  // Widget _callPage( int paginaActual ) {
-
-  //   switch ( paginaActual ) {
-  //     case 0 : return StartPage();
-  //     case 1 : return SearchPage();
-  //     case 2 : return GalleryPage();
-  //     case 3 : return ProfilePage();
-  //     default: return StartPage();
-  //   }
-
-  // }
-
   Widget _crearBottomNavigationBar() {
     return Container(
       child: BottomNavigationBar(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../size_config.dart';
+
 class GalleryPage extends StatelessWidget {
   const GalleryPage({Key? key}) : super(key: key);
 
@@ -7,11 +9,11 @@ class GalleryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
           child: Text('Gallery',
               style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: SizeConfig.screenHeight * 0.020,
                   fontWeight: FontWeight.w400,
                   color: Colors.white)),
         ),
@@ -42,9 +44,14 @@ class GalleryPage extends StatelessWidget {
           Flexible(
             child: Column(
               children: <Widget>[
-                _cardsLeft(),
-                _cardsLeft(),
-                _cardsLeft(),
+                _cardsLeft('assets/images/corte10.jpg', 'Undercut'),
+                _cardsLeft('assets/images/rizado.jpg', 'Rizado'),
+                _cardsLeft('assets/images/corte8.jpg', 'Spiky'),
+                _cardsLeft('assets/images/4.jpg', 'Fade Beard'),
+                _cardsLeft('assets/images/corte10.jpg', 'Undercut'),
+                _cardsLeft('assets/images/rizado.jpg', 'Rizado'),
+                _cardsLeft('assets/images/corte8.jpg', 'Spiky'),
+                _cardsLeft('assets/images/4.jpg', 'Fade Beard'),
               ],
             ),
           ),
@@ -53,9 +60,14 @@ class GalleryPage extends StatelessWidget {
           Flexible(
             child: Column(
               children: <Widget>[
-                _cardsRight(),
-                _cardsRight(),
-                _cardsRight(),
+                _cardsRight('assets/images/hairandbeard.jpg', 'Hair and Beard'),
+                _cardsRight('assets/images/haircoloring.jpg', 'Hair Color'),
+                _cardsRight('assets/images/2.jpg', 'Line Up'),
+                _cardsRight('assets/images/corte3.jpg', 'Flequillo'),
+                _cardsRight('assets/images/hairandbeard.jpg', 'Hair and Beard'),
+                _cardsRight('assets/images/haircoloring.jpg', 'Hair Color'),
+                _cardsRight('assets/images/2.jpg', 'Line Up'),
+                _cardsRight('assets/images/corte3.jpg', 'Flequillo'),
               ],
             ),
           ),
@@ -64,7 +76,7 @@ class GalleryPage extends StatelessWidget {
     );
   }
 
-  Widget _cardsLeft() {
+  Widget _cardsLeft(String img, String name) {
     return Column(
       children: <Widget>[
         //Card mediana
@@ -76,14 +88,14 @@ class GalleryPage extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Container(
-                    width: 160.0,
-                    height: 210.0,
+                    width: SizeConfig.screenWidth * 0.42,
+                    height: SizeConfig.screenHeight * 0.15,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.45),
                               BlendMode.multiply),
-                          image: const AssetImage('assets/images/corte10.jpg'),
+                          image: AssetImage(img),
                           fit: BoxFit.cover,
                         ),
                         boxShadow: const [
@@ -98,15 +110,15 @@ class GalleryPage extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
+                          children: [
                             Text(
-                              'Undercut',
+                              name,
                               style: TextStyle(
-                                  color: Colors.white70,
+                                  color: Colors.white.withOpacity(0.8),
                                   fontSize: 18.0,
-                                  fontWeight: FontWeight.w300),
+                                  fontWeight: FontWeight.w400),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20.0,
                             )
                           ],
@@ -123,327 +135,27 @@ class GalleryPage extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(
-          height: 10.0,
-        ),
-
-        //Card Pequeña
-        Card(
-            // margin: EdgeInsets.only( left: 30.0 ),
-            shape: const BeveledRectangleBorder(),
-            child: Container(
-              width: 160.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.45), BlendMode.multiply),
-                    image: const AssetImage('assets/images/rizado.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0)
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Rizado',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 10.0,
-                  )
-                ],
-              ),
-            )),
-
-        const SizedBox(
-          height: 10.0,
-        ),
-
-        //Card Pequeña
-        Card(
-            //  margin: EdgeInsets.only( left: 30.0, ),
-            shape: const BeveledRectangleBorder(),
-            child: Container(
-              width: 160.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.45), BlendMode.multiply),
-                    image: const AssetImage('assets/images/corte8.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0)
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Spiky',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 10.0,
-                  )
-                ],
-              ),
-            )),
-
-        //Card Grande
-        const SizedBox(
-          height: 10.0,
-        ),
-
-        Card(
-            //  margin: EdgeInsets.only( left: 30.0),
-            shape: const BeveledRectangleBorder(),
-            child: Container(
-              width: 160.0,
-              height: 250.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.45), BlendMode.multiply),
-                    image: const AssetImage('assets/images/4.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 4.0)
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Fade Beard',
-                        style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 10.0,
-                  )
-                ],
-              ),
-            )),
+        // const SizedBox(
+        //   height: 10.0,
+        // ),
       ],
     );
   }
 
-  Widget _cardsRight() {
+  Widget _cardsRight(String img, String name) {
     return Column(children: <Widget>[
       //Card - pequeña
       Card(
-          margin: const EdgeInsets.only(left: 13.5, top: 0.0),
-          shape: const BeveledRectangleBorder(),
-          child: Container(
-            width: 160.0,
-            height: 150.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.45), BlendMode.multiply),
-                  image: const AssetImage('assets/images/hairandbeard.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 5.0),
-                      blurRadius: 4.0)
-                ]),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Text(
-                      'Hair and Beard',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    )
-                  ],
-                ),
-                Container(
-                  height: 10.0,
-                )
-              ],
-            ),
-          )),
-
-      const SizedBox(
-        height: 15.0,
-      ),
-
-      //Card Grande
-      Card(
-          margin: const EdgeInsets.only(left: 13.5),
-          shape: const BeveledRectangleBorder(),
-          child: Container(
-            width: 160.0,
-            height: 250.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.45), BlendMode.multiply),
-                  image: const AssetImage('assets/images/haircoloring.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 5.0),
-                      blurRadius: 4.0)
-                ]),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Text(
-                      'Hair Color',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(
-                      width: 20.0,
-                    )
-                  ],
-                ),
-                Container(
-                  height: 10.0,
-                )
-              ],
-            ),
-          )),
-
-      const SizedBox(
-        height: 15.0,
-      ),
-
-      //card Mediana
-      Card(
-          margin: const EdgeInsets.only(
-            left: 13.5,
-          ),
-          shape: const BeveledRectangleBorder(),
-          child: Container(
-            width: 160.0,
-            height: 210.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.45), BlendMode.multiply),
-                  image: const AssetImage('assets/images/2.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 5.0),
-                      blurRadius: 4.0)
-                ]),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Text(
-                      'Line Up',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(
-                      width: 20.0,
-                    )
-                  ],
-                ),
-                Container(
-                  height: 20.0,
-                )
-              ],
-            ),
-          )),
-
-      const SizedBox(
-        height: 15.0,
-      ),
-
-      //Card Pequeña
-      Card(
-          margin: const EdgeInsets.only(
-            left: 13.5,
-          ),
-          shape: const BeveledRectangleBorder(),
-          child: Container(
-            width: 160.0,
-            height: 150.0,
-            decoration: BoxDecoration(
+        margin: const EdgeInsets.only(left: 10, top: 5.0),
+        shape: const BeveledRectangleBorder(),
+        child: Container(
+          width: SizeConfig.screenWidth * 0.42,
+          height: SizeConfig.screenHeight * 0.15,
+          decoration: BoxDecoration(
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.45), BlendMode.multiply),
-                image: const AssetImage('assets/images/corte3.jpg'),
+                image: AssetImage(img),
                 fit: BoxFit.cover,
               ),
               boxShadow: const [
@@ -451,36 +163,37 @@ class GalleryPage extends StatelessWidget {
                     color: Colors.black26,
                     offset: Offset(0.0, 5.0),
                     blurRadius: 4.0)
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Text(
-                      'Flequillo',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(
-                      width: 20.0,
-                    )
-                  ],
-                ),
-                Container(
-                  height: 10.0,
-                )
-              ],
-            ),
-          )),
+              ]),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  )
+                ],
+              ),
+              Container(
+                height: 10.0,
+              )
+            ],
+          ),
+        ),
+      ),
+
       const SizedBox(
-        height: 11.0,
-      )
+        height: 10.0,
+      ),
     ]);
   }
 }

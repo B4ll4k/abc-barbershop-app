@@ -12,6 +12,7 @@ import './providers/user_provider.dart';
 import './providers/appointment_provider.dart';
 import './providers/barber_provider.dart';
 import './providers/services_provider.dart';
+import './size_config.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -20,12 +21,13 @@ void main() {
     systemNavigationBarDividerColor: Colors.black,
   ));
 
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

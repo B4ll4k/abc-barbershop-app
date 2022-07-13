@@ -288,7 +288,7 @@ class ProfilePage extends StatelessWidget {
     final appointmentProvider = Provider.of<AppointmentProvider>(context);
     final barberProvider = Provider.of<BarberProvider>(context);
     final barber = barberProvider.barbers;
-    final historyAppointments = appointmentProvider.activeAppointments;
+    final historyAppointments = appointmentProvider.historyAppointments;
     return ListView.builder(
       itemCount: historyAppointments.length,
       itemBuilder: (ctx, i) => GestureDetector(

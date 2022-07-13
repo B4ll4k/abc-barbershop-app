@@ -8,6 +8,7 @@ import '../providers/user_provider.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/services_provider.dart';
 import '../providers/barber_provider.dart';
+import '../size_config.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -62,10 +63,8 @@ class _SplashScreenState extends State<SplashScreen> {
           await Provider.of<AppointmentProvider>(context, listen: false)
               .fetchHistoryAppointments(
                   Provider.of<UserProvider>(context, listen: false).user.id);
-          Navigator.pushReplacementNamed(context, 'home');
-        } else {
-          Navigator.pushReplacementNamed(context, 'authPage');
         }
+        Navigator.pushReplacementNamed(context, 'home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -104,6 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
