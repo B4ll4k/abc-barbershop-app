@@ -33,9 +33,15 @@ class _SearchPageState extends State<SearchPage> {
   };
 
   List<String> _hairStyleNames = [];
+
+  @override
+  void initState() {
+    _hairStyleNames = _hairStyles.keys.toList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    _hairStyleNames = _hairStyles.keys.toList();
     return Scaffold(
         appBar: AppBar(
           title: const Padding(
@@ -76,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
             child: TextField(
               onTap: () {
                 setState(() {
-                  _hairStyleNames = [];
+                  //_hairStyleNames = [];
                 });
               },
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -95,8 +101,9 @@ class _SearchPageState extends State<SearchPage> {
                 } else {
                   setState(() {
                     _hairStyleNames = _hairStyles.keys
-                        .where((element) =>
-                            element.toLowerCase() == keyword.toLowerCase())
+                        .where((element) => element
+                            .toLowerCase()
+                            .contains(keyword.toLowerCase()))
                         .toList();
                   });
                 }
