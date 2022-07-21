@@ -104,6 +104,36 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateProfile(String firstName, String lastName, String phoneNo,
+      String email, String password) async {
+    final userData = {
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNo': phoneNo,
+      'email': email,
+      'password': password
+    };
+
+    try {
+      final response = await http.post(
+          Uri.parse(EnviromentVariables.baseUrl + 'updateUser'),
+          body: jsonEncode(userData));
+
+      final responseBody = (json.decode(response.body) as Map<String, dynamic>);
+
+      if (responseBody['Success'] == null) {
+        String error = responseBody['Failure'];
+        throw HttpException(error);
+      }
+      _user!.firstName = firstName;
+      _user!.lastName = lastName;
+      _user!.phoneNum = phoneNo;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   void logout() async {
     final prefs = await SharedPreferences.getInstance();
     _user = null;

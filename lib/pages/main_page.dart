@@ -57,28 +57,6 @@ class _HomePageState extends State<MainPage> {
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
-        //If you only want the same App bar for all pages
-        // appBar: AppBar(
-        //   title: Padding(
-        //     padding: const EdgeInsets.only(left: 10.0, bottom: 25.0),
-        //       child: Text('Inicio',
-        //         style: TextStyle(
-        //           color: Colors.black,
-        //           ),
-        //         ),
-
-        //   ),
-        //   backgroundColor: Colors.white,
-
-        //   elevation: 0.0,
-        //   actions: <Widget>[
-        //     IconButton(
-        //       padding: const EdgeInsets.only(right: 5.0, bottom:25.0),
-        //       icon: Icon(Icons.more_vert, color: Colors.black),
-        //       onPressed: () {},
-        //       ),
-        //   ],
-        // ),
         body: Stack(
           children: <Widget>[
             _buildOffstageNavigator(0),
@@ -94,36 +72,32 @@ class _HomePageState extends State<MainPage> {
   }
 
   Widget _crearBottomNavigationBar() {
-    return Container(
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        // showSelectedLabels: false,
-        // showUnselectedLabels: false,
-        selectedItemColor: Theme.of(context).bottomAppBarTheme.color,
-        unselectedItemColor: Colors.black,
-        elevation: 0.0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            backgroundColor: Colors.white,
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.perm_identity), label: 'Profile'),
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.info_outline), label: 'About'),
-        ],
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      selectedItemColor: Theme.of(context).colorScheme.secondary,
+      unselectedItemColor: Colors.black.withOpacity(0.6),
+      elevation: 40.0,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          backgroundColor: Colors.white,
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.perm_identity), label: 'Profile'),
+        // BottomNavigationBarItem(
+        //     icon: Icon(Icons.info_outline), label: 'About'),
+      ],
+      onTap: (int index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
     );
   }
 

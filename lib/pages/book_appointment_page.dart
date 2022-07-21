@@ -8,6 +8,7 @@ import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/services_provider.dart';
+import '../size_config.dart';
 
 class BookAppointmentPage extends StatefulWidget {
   String barberId;
@@ -254,7 +255,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget _buildTimeFrame(BuildContext context) {
     final workingTime = _workingTime.keys.toList();
     return Container(
-      height: 530,
+      height: getProportionateScreenHeight(320),
       child: GridView.builder(
         itemCount: workingTime.length,
         gridDelegate:

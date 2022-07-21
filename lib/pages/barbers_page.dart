@@ -58,7 +58,10 @@ class BarberPage extends StatelessWidget {
                     height: 85.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(barbers[i].pictureUrl),
+                        fit: BoxFit.cover,
+                        image: NetworkImage(barbers[i].pictureUrl.isEmpty
+                            ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
+                            : barbers[i].pictureUrl),
                       ),
                     ),
                   ),
@@ -95,7 +98,7 @@ class BarberPage extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
-                            'Barberia Roma',
+                            'Geneve, Switzerland',
                             style: TextStyle(
                                 color: Colors.black54, fontSize: 13.5),
                           ),
@@ -127,7 +130,7 @@ class BarberPage extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
-                            '13-03-2020 3:30pm - 4:40pm',
+                            '13-03-2020 9:30am - 8:30pm',
                             style: TextStyle(
                                 color: Colors.black54, fontSize: 13.5),
                           ),

@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +14,13 @@ import './providers/appointment_provider.dart';
 import './providers/barber_provider.dart';
 import './providers/services_provider.dart';
 import './size_config.dart';
+import './pages/update_profile_page.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    statusBarBrightness: Brightness.dark,
-    systemNavigationBarDividerColor: Colors.black,
+    statusBarBrightness: Brightness.light,
+    systemNavigationBarDividerColor: Colors.transparent,
   ));
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -51,6 +53,8 @@ class MyApp extends StatelessWidget {
           'gallery': (BuildContext context) => const GalleryPage(),
           //'appointments': (BuildContext context) => AppointmentPage(),
           'authPage': (BuildContext context) => AuthPage(false),
+          ProfilePage.routeName: (ctx) => const ProfilePage(),
+          EditProfilePage.route: (ctx) => const EditProfilePage(),
         },
         theme: ThemeData(
           primaryColor: Colors.white,

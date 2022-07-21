@@ -1,413 +1,214 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../providers/barber_provider.dart';
-import '../providers/user_provider.dart';
+import '../pages/appointments_page.dart';
 import '../providers/appointment_provider.dart';
-import '../widgets/fonts/barber_icon_icons.dart';
-import '../pages/auth_page.dart';
+import '../providers/user_provider.dart';
+import 'auth_page.dart';
 
 class ProfilePage extends StatelessWidget {
+  static String routeName = "/profilePage";
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.user;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: const Padding(
-              padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
-              child: Text(
-                'Profile',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w400),
-              )),
-          elevation: 0.0,
-          actions: <Widget>[
-            IconButton(
-              padding:
-                  const EdgeInsets.only(right: 10.0, bottom: 25.0, top: 5.0),
-              icon: const Icon(Icons.logout, color: Colors.white),
-              onPressed: () {
-                Provider.of<AppointmentProvider>(context, listen: false)
-                    .setActiveAppointment([]);
-                Provider.of<AppointmentProvider>(context, listen: false)
-                    .setHistoryAppointment([]);
-                Provider.of<UserProvider>(context, listen: false).logout();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => AuthPage(true)),
-                  ),
-                );
-              },
-            )
-          ],
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        body: ListView(
-          children: <Widget>[
-            _profileMember(context, user.firstName + " " + user.lastName),
-            _buildUserAppointmentTab(context),
-          ],
-        ));
+      ),
+      body: _buildBody(context),
+    );
   }
 
-  Widget _profileMember(BuildContext context, String fullName) {
-    return Column(children: <Widget>[
-      const SizedBox(
-        height: 20.0,
-      ),
-      Container(
-        // padding: EdgeInsets.only(top: 30.0),
-        width: MediaQuery.of(context).size.width,
-        height: 150.0,
-        child: Column(children: <Widget>[
-          Container(
-            width: 95.0,
-            height: 90.0,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.25), BlendMode.multiply),
-                    image: const AssetImage('assets/images/member4.jpg'),
-                    fit: BoxFit.cover),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0.0, 3.0),
-                      blurRadius: 10.0)
-                ]),
-          ),
-          const SizedBox(
-            height: 15.0,
-          ),
-          Flexible(
-            child: Container(
-              // padding: EdgeInsets.only( top: 20.0 ),
-              width: 190.0,
-              height: 80.0,
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    fullName,
-                    style: const TextStyle(
-                        fontSize: 18.0, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ]),
-      ),
-    ]);
-  }
-
-  Widget _buildUserAppointmentTab(BuildContext context) {
+  Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Text(
-          "Appointments",
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontSize: 30,
-              fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        DefaultTabController(
-            length: 2, // length of tabs
-            initialIndex: 0,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    child: TabBar(
-                      labelStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500),
-                      labelColor: Theme.of(context).colorScheme.secondary,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorColor: Theme.of(context).colorScheme.secondary,
-                      tabs: const [
-                        Tab(
-                          text: "Active",
-                        ),
-                        Tab(text: 'History'),
-                      ],
-                    ),
-                  ),
-                  Container(
-                      height: 400, //height of TabBarView
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              top: BorderSide(color: Colors.grey, width: 0.5))),
-                      child: TabBarView(children: <Widget>[
-                        _buildActiveAppointmentsList(context),
-                        _buildHistoryAppointmentsList(context)
-                      ]))
-                ])),
-      ]),
-    );
-  }
-
-  Widget _buildActiveAppointmentsList(BuildContext context) {
-    final appointmentProvider = Provider.of<AppointmentProvider>(context);
-    final barberProvider = Provider.of<BarberProvider>(context);
-    final barber = barberProvider.barbers;
-    final activeAppointments = appointmentProvider.activeAppointments;
-    return ListView.builder(
-      itemCount: activeAppointments.length,
-      itemBuilder: (ctx, i) => GestureDetector(
-        onTap: () {},
-        child: Card(
-          shape: const BeveledRectangleBorder(),
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-          shadowColor: Colors.black87,
-          elevation: 8.0,
-          child: Container(
-            height: 110.0,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Container(
-                    width: 90.0,
-                    height: 85.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(barber
-                            .firstWhere((element) =>
-                                element.id == activeAppointments[i].barberId)
-                            .pictureUrl),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  width: 210.0,
-                  height: 90.0,
-                  child: Column(
-                    children: <Widget>[
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.person,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            barber
-                                    .firstWhere((element) =>
-                                        element.id ==
-                                        activeAppointments[i].barberId)
-                                    .firstName +
-                                ' ' +
-                                barber
-                                    .firstWhere((element) =>
-                                        element.id ==
-                                        activeAppointments[i].barberId)
-                                    .lastName,
-                            style: const TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            'Barberia Roma',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          BarberIcon.barbero,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            'Haircut',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            DateFormat.yMMMMd()
-                                .add_jms()
-                                .format(activeAppointments[i].bookingStart)
-                                .toString(),
-                            style: const TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+          _buildProfilePic(),
+          const SizedBox(height: 40),
+          _buildMenuOptions(
+              context,
+              "My Account",
+              Icon(
+                Icons.person_outline_rounded,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            Navigator.of(context, rootNavigator: true)
+                .pushNamed("/editProfilePage");
+          }),
+          const SizedBox(height: 30),
+          _buildMenuOptions(
+              context,
+              "Active Appointments",
+              Icon(
+                Icons.local_activity_outlined,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AppointmentsPage("Active"),
+                ));
+          }),
+          const SizedBox(height: 30),
+          _buildMenuOptions(
+              context,
+              "History Appointments",
+              Icon(
+                Icons.history,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AppointmentsPage("History"),
+                ));
+          }),
+          const SizedBox(height: 30),
+          _buildMenuOptions(
+              context,
+              "Privacy",
+              Icon(
+                Icons.privacy_tip_outlined,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            _launchInWebViewOrVC(Uri.parse("https://abc-barber.ch/privacy/"));
+          }),
+          const SizedBox(height: 30),
+          _buildMenuOptions(
+              context,
+              "About",
+              Icon(
+                Icons.abc_outlined,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            _launchInWebViewOrVC(Uri.parse("https://abc-barber.ch/about-us/"));
+          }),
+          const SizedBox(height: 30),
+          _buildMenuOptions(
+              context,
+              "LogOut",
+              Icon(
+                Icons.logout,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            Provider.of<AppointmentProvider>(context, listen: false)
+                .setActiveAppointment([]);
+            Provider.of<AppointmentProvider>(context, listen: false)
+                .setHistoryAppointment([]);
+            Provider.of<UserProvider>(context, listen: false).logout();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => AuthPage(true)),
+              ),
+            );
+          }),
+          const SizedBox(height: 30),
+        ],
       ),
     );
   }
 
-  Widget _buildHistoryAppointmentsList(BuildContext context) {
-    final appointmentProvider = Provider.of<AppointmentProvider>(context);
-    final barberProvider = Provider.of<BarberProvider>(context);
-    final barber = barberProvider.barbers;
-    final historyAppointments = appointmentProvider.historyAppointments;
-    return ListView.builder(
-      itemCount: historyAppointments.length,
-      itemBuilder: (ctx, i) => GestureDetector(
-        onTap: () {},
-        child: Card(
-          shape: const BeveledRectangleBorder(),
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-          shadowColor: Colors.black87,
-          elevation: 8.0,
-          child: Container(
-            height: 110.0,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Container(
-                    width: 90.0,
-                    height: 85.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(barber
-                            .firstWhere((element) =>
-                                element.id == historyAppointments[i].barberId)
-                            .pictureUrl),
-                      ),
+  Widget _buildProfilePic() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 140,
+          width: 140,
+          child: Stack(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            fit: StackFit.expand,
+            children: [
+              const CircleAvatar(
+                backgroundImage: AssetImage("assets/images/corte4.jpg"),
+              ),
+              Positioned(
+                bottom: 0,
+                right: -4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.white, width: 3.0),
+                    color: const Color.fromARGB(255, 239, 239, 240),
+                  ),
+                  height: 55,
+                  width: 55,
+                  child: Center(
+                    child: IconButton(
+                      iconSize: 25,
+                      color: Colors.black38,
+                      onPressed: () {},
+                      icon: const Icon(Icons.camera_alt_outlined),
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  width: 210.0,
-                  height: 90.0,
-                  child: Column(
-                    children: <Widget>[
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.person,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            barber
-                                    .firstWhere((element) =>
-                                        element.id ==
-                                        historyAppointments[i].barberId)
-                                    .firstName +
-                                ' ' +
-                                barber
-                                    .firstWhere((element) =>
-                                        element.id ==
-                                        historyAppointments[i].barberId)
-                                    .lastName,
-                            style: const TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            'Barberia Roma',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          BarberIcon.barbero,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            'Haircut',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          Icons.access_time,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            DateFormat.yMMMMd()
-                                .add_jms()
-                                .format(historyAppointments[i].bookingStart)
-                                .toString(),
-                            style: const TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
-      ),
+      ],
     );
+  }
+
+  Widget _buildMenuOptions(
+      BuildContext context, String option, Icon icon, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: TextButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.resolveWith((states) =>
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15))),
+            backgroundColor: MaterialStateProperty.resolveWith(
+              (states) => const Color.fromARGB(255, 239, 239, 240),
+            ),
+          ),
+          onPressed: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                icon,
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Text(
+                    option,
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.6), fontSize: 17),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black.withOpacity(0.6),
+                )
+              ],
+            ),
+          )),
+    );
+  }
+
+  Future<void> _launchInWebViewOrVC(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.inAppWebView,
+      webViewConfiguration: const WebViewConfiguration(
+          headers: <String, String>{'my_header_key': 'my_header_value'}),
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 }
