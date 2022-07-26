@@ -61,8 +61,8 @@ class _HomePageState extends State<MainPage> {
           children: <Widget>[
             _buildOffstageNavigator(0),
             _buildOffstageNavigator(1),
-            _buildOffstageNavigator(2),
-            _buildOffstageNavigator(3),
+            //_buildOffstageNavigator(2),
+            //_buildOffstageNavigator(3),
           ],
         ),
         bottomNavigationBar: _crearBottomNavigationBar(),
@@ -83,11 +83,11 @@ class _HomePageState extends State<MainPage> {
           backgroundColor: Colors.white,
           label: 'Home',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
+        //BottomNavigationBarItem(
+        //  icon: Icon(Icons.search),
+        //  label: 'Search',
+        //),
+        //BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
         BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity), label: 'Profile'),
         // BottomNavigationBarItem(
@@ -106,8 +106,8 @@ class _HomePageState extends State<MainPage> {
       '/': (context) {
         return [
           StartPage(),
-          const SearchPage(),
-          const GalleryPage(),
+          //const SearchPage(),
+          //const GalleryPage(),
           Provider.of<UserProvider>(context).isAuth()
               ? const ProfilePage()
               : AuthPage(true),
