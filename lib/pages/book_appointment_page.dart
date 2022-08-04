@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/pages/confirmation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -59,8 +60,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   @override
   Widget build(BuildContext context) {
     final appointmentProvider = Provider.of<AppointmentProvider>(context);
-    final activeAppointment = appointmentProvider.activeAppointments;
-    activeAppointment.forEach((element) {
+    final allAppointments = appointmentProvider.allAppointments;
+    allAppointments.forEach((element) {
       if (element.barberId == widget.barberId) {
         if (element.bookingStart.year == _selectedDate.value.year &&
             element.bookingStart.month == _selectedDate.value.month &&
@@ -121,7 +122,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.25), BlendMode.multiply),
-                  image: NetworkImage(barber.pictureUrl),
+                  image: NetworkImage(barber.pictureUrl.isEmpty
+                      ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
+                      : barber.pictureUrl),
                   fit: BoxFit.cover),
               boxShadow: const [
                 BoxShadow(
@@ -183,7 +186,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   Widget _buildBookBtn(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
+    final workingTime = _workingTime.keys.toList();
     return _isBookBtnLoading
         ? const CircularProgressIndicator()
         : Container(
@@ -191,15 +194,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             height: 55,
             child: ElevatedButton(
               onPressed: () async {
-                if (!userProvider.isAuth()) {
-                  Navigator.of(context, rootNavigator: true)
-                      .pushReplacement(MaterialPageRoute(
-                    builder: (context) => AuthPage(false),
-                  ));
-                } else if (_selectedTimeIndex > 1) {
-                  setState(() {
-                    _isBookBtnLoading = true;
-                  });
+                if (_selectedTimeIndex >= 0) {
                   final bookingStart = DateTime(
                     _selectedDate.value.year,
                     _selectedDate.value.month,
@@ -209,39 +204,24 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                   );
                   final bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
-                  try {
-                    await Provider.of<AppointmentProvider>(context,
-                            listen: false)
-                        .bookAppointment(
-                      userId: Provider.of<UserProvider>(context, listen: false)
-                          .user
-                          .id,
-                      barberId: widget.barberId,
-                      serviceId: widget.serviceId,
-                      servicePrice:
-                          Provider.of<ServicesProvider>(context, listen: false)
-                              .services
-                              .firstWhere(
-                                  (element) => element.id == widget.serviceId)
-                              .price,
-                      bookingStart: bookingStart.toString(),
-                      bookingEnd: bookingEnd.toString(),
-                    );
+                  setState(() {
+                    _workingTime[workingTime[_selectedTimeIndex]] = false;
                     _selectedTime = "";
                     _selectedTimeIndex = -1;
-                    _showDialog("Operation Successful!", true);
-                  } on HttpException catch (e) {
-                    _showDialog(e.toString(), false);
-                  } catch (e) {
-                    _showDialog("Ooops something went wrong!", false);
-                  }
-                  setState(() {
-                    _isBookBtnLoading = false;
                   });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmationPage(
+                            barberId: widget.barberId,
+                            serviceId: widget.serviceId,
+                            bookingStart: bookingStart,
+                            bookingEnd: bookingEnd),
+                      ));
                 }
               },
               child: const Text(
-                "Book",
+                "Continue",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               style: ButtonStyle(
@@ -255,7 +235,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget _buildTimeFrame(BuildContext context) {
     final workingTime = _workingTime.keys.toList();
     return Container(
-      height: getProportionateScreenHeight(320),
+      height: getProportionateScreenHeight(420),
       child: GridView.builder(
         itemCount: workingTime.length,
         gridDelegate:
@@ -354,9 +334,15 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   void _selectDate(DateTime? newSelectedDate) {
+    final workingTime = _workingTime.keys.toList();
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
+        setState(() {
+          _workingTime[workingTime[_selectedTimeIndex]] = false;
+          _selectedTime = "";
+          _selectedTimeIndex = -1;
+        });
       });
     }
   }

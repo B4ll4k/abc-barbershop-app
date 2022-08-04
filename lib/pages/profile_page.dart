@@ -28,9 +28,7 @@ class ProfilePage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 40),
-          _buildProfilePic(),
-          const SizedBox(height: 40),
+          const SizedBox(height: 50),
           _buildMenuOptions(
               context,
               "My Account",

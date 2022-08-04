@@ -130,7 +130,7 @@ class BarberPage extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
-                            '13-03-2020 9:30am - 8:30pm',
+                            '9:30am - 8:30pm',
                             style: TextStyle(
                                 color: Colors.black54, fontSize: 13.5),
                           ),

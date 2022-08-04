@@ -7,6 +7,8 @@ import '../models/http_exception.dart';
 import '../models/apponitments.dart';
 
 class AppointmentProvider with ChangeNotifier {
+  List<Appointment> _allAppointments = [];
+
   List<Appointment> _activeAppointments = [];
 
   List<Appointment> get activeAppointments {
@@ -21,6 +23,10 @@ class AppointmentProvider with ChangeNotifier {
 
   List<Appointment> get historyAppointments {
     return [..._historyAppointments];
+  }
+
+  List<Appointment> get allAppointments {
+    return [..._allAppointments];
   }
 
   void setHistoryAppointment(List<Appointment> newHistoryAppointment) {
@@ -55,30 +61,30 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   Future<void> fetchHistoryAppointments(String id) async {
-    try {
-      final response = await http.get(
-        Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
-      );
-      //print(response.body);
-      final responseData = jsonDecode(response.body) as List<dynamic>;
+    // try {
+    //   final response = await http.get(
+    //     Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
+    //   );
+    //   //print(response.body);
+    //   final responseData = jsonDecode(response.body) as List<dynamic>;
 
-      for (var data in responseData) {
-        var appointment = data as Map<String, dynamic>;
+    //   for (var data in responseData) {
+    //     var appointment = data as Map<String, dynamic>;
 
-        _historyAppointments.add(
-          Appointment(
-            id: appointment["id"].toString(),
-            bookingStart: DateTime.parse(appointment["bookingStart"]),
-            bookingEnd: DateTime.parse(appointment["bookingEnd"]),
-            serviceId: appointment["serviceId"].toString(),
-            barberId: appointment["providerId"].toString(),
-          ),
-        );
-        notifyListeners();
-      }
-    } catch (e) {
-      throw HttpException(e.toString());
-    }
+    //     _historyAppointments.add(
+    //       Appointment(
+    //         id: appointment["id"].toString(),
+    //         bookingStart: DateTime.parse(appointment["bookingStart"]),
+    //         bookingEnd: DateTime.parse(appointment["bookingEnd"]),
+    //         serviceId: appointment["serviceId"].toString(),
+    //         barberId: appointment["providerId"].toString(),
+    //       ),
+    //     );
+    //     notifyListeners();
+    //   }
+    // } catch (e) {
+    //   throw HttpException(e.toString());
+    // }
   }
 
   Future<void> bookAppointment(
@@ -106,17 +112,35 @@ class AppointmentProvider with ChangeNotifier {
       if (responseData['Success'] == null) {
         throw HttpException(responseData['Failure']);
       }
-      _activeAppointments.add(
-        Appointment(
-          id: DateTime.now().toString(),
-          bookingStart: DateTime.parse(bookingStart),
-          bookingEnd: DateTime.parse(bookingEnd),
-          serviceId: serviceId,
-          barberId: barberId,
-        ),
-      );
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> fetchAllAppointments() async {
+    try {
+      final response = await http.get(
+        Uri.parse(EnviromentVariables.baseUrl + "allappointments/"),
+      );
+      //print(response.body);
+      final responseData = jsonDecode(response.body) as List<dynamic>;
+
+      for (var data in responseData) {
+        var appointment = data as Map<String, dynamic>;
+
+        _allAppointments.add(
+          Appointment(
+            id: appointment["id"].toString(),
+            bookingStart: DateTime.parse(appointment["bookingStart"]),
+            bookingEnd: DateTime.parse(appointment["bookingEnd"]),
+            serviceId: appointment["serviceId"].toString(),
+            barberId: appointment["providerId"].toString(),
+          ),
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      throw HttpException(e.toString());
     }
   }
 }

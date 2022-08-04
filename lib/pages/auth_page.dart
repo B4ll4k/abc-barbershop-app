@@ -6,6 +6,7 @@ import '../models/http_exception.dart';
 import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
 import '../providers/appointment_provider.dart';
+import '../size_config.dart';
 
 enum AuthMode { logIn, signUp }
 
@@ -50,7 +51,9 @@ class _AuthPageState extends State<AuthPage> {
                 child: Column(
                   children: [
                     Container(
-                      height: 150,
+                      margin: EdgeInsets.only(
+                          top: getProportionateScreenHeight(25)),
+                      height: getProportionateScreenHeight(50),
                       child: const Center(
                         child: Text(
                           'ABC',
@@ -59,10 +62,13 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                     SizedBox(
-                      height: _authMode == AuthMode.signUp ? 70 : 110,
+                      height: _authMode == AuthMode.signUp
+                          ? getProportionateScreenHeight(40)
+                          : getProportionateScreenHeight(80),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(40)),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -83,38 +89,20 @@ class _AuthPageState extends State<AuthPage> {
                                 _authMode == AuthMode.signUp
                                     ? _buildConfirmPasswordTextField()
                                     : Container(),
-                                (_authMode == AuthMode.logIn &&
-                                        !widget._redirected)
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Navigator.pushReplacementNamed(
-                                              context, 'home');
-                                        },
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                              border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.white, width: 1),
-                                          )),
-                                          child: const Text(
-                                            "Proceed without signing in",
-                                            style: kBodyText,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
                               ],
                             ),
                             Column(
                               children: [
                                 SizedBox(
-                                  height:
-                                      _authMode == AuthMode.signUp ? 45 : 80,
+                                  height: _authMode == AuthMode.signUp
+                                      ? getProportionateScreenHeight(15)
+                                      : getProportionateScreenHeight(30),
                                 ),
                                 _authBtn(),
                                 SizedBox(
-                                  height:
-                                      _authMode == AuthMode.signUp ? 60 : 80,
+                                  height: _authMode == AuthMode.signUp
+                                      ? getProportionateScreenHeight(20)
+                                      : getProportionateScreenHeight(30),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -139,9 +127,6 @@ class _AuthPageState extends State<AuthPage> {
                                       style: kBodyText,
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
                                 ),
                               ],
                             )
@@ -189,16 +174,16 @@ class _AuthPageState extends State<AuthPage> {
         ),
         child: TextFormField(
           controller: _passwordController,
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 20),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
             hintText: "Password",
             prefixIcon: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
                 FontAwesomeIcons.lock,
                 color: Colors.white,
-                size: 30,
+                size: getProportionateScreenHeight(30),
               ),
             ),
             hintStyle: kBodyText,
@@ -479,7 +464,11 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context, rootNavigator: true).pushNamed('home');
+      if (widget._redirected) {
+        Navigator.pop(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
+      }
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;
@@ -518,7 +507,11 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
+      if (widget._redirected) {
+        Navigator.pop(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
+      }
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;
