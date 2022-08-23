@@ -77,14 +77,14 @@ class BarberPage extends StatelessWidget {
                         Icon(
                           Icons.person,
                           color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
+                          size: 17.0,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
                             barbers[i].firstName + ' ' + barbers[i].lastName,
                             style: const TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
+                                color: Colors.black54, fontSize: 15),
                           ),
                         )
                       ]),
@@ -93,30 +93,14 @@ class BarberPage extends StatelessWidget {
                         Icon(
                           Icons.location_on,
                           color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
+                          size: 17.0,
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
                             'Geneve, Switzerland',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
-                          ),
-                        )
-                      ]),
-                      const SizedBox(height: 5.0),
-                      Row(children: <Widget>[
-                        Icon(
-                          BarberIcon.barbero,
-                          color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            'Haircut',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 15),
                           ),
                         )
                       ]),
@@ -125,14 +109,14 @@ class BarberPage extends StatelessWidget {
                         Icon(
                           Icons.access_time,
                           color: Theme.of(context).bottomAppBarTheme.color,
-                          size: 15.0,
+                          size: 17.0,
                         ),
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
                             '9:30am - 8:30pm',
-                            style: TextStyle(
-                                color: Colors.black54, fontSize: 13.5),
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 15),
                           ),
                         )
                       ]),

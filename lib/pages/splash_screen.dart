@@ -63,8 +63,8 @@ class _SplashScreenState extends State<SplashScreen> {
           await Provider.of<AppointmentProvider>(context, listen: false)
               .fetchHistoryAppointments(
                   Provider.of<UserProvider>(context, listen: false).user.id);
-          await Provider.of<AppointmentProvider>(context, listen: false)
-              .fetchAllAppointments();
+          // await Provider.of<AppointmentProvider>(context, listen: false)
+          //     .fetchAllAppointments();
         }
         Navigator.pushReplacementNamed(context, 'home');
       } else {
@@ -101,6 +101,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> initJobs() async {
     await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
     await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
+    await Provider.of<BarberProvider>(context, listen: false).fetchDaysoff();
+    await Provider.of<BarberProvider>(context, listen: false)
+        .fetchFreeWeekdays();
+    await Provider.of<BarberProvider>(context, listen: false)
+        .fetchWorkingTime();
   }
 
   @override
@@ -112,11 +117,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Image(
-              image: AssetImage('assets/images/logo.png'),
+            Image(
+              image: const AssetImage('assets/images/logo.png'),
               fit: BoxFit.cover,
-              height: 160,
-              width: 300,
+              height: getProportionateScreenHeight(200),
+              width: getProportionateScreenWidth(340),
             ),
             const SizedBox(
               height: 5,

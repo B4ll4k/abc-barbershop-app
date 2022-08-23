@@ -40,7 +40,32 @@ class StartPage extends StatelessWidget {
         // backgroundColor: Colors.white,
         elevation: 0.0,
       ),
-      body: _categoriesBuilder(context),
+      body: Stack(
+        children: [
+          _buildBackgroundImage(),
+          _categoriesBuilder(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackgroundImage() {
+    return ShaderMask(
+      shaderCallback: (bounds) => const LinearGradient(
+        colors: [Colors.black, Colors.black12],
+        begin: Alignment.bottomCenter,
+        end: Alignment.center,
+      ).createShader(bounds),
+      blendMode: BlendMode.darken,
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/bg.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black12, BlendMode.color),
+          ),
+        ),
+      ),
     );
   }
 
@@ -69,7 +94,7 @@ class StartPage extends StatelessWidget {
                   },
                   child: Card(
                     elevation: 8.0,
-                    shadowColor: Colors.black,
+                    color: Colors.white.withOpacity(0.7),
                     // decoration: BoxDecoration(
                     //     border: Border.all(
                     //         width: 2.0,

@@ -3,12 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../models/http_exception.dart';
-import '../pages/auth_page.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
-import '../providers/user_provider.dart';
-import '../providers/services_provider.dart';
 import '../size_config.dart';
 
 class BookAppointmentPage extends StatefulWidget {
@@ -26,30 +22,9 @@ class BookAppointmentPage extends StatefulWidget {
 
 class _BookAppointmentPageState extends State<BookAppointmentPage>
     with RestorationMixin {
-  final Map<String, dynamic> _workingTime = {
-    "09:00": false,
-    "09:30": false,
-    "10:00": false,
-    "10:30": false,
-    "11:00": false,
-    "11:30": false,
-    "12:00": false,
-    "12:30": false,
-    "13:00": false,
-    "13:30": false,
-    "14:00": false,
-    "14:30": false,
-    "15:00": false,
-    "15:30": false,
-    "16:00": false,
-    "16:30": false,
-    "17:00": false,
-    "17:30": false,
-    "18:00": false,
-    "18:30": false,
-    "19:00": false,
-    "19:30": false
-  };
+  Map<String, dynamic> _workingTime = {};
+
+  static String _barberId = "-1";
 
   String _selectedTime = "";
 
@@ -57,8 +32,78 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   bool _isBookBtnLoading = false;
 
+  bool _isWorkingDay = true;
+
   @override
   Widget build(BuildContext context) {
+    _barberId = widget.barberId;
+    _workingTime = {};
+    _isWorkingDay = true;
+
+    final barberProvider = Provider.of<BarberProvider>(context);
+    final times = barberProvider.findWorkingTime(
+        widget.barberId, _selectedDate.value.weekday.toString());
+
+    for (var element in barberProvider.freeWeekdays) {
+      if (_selectedDate.value.weekday == element) {
+        _isWorkingDay = false;
+      }
+    }
+
+    for (var element in barberProvider.barbers
+        .firstWhere((element) => element.id == _barberId)
+        .daysoff) {
+      if (_selectedDate.value == element) {
+        _isWorkingDay = false;
+      }
+    }
+    for (var element in times) {
+      String startTime = element["startTime"].toString().substring(0, 5);
+      String endTime = element["endTime"].toString().substring(0, 5);
+      String breakStartTime =
+          element["breakStartTime"].toString().substring(0, 5);
+      String breakEndTime = element["breakEndTime"].toString().substring(0, 5);
+      while (startTime != breakStartTime) {
+        if (_selectedTime == startTime) {
+          _workingTime.addAll({startTime: true});
+        } else {
+          _workingTime.addAll({startTime: !_isWorkingDay});
+        }
+
+        if (startTime[3] == "0") {
+          startTime = startTime.replaceRange(3, 4, "3");
+        } else {
+          int f = int.parse(startTime.substring(0, 2));
+          f = f + 1;
+          startTime = startTime.replaceRange(3, 4, "0");
+          if (f < 10) {
+            startTime = startTime.replaceRange(0, 2, "0$f");
+          } else {
+            startTime = startTime.replaceRange(0, 2, "$f");
+          }
+        }
+      }
+      while (breakEndTime != endTime) {
+        if (_selectedTime == breakEndTime) {
+          _workingTime.addAll({breakEndTime: true});
+        } else {
+          _workingTime.addAll({breakEndTime: !_isWorkingDay});
+        }
+        if (breakEndTime[3] == "0") {
+          breakEndTime = breakEndTime.replaceRange(3, 4, "3");
+        } else {
+          int f = int.parse(breakEndTime.substring(0, 2));
+          f = f + 1;
+          breakEndTime = breakEndTime.replaceRange(3, 4, "0");
+          if (f < 10) {
+            breakEndTime = breakEndTime.replaceRange(0, 2, "0$f");
+          } else {
+            breakEndTime = breakEndTime.replaceRange(0, 2, "$f");
+          }
+        }
+      }
+    }
+
     final appointmentProvider = Provider.of<AppointmentProvider>(context);
     final allAppointments = appointmentProvider.allAppointments;
     allAppointments.forEach((element) {
@@ -144,7 +189,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             child: Column(
               children: <Widget>[
                 Text(
-                  '${barber.firstName} ${barber.lastName}',
+                  barber.firstName,
                   style: const TextStyle(
                       fontSize: 21.0, fontWeight: FontWeight.w400),
                 ),
@@ -157,14 +202,12 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   Widget _buildCalendar(BuildContext context) {
-    final format = DateFormat('EEE, MMM d, yyyy');
-    final date = format.format(DateTime.now());
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(date,
+            Text(DateFormat('EEE, MMM d, yyyy').format(_selectedDate.value),
                 style: const TextStyle(
                   fontSize: 20,
                 )),
@@ -194,7 +237,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             height: 55,
             child: ElevatedButton(
               onPressed: () async {
-                if (_selectedTimeIndex >= 0) {
+                if (_selectedTimeIndex >= 0 && _isWorkingDay) {
                   final bookingStart = DateTime(
                     _selectedDate.value.year,
                     _selectedDate.value.month,
@@ -220,13 +263,22 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                       ));
                 }
               },
-              child: const Text(
+              child: Text(
                 "Continue",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                    color: _isWorkingDay
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.6),
+                    fontSize: 20),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => Theme.of(context).colorScheme.secondary),
+                backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                    _isWorkingDay
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.6)),
               ),
             ),
           );
@@ -315,12 +367,25 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             ),
           ),
           child: DatePickerDialog(
-            restorationId: 'date_picker_dialog',
-            initialEntryMode: DatePickerEntryMode.calendarOnly,
-            initialDate: DateTime.fromMillisecondsSinceEpoch(arguments! as int),
-            firstDate: DateTime.now(),
-            lastDate: DateTime(2029),
-          ),
+              restorationId: 'date_picker_dialog',
+              initialEntryMode: DatePickerEntryMode.calendarOnly,
+              initialDate:
+                  DateTime.fromMillisecondsSinceEpoch(arguments! as int),
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(const Duration(days: 90)),
+              selectableDayPredicate: (DateTime val) {
+                final barberProvider =
+                    Provider.of<BarberProvider>(context, listen: false);
+                final barber = barberProvider.barbers
+                    .firstWhere((element) => element.id == _barberId);
+                final freeWeekDays = barberProvider.freeWeekdays;
+
+                if (freeWeekDays.contains(val.weekday) ||
+                    barber.daysoff.contains(val)) {
+                  return false;
+                }
+                return true;
+              }),
         );
       },
     );
@@ -338,11 +403,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
-        setState(() {
+        if (_selectedTimeIndex > 0) {
           _workingTime[workingTime[_selectedTimeIndex]] = false;
           _selectedTime = "";
           _selectedTimeIndex = -1;
-        });
+        }
       });
     }
   }

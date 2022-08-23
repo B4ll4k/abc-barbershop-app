@@ -1,4 +1,4 @@
-import 'package:abc_barbershop/models/apponitments.dart';
+import 'package:abc_barbershop/models/appointments.dart';
 import 'package:abc_barbershop/providers/appointment_provider.dart';
 import 'package:abc_barbershop/providers/services_provider.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Appointment? appointment;
   @override
   Widget build(BuildContext context) {
+    print("APpointment Id ${widget.appointmentId}");
     appointment = Provider.of<AppointmentProvider>(context, listen: false)
         .activeAppointments
         .firstWhereOrNull((element) => element.id == widget.appointmentId);

@@ -99,14 +99,14 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         Flexible(
           child: Container(
             // padding: EdgeInsets.only( top: 20.0 ),
-            width: getProportionateScreenWidth(140),
+            width: getProportionateScreenWidth(150),
             height: getProportionateScreenHeight(80),
             child: Column(
               children: <Widget>[
                 Text(
-                  '${barber.firstName} ${barber.lastName}',
+                  barber.firstName,
                   style: TextStyle(
-                      fontSize: getProportionateScreenHeight(30),
+                      fontSize: getProportionateScreenHeight(25),
                       fontWeight: FontWeight.w500),
                 ),
               ],
@@ -328,6 +328,10 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {
+              // print(Provider.of<AppointmentProvider>(context, listen: false)
+              //     .activeAppointments
+              //     .last
+              //     .id);
               Navigator.of(ctx).pop();
               Navigator.push(
                   context,

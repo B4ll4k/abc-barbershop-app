@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/env.dart';
 import '../models/http_exception.dart';
-import '../models/apponitments.dart';
+import '../models/appointments.dart';
 
 class AppointmentProvider with ChangeNotifier {
   List<Appointment> _allAppointments = [];
@@ -38,7 +38,7 @@ class AppointmentProvider with ChangeNotifier {
       final response = await http.get(
         Uri.parse(EnviromentVariables.baseUrl + "appointments/$id"),
       );
-      //print(response.body);
+      print(response.body);
       final responseData = jsonDecode(response.body) as List<dynamic>;
 
       for (var data in responseData) {
@@ -61,30 +61,30 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   Future<void> fetchHistoryAppointments(String id) async {
-    // try {
-    //   final response = await http.get(
-    //     Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
-    //   );
-    //   //print(response.body);
-    //   final responseData = jsonDecode(response.body) as List<dynamic>;
+    try {
+      final response = await http.get(
+        Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
+      );
+      //print(response.body);
+      final responseData = jsonDecode(response.body) as List<dynamic>;
 
-    //   for (var data in responseData) {
-    //     var appointment = data as Map<String, dynamic>;
+      for (var data in responseData) {
+        var appointment = data as Map<String, dynamic>;
 
-    //     _historyAppointments.add(
-    //       Appointment(
-    //         id: appointment["id"].toString(),
-    //         bookingStart: DateTime.parse(appointment["bookingStart"]),
-    //         bookingEnd: DateTime.parse(appointment["bookingEnd"]),
-    //         serviceId: appointment["serviceId"].toString(),
-    //         barberId: appointment["providerId"].toString(),
-    //       ),
-    //     );
-    //     notifyListeners();
-    //   }
-    // } catch (e) {
-    //   throw HttpException(e.toString());
-    // }
+        _historyAppointments.add(
+          Appointment(
+            id: appointment["id"].toString(),
+            bookingStart: DateTime.parse(appointment["bookingStart"]),
+            bookingEnd: DateTime.parse(appointment["bookingEnd"]),
+            serviceId: appointment["serviceId"].toString(),
+            barberId: appointment["providerId"].toString(),
+          ),
+        );
+        notifyListeners();
+      }
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
   }
 
   Future<void> bookAppointment(
@@ -117,30 +117,30 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAllAppointments() async {
-    try {
-      final response = await http.get(
-        Uri.parse(EnviromentVariables.baseUrl + "allappointments/"),
-      );
-      //print(response.body);
-      final responseData = jsonDecode(response.body) as List<dynamic>;
+  // Future<void> fetchAllAppointments() async {
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse(EnviromentVariables.baseUrl + "allappointments/"),
+  //     );
+  //     //print(response.body);
+  //     final responseData = jsonDecode(response.body) as List<dynamic>;
 
-      for (var data in responseData) {
-        var appointment = data as Map<String, dynamic>;
+  //     for (var data in responseData) {
+  //       var appointment = data as Map<String, dynamic>;
 
-        _allAppointments.add(
-          Appointment(
-            id: appointment["id"].toString(),
-            bookingStart: DateTime.parse(appointment["bookingStart"]),
-            bookingEnd: DateTime.parse(appointment["bookingEnd"]),
-            serviceId: appointment["serviceId"].toString(),
-            barberId: appointment["providerId"].toString(),
-          ),
-        );
-        notifyListeners();
-      }
-    } catch (e) {
-      throw HttpException(e.toString());
-    }
-  }
+  //       _allAppointments.add(
+  //         Appointment(
+  //           id: appointment["id"].toString(),
+  //           bookingStart: DateTime.parse(appointment["bookingStart"]),
+  //           bookingEnd: DateTime.parse(appointment["bookingEnd"]),
+  //           serviceId: appointment["serviceId"].toString(),
+  //           barberId: appointment["providerId"].toString(),
+  //         ),
+  //       );
+  //       notifyListeners();
+  //     }
+  //   } catch (e) {
+  //     throw HttpException(e.toString());
+  //   }
+  // }
 }

@@ -1,4 +1,3 @@
-import 'package:abc_barbershop/pages/confirmation_page.dart';
 import 'package:abc_barbershop/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,10 +13,11 @@ import './providers/user_provider.dart';
 import './providers/appointment_provider.dart';
 import './providers/barber_provider.dart';
 import './providers/services_provider.dart';
-import './size_config.dart';
 import './pages/update_profile_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarBrightness: Brightness.light,

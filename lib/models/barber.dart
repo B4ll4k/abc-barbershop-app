@@ -5,6 +5,7 @@ class Barber {
   String phoneNum;
   String email;
   String pictureUrl;
+  List<DateTime> daysoff;
 
   Barber({
     required this.id,
@@ -13,5 +14,6 @@ class Barber {
     required this.lastName,
     required this.phoneNum,
     required this.pictureUrl,
+    required this.daysoff,
   });
 }
