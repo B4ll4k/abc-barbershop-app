@@ -10,9 +10,11 @@ import '../models/http_exception.dart';
 class BarberProvider with ChangeNotifier {
   final List<Barber> _barbers = [];
 
-  List<Map<String, dynamic>> _workingTime = [];
+  final List<Map<String, dynamic>> _workingTime = [];
 
-  List<int> _freeWeekdays = [];
+  String workingHours = "";
+
+  final List<int> _freeWeekdays = [];
 
   List<int> get freeWeekdays {
     return [..._freeWeekdays];
@@ -43,6 +45,7 @@ class BarberProvider with ChangeNotifier {
           ),
         );
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -58,6 +61,7 @@ class BarberProvider with ChangeNotifier {
         var element = elementData as Map<String, dynamic>;
         _freeWeekdays.add(int.parse(element["weekday_off"] as String));
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -91,6 +95,7 @@ class BarberProvider with ChangeNotifier {
               .add(date);
         }
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -106,6 +111,7 @@ class BarberProvider with ChangeNotifier {
       for (var elementData in resposeData) {
         _workingTime.add(elementData);
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -116,5 +122,22 @@ class BarberProvider with ChangeNotifier {
         .where((element) =>
             element["userId"] == barberId && element["weekDay"] == weekDay)
         .toList();
+  }
+
+  Future<void> fetchWorkingHours() async {
+    try {
+      final response = await http
+          .get(Uri.parse(EnviromentVariables.baseUrl + "workinghours/"));
+      final responseData = json.decode(response.body) as List<dynamic>;
+
+      String startTime =
+          responseData[0]["startTime"].toString().substring(0, 5);
+      String endTime = responseData[0]["endTime"].toString().substring(0, 5);
+
+      workingHours = startTime + " - " + endTime;
+      notifyListeners();
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
   }
 }

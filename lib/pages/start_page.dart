@@ -3,48 +3,66 @@ import 'package:provider/provider.dart';
 
 import '../pages/barbers_page.dart';
 import '../providers/services_provider.dart';
+import '../providers/user_provider.dart';
+import '../providers/appointment_provider.dart';
+import '../providers/barber_provider.dart';
 import '../size_config.dart';
 
 class StartPage extends StatelessWidget {
-  final List<String> _mostFrequentedHairStyles = [
-    "Mid Fade",
-    "High Fade",
-    "Caesar",
-    "Fringe",
-    "Line Up",
-    "Maxi Tupé",
-    "Military Style",
-    "Spiky",
-    "Quiff",
-    "Undercut"
-  ];
-
   StartPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Padding(
-          padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
-          child: Text(
-            'Home',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w400),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Provider.of<ServicesProvider>(context, listen: false)
+            .fetchServices();
+        await Provider.of<BarberProvider>(context, listen: false)
+            .fetchBarbers();
+        await Provider.of<BarberProvider>(context, listen: false)
+            .fetchDaysoff();
+        await Provider.of<BarberProvider>(context, listen: false)
+            .fetchFreeWeekdays();
+        await Provider.of<BarberProvider>(context, listen: false)
+            .fetchWorkingTime();
+
+        bool isAuth =
+            Provider.of<UserProvider>(context, listen: false).isAuth();
+        if (isAuth) {
+          await Provider.of<AppointmentProvider>(context, listen: false)
+              .fetchActiveAppointments(
+                  Provider.of<UserProvider>(context, listen: false).user.id);
+          await Provider.of<AppointmentProvider>(context, listen: false)
+              .fetchHistoryAppointments(
+                  Provider.of<UserProvider>(context, listen: false).user.id);
+          // await Provider.of<AppointmentProvider>(context, listen: false)
+          //     .fetchAllAppointments();
+        }
+      },
+      color: Theme.of(context).colorScheme.secondary,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: const Padding(
+            padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
+            child: Text(
+              'Home',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400),
+            ),
           ),
+          // backgroundColor: Colors.white,
+          elevation: 0.0,
         ),
-        // backgroundColor: Colors.white,
-        elevation: 0.0,
-      ),
-      body: Stack(
-        children: [
-          _buildBackgroundImage(),
-          _categoriesBuilder(context),
-        ],
+        body: Stack(
+          children: [
+            _buildBackgroundImage(),
+            _categoriesBuilder(context),
+          ],
+        ),
       ),
     );
   }

@@ -7,12 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../providers/barber_provider.dart';
-import '../providers/user_provider.dart';
 import '../size_config.dart';
 
 class AppointmentDetailsPage extends StatefulWidget {
   String appointmentId;
-  bool _isBooking;
+  final bool _isBooking;
   AppointmentDetailsPage(this.appointmentId, this._isBooking, {Key? key})
       : super(key: key);
 
@@ -25,7 +24,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Appointment? appointment;
   @override
   Widget build(BuildContext context) {
-    print("APpointment Id ${widget.appointmentId}");
     appointment = Provider.of<AppointmentProvider>(context, listen: false)
         .activeAppointments
         .firstWhereOrNull((element) => element.id == widget.appointmentId);
@@ -76,7 +74,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Widget _barberProfilePic(BuildContext context) {
     final barberProvider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = barberProvider.barbers;
-    final barber = barbers.firstWhere(
+    final barber = barbers.firstWhereOrNull(
       (element) => element.id == appointment!.barberId,
     );
     return Container(
@@ -92,7 +90,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.25), BlendMode.multiply),
-                    image: NetworkImage(barber.pictureUrl.isEmpty
+                    image: NetworkImage(barber!.pictureUrl.isEmpty
                         ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                         : barber.pictureUrl),
                     fit: BoxFit.cover),
@@ -110,14 +108,14 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
         Flexible(
           child: Container(
             // padding: EdgeInsets.only( top: 20.0 ),
-            width: getProportionateScreenWidth(140),
+            width: getProportionateScreenWidth(145),
             height: getProportionateScreenHeight(80),
             child: Column(
               children: <Widget>[
                 Text(
-                  '${barber.firstName} ${barber.lastName}',
+                  barber.firstName,
                   style: TextStyle(
-                      fontSize: getProportionateScreenHeight(30),
+                      fontSize: getProportionateScreenHeight(25),
                       fontWeight: FontWeight.w500),
                 ),
               ],
@@ -131,7 +129,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Widget _buildDetails() {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
-        .firstWhere((element) => element.id == appointment!.serviceId);
+        .firstWhereOrNull((element) => element.id == appointment!.serviceId);
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(25)),
       child: Column(
@@ -154,7 +152,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 height: getProportionateScreenHeight(5),
               ),
               Text(
-                service.name,
+                service!.name,
                 style: TextStyle(fontSize: getProportionateScreenHeight(14)),
               )
             ],
@@ -178,7 +176,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                     height: getProportionateScreenHeight(5),
                   ),
                   Text(
-                    "25 CHF",
+                    "${service.studentPrice} CHF",
                     style:
                         TextStyle(fontSize: getProportionateScreenHeight(14)),
                   )
@@ -200,7 +198,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                     height: getProportionateScreenHeight(5),
                   ),
                   Text(
-                    "${service.price} CHF",
+                    "${service.normalPrice} CHF",
                     style:
                         TextStyle(fontSize: getProportionateScreenHeight(14)),
                   )

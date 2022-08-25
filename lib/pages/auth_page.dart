@@ -397,14 +397,6 @@ class _AuthPageState extends State<AuthPage> {
             }
             return null;
           },
-          // onTap: () {
-          //   setState(() {
-          //     if (_phoneTxtFieldController.text.compareTo('0911121314') ==
-          //         0) {
-          //       _phoneTxtFieldController.text = '';
-          //     }
-          //   });
-          // },
           onSaved: (String? value) {
             _formData['phoneNum'] = value!;
           },
@@ -419,7 +411,8 @@ class _AuthPageState extends State<AuthPage> {
             color: Theme.of(context).colorScheme.secondary,
           )
         : Container(
-            width: double.infinity,
+            width: getProportionateScreenWidth(250),
+            height: getProportionateScreenHeight(50),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(16),
@@ -433,7 +426,7 @@ class _AuthPageState extends State<AuthPage> {
                 }
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   _authMode == AuthMode.logIn ? "LogIn" : "SignUp",
                   style: kBodyText,
@@ -454,15 +447,14 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       await Provider.of<UserProvider>(context, listen: false)
-          .login(_formData['email'], _formData['password']);
-      await Provider.of<AppointmentProvider>(context, listen: false)
-          .fetchActiveAppointments(
-              Provider.of<UserProvider>(context, listen: false).user.id);
-      await Provider.of<AppointmentProvider>(context, listen: false)
-          .fetchHistoryAppointments(
-              Provider.of<UserProvider>(context, listen: false).user.id);
-      setState(() {
-        _isLoading = false;
+          .login(_formData['email'], _formData['password'])
+          .then((value) async {
+        await Provider.of<AppointmentProvider>(context, listen: false)
+            .fetchActiveAppointments(
+                Provider.of<UserProvider>(context, listen: false).user.id);
+        await Provider.of<AppointmentProvider>(context, listen: false)
+            .fetchHistoryAppointments(
+                Provider.of<UserProvider>(context, listen: false).user.id);
       });
       if (widget._redirected) {
         Navigator.pop(context);

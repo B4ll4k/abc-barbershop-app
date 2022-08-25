@@ -67,7 +67,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         if (_selectedTime == startTime) {
           _workingTime.addAll({startTime: true});
         } else {
-          _workingTime.addAll({startTime: !_isWorkingDay});
+          if (DateTime.now().hour > int.parse(startTime.substring(0, 2))) {
+            _workingTime.addAll({startTime: true});
+          } else {
+            _workingTime.addAll({startTime: !_isWorkingDay});
+          }
         }
 
         if (startTime[3] == "0") {
@@ -87,7 +91,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         if (_selectedTime == breakEndTime) {
           _workingTime.addAll({breakEndTime: true});
         } else {
-          _workingTime.addAll({breakEndTime: !_isWorkingDay});
+          if (DateTime.now().hour > int.parse(breakEndTime.substring(0, 2))) {
+            _workingTime.addAll({breakEndTime: true});
+          } else {
+            _workingTime.addAll({breakEndTime: !_isWorkingDay});
+          }
         }
         if (breakEndTime[3] == "0") {
           breakEndTime = breakEndTime.replaceRange(3, 4, "3");
@@ -103,23 +111,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         }
       }
     }
-
-    final appointmentProvider = Provider.of<AppointmentProvider>(context);
-    final allAppointments = appointmentProvider.allAppointments;
-    allAppointments.forEach((element) {
-      if (element.barberId == widget.barberId) {
-        if (element.bookingStart.year == _selectedDate.value.year &&
-            element.bookingStart.month == _selectedDate.value.month &&
-            element.bookingStart.day == _selectedDate.value.day) {
-          String minute = element.bookingStart.minute < 10
-              ? '0' + element.bookingStart.minute.toString()
-              : element.bookingStart.minute.toString();
-
-          var time = element.bookingStart.hour.toString() + ":" + minute;
-          _workingTime[time] = true;
-        }
-      }
-    });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -247,20 +238,30 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                   );
                   final bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
-                  setState(() {
-                    _workingTime[workingTime[_selectedTimeIndex]] = false;
-                    _selectedTime = "";
-                    _selectedTimeIndex = -1;
-                  });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ConfirmationPage(
-                            barberId: widget.barberId,
-                            serviceId: widget.serviceId,
-                            bookingStart: bookingStart,
-                            bookingEnd: bookingEnd),
-                      ));
+                  if (DateTime.now().hour >
+                      int.parse(_selectedTime.substring(0, 2))) {
+                    setState(() {
+                      _workingTime[workingTime[_selectedTimeIndex]] = false;
+                      _selectedTime = "";
+                      _selectedTimeIndex = -1;
+                    });
+                    _showDialog("Please, select another time!", false);
+                  } else {
+                    setState(() {
+                      _workingTime[workingTime[_selectedTimeIndex]] = false;
+                      _selectedTime = "";
+                      _selectedTimeIndex = -1;
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConfirmationPage(
+                              barberId: widget.barberId,
+                              serviceId: widget.serviceId,
+                              bookingStart: bookingStart,
+                              bookingEnd: bookingEnd),
+                        ));
+                  }
                 }
               },
               child: Text(

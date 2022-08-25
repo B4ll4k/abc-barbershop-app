@@ -1,4 +1,3 @@
-import 'package:abc_barbershop/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +29,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
-      print("exi alegebam belegn");
       return;
     }
     _formKey.currentState!.save();

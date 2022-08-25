@@ -6,19 +6,6 @@ import '../providers/services_provider.dart';
 import '../size_config.dart';
 
 class ServicesPage extends StatelessWidget {
-  final List<String> _mostFrequentedHairStyles = [
-    "Mid Fade",
-    "High Fade",
-    "Caesar",
-    "Fringe",
-    "Line Up",
-    "Maxi Tupé",
-    "Military Style",
-    "Spiky",
-    "Quiff",
-    "Undercut"
-  ];
-
   ServicesPage({Key? key}) : super(key: key);
 
   @override

@@ -35,29 +35,33 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchUserInfo(String email) async {
     final requestData = {"email": email};
+    try {
+      final response = await http.post(
+        Uri.parse(EnviromentVariables.baseUrl + "user"),
+        body: json.encode(requestData),
+      );
+      final responseList = json.decode(response.body) as List<dynamic>;
+      final responseMap = responseList[0] as Map<String, dynamic>;
 
-    final response = await http.post(
-      Uri.parse(EnviromentVariables.baseUrl + "user"),
-      body: json.encode(requestData),
-    );
-    final responseList = json.decode(response.body) as List<dynamic>;
-    final responseMap = responseList[0] as Map<String, dynamic>;
-
-    _user = User(
-        id: responseMap["id"].toString(),
-        email: responseMap["email"],
-        firstName: responseMap["firstName"],
-        lastName: responseMap["lastName"],
-        phoneNum: responseMap["phone"]);
-    final prefs = await SharedPreferences.getInstance();
-    final userData = json.encode({
-      'id': _user!.id,
-      'firstName': _user!.firstName,
-      'lastName': _user!.lastName,
-      'phoneNum': _user!.phoneNum,
-      'email': _user!.email,
-    });
-    prefs.setString('userData', userData);
+      _user = User(
+          id: responseMap["id"].toString(),
+          email: responseMap["email"],
+          firstName: responseMap["firstName"],
+          lastName: responseMap["lastName"],
+          phoneNum: responseMap["phone"]);
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'id': _user!.id,
+        'firstName': _user!.firstName,
+        'lastName': _user!.lastName,
+        'phoneNum': _user!.phoneNum,
+        'email': _user!.email,
+      });
+      prefs.setString('userData', userData);
+      notifyListeners();
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
   }
 
   Future<bool> tryAutoLogIn() async {
@@ -73,6 +77,8 @@ class UserProvider with ChangeNotifier {
         firstName: userData['firstName'].toString(),
         lastName: userData['lastName'].toString(),
         phoneNum: userData['phoneNum'].toString());
+
+    notifyListeners();
 
     return true;
   }

@@ -25,12 +25,14 @@ class ServicesProvider with ChangeNotifier {
           Service(
             id: service["id"].toString(),
             name: service["name"],
-            price: double.parse(service["price"]),
+            normalPrice: double.parse(service["price"]),
+            studentPrice: double.parse(service["studentPrice"] ?? "0.0"),
             durationSeconds: double.parse(service["duration"]),
             pictureUrl: service["pictureFullPath"] ?? "",
           ),
         );
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }

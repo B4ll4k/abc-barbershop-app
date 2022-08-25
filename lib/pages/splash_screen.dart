@@ -106,6 +106,8 @@ class _SplashScreenState extends State<SplashScreen> {
         .fetchFreeWeekdays();
     await Provider.of<BarberProvider>(context, listen: false)
         .fetchWorkingTime();
+    await Provider.of<BarberProvider>(context, listen: false)
+        .fetchWorkingHours();
   }
 
   @override

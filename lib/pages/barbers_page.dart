@@ -98,7 +98,7 @@ class BarberPage extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(left: 10.0),
                           child: Text(
-                            'Geneve, Switzerland',
+                            'Rue de la servette 01,\n 1201 Geneve',
                             style:
                                 TextStyle(color: Colors.black54, fontSize: 15),
                           ),
@@ -111,12 +111,16 @@ class BarberPage extends StatelessWidget {
                           color: Theme.of(context).bottomAppBarTheme.color,
                           size: 17.0,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
-                            '9:30am - 8:30pm',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 15),
+                            Provider.of<BarberProvider>(context).workingHours ==
+                                    ""
+                                ? '9:30am - 8:30pm'
+                                : Provider.of<BarberProvider>(context)
+                                    .workingHours,
+                            style: const TextStyle(
+                                color: Colors.black54, fontSize: 15),
                           ),
                         )
                       ]),

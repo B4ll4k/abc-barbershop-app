@@ -7,8 +7,6 @@ import '../models/http_exception.dart';
 import '../models/appointments.dart';
 
 class AppointmentProvider with ChangeNotifier {
-  List<Appointment> _allAppointments = [];
-
   List<Appointment> _activeAppointments = [];
 
   List<Appointment> get activeAppointments {
@@ -17,28 +15,26 @@ class AppointmentProvider with ChangeNotifier {
 
   void setActiveAppointment(List<Appointment> newActiveAppointment) {
     _activeAppointments = newActiveAppointment;
+    notifyListeners();
   }
 
-  final List<Appointment> _historyAppointments = [];
+  List<Appointment> _historyAppointments = [];
 
   List<Appointment> get historyAppointments {
     return [..._historyAppointments];
   }
 
-  List<Appointment> get allAppointments {
-    return [..._allAppointments];
-  }
-
   void setHistoryAppointment(List<Appointment> newHistoryAppointment) {
     _activeAppointments = newHistoryAppointment;
+    notifyListeners();
   }
 
   Future<void> fetchActiveAppointments(String id) async {
+    _activeAppointments = [];
     try {
       final response = await http.get(
         Uri.parse(EnviromentVariables.baseUrl + "appointments/$id"),
       );
-      print(response.body);
       final responseData = jsonDecode(response.body) as List<dynamic>;
 
       for (var data in responseData) {
@@ -61,6 +57,7 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   Future<void> fetchHistoryAppointments(String id) async {
+    _historyAppointments = [];
     try {
       final response = await http.get(
         Uri.parse(EnviromentVariables.baseUrl + "historyappointments/$id"),
@@ -82,6 +79,7 @@ class AppointmentProvider with ChangeNotifier {
         );
         notifyListeners();
       }
+      notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
@@ -116,31 +114,4 @@ class AppointmentProvider with ChangeNotifier {
       rethrow;
     }
   }
-
-  // Future<void> fetchAllAppointments() async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse(EnviromentVariables.baseUrl + "allappointments/"),
-  //     );
-  //     //print(response.body);
-  //     final responseData = jsonDecode(response.body) as List<dynamic>;
-
-  //     for (var data in responseData) {
-  //       var appointment = data as Map<String, dynamic>;
-
-  //       _allAppointments.add(
-  //         Appointment(
-  //           id: appointment["id"].toString(),
-  //           bookingStart: DateTime.parse(appointment["bookingStart"]),
-  //           bookingEnd: DateTime.parse(appointment["bookingEnd"]),
-  //           serviceId: appointment["serviceId"].toString(),
-  //           barberId: appointment["providerId"].toString(),
-  //         ),
-  //       );
-  //       notifyListeners();
-  //     }
-  //   } catch (e) {
-  //     throw HttpException(e.toString());
-  //   }
-  // }
 }

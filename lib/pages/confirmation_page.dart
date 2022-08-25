@@ -3,6 +3,7 @@ import 'package:abc_barbershop/pages/appointment_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 import '../models/http_exception.dart';
 import '../pages/auth_page.dart';
@@ -65,7 +66,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   Widget _barberProfilePic(BuildContext context) {
     final barberProvider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = barberProvider.barbers;
-    final barber = barbers.firstWhere(
+    final barber = barbers.firstWhereOrNull(
       (element) => element.id == widget.barberId,
     );
     return Container(
@@ -81,7 +82,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.25), BlendMode.multiply),
-                    image: NetworkImage(barber.pictureUrl.isEmpty
+                    image: NetworkImage(barber!.pictureUrl.isEmpty
                         ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                         : barber.pictureUrl),
                     fit: BoxFit.cover),
@@ -120,7 +121,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   Widget _buildDetails() {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
-        .firstWhere((element) => element.id == widget.serviceId);
+        .firstWhereOrNull((element) => element.id == widget.serviceId);
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(25)),
       child: Column(
@@ -143,7 +144,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 height: getProportionateScreenHeight(5),
               ),
               Text(
-                service.name,
+                service!.name,
                 style: TextStyle(fontSize: getProportionateScreenHeight(14)),
               )
             ],
@@ -167,7 +168,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     height: getProportionateScreenHeight(5),
                   ),
                   Text(
-                    "25 CHF",
+                    "${service.studentPrice} CHF",
                     style:
                         TextStyle(fontSize: getProportionateScreenHeight(14)),
                   )
@@ -189,7 +190,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     height: getProportionateScreenHeight(5),
                   ),
                   Text(
-                    "${service.price} CHF",
+                    "${service.normalPrice} CHF",
                     style:
                         TextStyle(fontSize: getProportionateScreenHeight(14)),
                   )
@@ -249,7 +250,14 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   Widget _buildBookBtn(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
     return _isBookBtnLoading
-        ? const CircularProgressIndicator()
+        ? Container(
+            height: 55,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          )
         : Container(
             width: double.infinity,
             height: 55,
@@ -259,6 +267,9 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                   _showRedirectDialog();
                 } else {
                   try {
+                    setState(() {
+                      _isBookBtnLoading = true;
+                    });
                     await Provider.of<AppointmentProvider>(context,
                             listen: false)
                         .bookAppointment(
@@ -270,20 +281,31 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                       servicePrice:
                           Provider.of<ServicesProvider>(context, listen: false)
                               .services
-                              .firstWhere(
-                                  (element) => element.id == widget.serviceId)
-                              .price,
+                              .firstWhereOrNull(
+                                  (element) => element.id == widget.serviceId)!
+                              .normalPrice,
                       bookingStart: widget.bookingStart.toString(),
                       bookingEnd: widget.bookingEnd.toString(),
                     );
                     await Provider.of<AppointmentProvider>(context,
                             listen: false)
                         .fetchActiveAppointments(userProvider.user.id);
-                    _showDialog("Operation Successful!", true);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppointmentDetailsPage(
+                              Provider.of<AppointmentProvider>(context,
+                                      listen: false)
+                                  .activeAppointments
+                                  .last
+                                  .id,
+                              true),
+                        ));
                   } on HttpException catch (e) {
-                    _showDialog(e.toString(), false);
+                    _showDialog(e.toString());
                   } catch (e) {
-                    _showDialog("Ooops something went wrong!", false);
+                    print(e.toString());
+                    _showDialog("Ooops something went wrong!");
                   }
                   setState(() {
                     _isBookBtnLoading = false;
@@ -302,16 +324,16 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
           );
   }
 
-  void _showDialog(String message, bool isSuccess) {
+  void _showDialog(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(isSuccess ? 'Successful' : 'An Error Occurred!'),
+        title: const Text('An Error Occurred!'),
         content: Row(children: [
-          Icon(
-            isSuccess ? Icons.check_circle : Icons.error,
-            color: isSuccess ? Colors.green : Colors.red,
-            size: 35.0,
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+            size: 35,
           ),
           const SizedBox(
             width: 10,
@@ -333,16 +355,6 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               //     .last
               //     .id);
               Navigator.of(ctx).pop();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AppointmentDetailsPage(
-                        Provider.of<AppointmentProvider>(context, listen: false)
-                            .activeAppointments
-                            .last
-                            .id,
-                        true),
-                  ));
             },
           )
         ],
