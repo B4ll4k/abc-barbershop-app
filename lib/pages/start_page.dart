@@ -119,53 +119,10 @@ class StartPage extends StatelessWidget {
                     //         style: BorderStyle.solid,
                     //         color: Colors.black.withOpacity(0.6))),
                     child: Column(children: [
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/Haircut.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Haircut",
-                      ),
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/Barber.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Barber",
-                      ),
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/Haircut and Barber.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Haircut and Barber",
-                      ),
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/Hair wash.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Hair wash",
-                      ),
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/Students and Retired.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Students & Retired",
-                      ),
-                      Visibility(
-                        child: Image.asset(
-                          "assets/images/kids.png",
-                          height: SizeConfig.screenHeight * 0.2,
-                          width: SizeConfig.screenWidth * 0.35,
-                        ),
-                        visible: services[index].name == "Kids under 12 yrs",
+                      Image.network(
+                        services[index].pictureUrl,
+                        height: SizeConfig.screenHeight * 0.2,
+                        width: SizeConfig.screenWidth * 0.35,
                       ),
                       Text(
                         services[index].name,
