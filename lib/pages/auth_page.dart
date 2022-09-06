@@ -53,18 +53,21 @@ class _AuthPageState extends State<AuthPage> {
                     Container(
                       margin: EdgeInsets.only(
                           top: getProportionateScreenHeight(25)),
-                      height: getProportionateScreenHeight(50),
-                      child: const Center(
+                      height: getProportionateScreenHeight(55),
+                      child: Center(
                         child: Text(
                           'ABC',
-                          style: kHeading,
+                          style: TextStyle(
+                              fontSize: getProportionateScreenHeight(60),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: _authMode == AuthMode.signUp
-                          ? getProportionateScreenHeight(40)
-                          : getProportionateScreenHeight(80),
+                          ? getProportionateScreenHeight(35)
+                          : getProportionateScreenHeight(75),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
@@ -411,7 +414,7 @@ class _AuthPageState extends State<AuthPage> {
             color: Theme.of(context).colorScheme.secondary,
           )
         : Container(
-            width: getProportionateScreenWidth(250),
+            width: getProportionateScreenWidth(230),
             height: getProportionateScreenHeight(50),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondary,
@@ -426,10 +429,11 @@ class _AuthPageState extends State<AuthPage> {
                 }
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(2)),
                 child: Text(
                   _authMode == AuthMode.logIn ? "LogIn" : "SignUp",
-                  style: kBodyText,
+                  style: TextStyle(fontSize: getProportionateScreenHeight(20)),
                 ),
               ),
             ),

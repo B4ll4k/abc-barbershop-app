@@ -204,46 +204,50 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   }
 
   Widget _buildCalTime() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Icon(
-                  Icons.calendar_month,
-                  size: getProportionateScreenHeight(35),
-                ),
-                Text(
-                  DateFormat.yMMMMd().format(widget.bookingStart),
-                  style: TextStyle(
-                      fontSize: getProportionateScreenHeight(13),
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
-            SizedBox(
-              width: getProportionateScreenWidth(100),
-            ),
-            Column(
-              children: [
-                Icon(
-                  Icons.watch_later,
-                  size: getProportionateScreenHeight(35),
-                ),
-                Text(
-                  '${DateFormat.Hms().format(widget.bookingStart)} - ${DateFormat.Hms().format(widget.bookingEnd)}',
-                  style: TextStyle(
-                      fontSize: getProportionateScreenHeight(13),
-                      fontWeight: FontWeight.w500),
-                )
-              ],
-            )
-          ],
-        ),
-      ],
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(10)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    size: getProportionateScreenHeight(35),
+                  ),
+                  Text(
+                    DateFormat.yMMMMd().format(widget.bookingStart),
+                    style: TextStyle(
+                        fontSize: getProportionateScreenHeight(13),
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: getProportionateScreenWidth(100),
+              ),
+              Column(
+                children: [
+                  Icon(
+                    Icons.watch_later,
+                    size: getProportionateScreenHeight(35),
+                  ),
+                  Text(
+                    '${DateFormat.Hms().format(widget.bookingStart).substring(0, 5)} - ${DateFormat.Hms().format(widget.bookingEnd).substring(0, 5)}',
+                    style: TextStyle(
+                        fontSize: getProportionateScreenHeight(13),
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
