@@ -35,8 +35,6 @@ class StartPage extends StatelessWidget {
           await Provider.of<AppointmentProvider>(context, listen: false)
               .fetchHistoryAppointments(
                   Provider.of<UserProvider>(context, listen: false).user.id);
-          // await Provider.of<AppointmentProvider>(context, listen: false)
-          //     .fetchAllAppointments();
         }
       },
       color: Theme.of(context).colorScheme.secondary,
@@ -54,7 +52,6 @@ class StartPage extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
           ),
-          // backgroundColor: Colors.white,
           elevation: 0.0,
         ),
         body: Stack(
@@ -113,11 +110,6 @@ class StartPage extends StatelessWidget {
                   child: Card(
                     elevation: 8.0,
                     color: Colors.white.withOpacity(0.7),
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(
-                    //         width: 2.0,
-                    //         style: BorderStyle.solid,
-                    //         color: Colors.black.withOpacity(0.6))),
                     child: Column(children: [
                       Image.network(
                         services[index].pictureUrl,

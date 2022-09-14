@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import './pages/gallery_page.dart';
 import './pages/auth_page.dart';
 import './pages/main_page.dart';
-import './pages/search_page.dart';
 import './pages/splash_screen.dart';
 import '../pages/start_page.dart';
 import './providers/user_provider.dart';
@@ -46,13 +44,9 @@ class MyApp extends StatelessWidget {
         home: const SplashScreen(),
         debugShowCheckedModeBanner: false,
         title: 'BarberShop Booking',
-        //initialRoute: 'appointments',
         routes: {
           'home': (BuildContext context) => const MainPage(),
           'start': (BuildContext context) => StartPage(),
-          'search': (BuildContext context) => const SearchPage(),
-          'gallery': (BuildContext context) => const GalleryPage(),
-          //'appointments': (BuildContext context) => AppointmentPage(),
           'authPage': (BuildContext context) => AuthPage(false),
           ProfilePage.routeName: (ctx) => const ProfilePage(),
           EditProfilePage.route: (ctx) => const EditProfilePage(),

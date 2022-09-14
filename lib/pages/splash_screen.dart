@@ -63,8 +63,6 @@ class _SplashScreenState extends State<SplashScreen> {
           await Provider.of<AppointmentProvider>(context, listen: false)
               .fetchHistoryAppointments(
                   Provider.of<UserProvider>(context, listen: false).user.id);
-          // await Provider.of<AppointmentProvider>(context, listen: false)
-          //     .fetchAllAppointments();
         }
         Navigator.pushReplacementNamed(context, 'home');
       } else {

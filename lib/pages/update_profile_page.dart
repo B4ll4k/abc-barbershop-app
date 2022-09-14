@@ -146,7 +146,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: [
                 buildTextField("First Name", user!.firstName, "First Name"),
                 buildTextField('Last Name', user!.lastName, "Last Name"),
-                //buildTextField('email', user!.email, "Email"),
                 buildPhoneTextField('PhoneNo', user!.phoneNum),
                 buildPasswordTextField('New Password', '********', false, true),
                 buildPasswordTextField(

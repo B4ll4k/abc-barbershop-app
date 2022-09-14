@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-//Switch Routes Pages
-import './gallery_page.dart';
 import './profile_page.dart';
 import './start_page.dart';
-import './search_page.dart';
 import './auth_page.dart';
 import '../providers/user_provider.dart';
 
@@ -18,17 +15,8 @@ class MainPage extends StatefulWidget {
 
 class _HomePageState extends State<MainPage> {
   int _currentIndex = 0;
-  //Valores para el HideBottomNavBar
-  // ScrollController = _scrollControler;
+
   bool visible = true;
-  //If the app does not close when clicking the back buttons of the Gallery we can use this list
-  // List <Widget> _widgetOptions = <Widget>[
-  //   StartPage(),
-  //   SearchPage(),
-  //   GalleryPage(),
-  //   ProfilePage(),
-  //   AboutPage(),
-  // ];
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     GlobalKey<NavigatorState>(),
@@ -40,15 +28,6 @@ class _HomePageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    // void initState() {
-    //   super.initState();
-    //   _scrollController = ScrollController();
-    //   _scrollController.addListener(() {
-    //     if ( _scrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //       setState
-    //     }
-    //   });
-    // }
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab =
@@ -61,12 +40,9 @@ class _HomePageState extends State<MainPage> {
           children: <Widget>[
             _buildOffstageNavigator(0),
             _buildOffstageNavigator(1),
-            //_buildOffstageNavigator(2),
-            //_buildOffstageNavigator(3),
           ],
         ),
         bottomNavigationBar: _crearBottomNavigationBar(),
-        // backgroundColor: Colors.white,
       ),
     );
   }
@@ -83,15 +59,8 @@ class _HomePageState extends State<MainPage> {
           backgroundColor: Colors.white,
           label: 'Home',
         ),
-        //BottomNavigationBarItem(
-        //  icon: Icon(Icons.search),
-        //  label: 'Search',
-        //),
-        //BottomNavigationBarItem(icon: Icon(Icons.photo), label: 'Gallery'),
         BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity), label: 'Profile'),
-        // BottomNavigationBarItem(
-        //     icon: Icon(Icons.info_outline), label: 'About'),
       ],
       onTap: (int index) {
         setState(() {
@@ -106,12 +75,9 @@ class _HomePageState extends State<MainPage> {
       '/': (context) {
         return [
           StartPage(),
-          //const SearchPage(),
-          //const GalleryPage(),
           Provider.of<UserProvider>(context).isAuth()
               ? const ProfilePage()
               : AuthPage(true),
-          //const AboutPage(),
         ].elementAt(index);
       },
     };

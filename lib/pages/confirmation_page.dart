@@ -1,4 +1,3 @@
-import 'package:abc_barbershop/models/services.dart';
 import 'package:abc_barbershop/pages/appointment_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -354,10 +353,6 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {
-              // print(Provider.of<AppointmentProvider>(context, listen: false)
-              //     .activeAppointments
-              //     .last
-              //     .id);
               Navigator.of(ctx).pop();
             },
           )

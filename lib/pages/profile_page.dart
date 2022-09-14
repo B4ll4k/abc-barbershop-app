@@ -119,47 +119,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfilePic() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 140,
-          width: 140,
-          child: Stack(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            fit: StackFit.expand,
-            children: [
-              const CircleAvatar(
-                backgroundImage: AssetImage("assets/images/corte4.jpg"),
-              ),
-              Positioned(
-                bottom: 0,
-                right: -4,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Colors.white, width: 3.0),
-                    color: const Color.fromARGB(255, 239, 239, 240),
-                  ),
-                  height: 55,
-                  width: 55,
-                  child: Center(
-                    child: IconButton(
-                      iconSize: 25,
-                      color: Colors.black38,
-                      onPressed: () {},
-                      icon: const Icon(Icons.camera_alt_outlined),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildMenuOptions(
       BuildContext context, String option, Icon icon, VoidCallback onTap) {
     return Padding(
