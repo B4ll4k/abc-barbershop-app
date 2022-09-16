@@ -49,26 +49,26 @@ class _AuthPageState extends State<AuthPage> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: getProportionateScreenHeight(25)),
-                      height: getProportionateScreenHeight(55),
-                      child: Center(
-                        child: Text(
-                          'ABC',
-                          style: TextStyle(
-                              fontSize: getProportionateScreenHeight(60),
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                    _buildBackBtn(),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: getProportionateScreenWidth(300),
+                        height: getProportionateScreenHeight(300),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/ABC_logo.png')),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: _authMode == AuthMode.signUp
-                          ? getProportionateScreenHeight(35)
-                          : getProportionateScreenHeight(75),
-                    ),
+                    // SizedBox(
+                    //   height: _authMode == AuthMode.signUp
+                    //       ? getProportionateScreenHeight(35)
+                    //       : getProportionateScreenHeight(75),
+                    // ),
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenWidth(40)),
@@ -540,5 +540,20 @@ class _AuthPageState extends State<AuthPage> {
         ],
       ),
     );
+  }
+
+  Widget _buildBackBtn() {
+    return widget._redirected
+        ? Positioned(
+            left: 5,
+            top: 5,
+            child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                )),
+          )
+        : Container();
   }
 }

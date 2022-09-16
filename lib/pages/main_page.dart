@@ -77,7 +77,7 @@ class _HomePageState extends State<MainPage> {
           StartPage(),
           Provider.of<UserProvider>(context).isAuth()
               ? const ProfilePage()
-              : AuthPage(true),
+              : AuthPage(false),
         ].elementAt(index);
       },
     };
