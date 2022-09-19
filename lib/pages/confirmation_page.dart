@@ -121,8 +121,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
         .firstWhereOrNull((element) => element.id == widget.serviceId);
-    return Padding(
-      padding: EdgeInsets.all(getProportionateScreenWidth(25)),
+    return Container(
+      margin: const EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -64,11 +64,6 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                       ),
                     ),
-                    // SizedBox(
-                    //   height: _authMode == AuthMode.signUp
-                    //       ? getProportionateScreenHeight(35)
-                    //       : getProportionateScreenHeight(75),
-                    // ),
                     Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenWidth(40)),

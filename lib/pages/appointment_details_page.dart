@@ -130,8 +130,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
         .firstWhereOrNull((element) => element.id == appointment!.serviceId);
-    return Padding(
-      padding: EdgeInsets.all(getProportionateScreenWidth(25)),
+    return Container(
+      margin: const EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -242,7 +242,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                   size: getProportionateScreenHeight(35),
                 ),
                 Text(
-                  '${DateFormat.Hms().format(appointment!.bookingStart)} - ${DateFormat.Hms().format(appointment!.bookingEnd)}',
+                  '${DateFormat.Hm().format(appointment!.bookingStart)} - ${DateFormat.Hm().format(appointment!.bookingEnd)}',
                   style: TextStyle(
                       fontSize: getProportionateScreenHeight(13),
                       fontWeight: FontWeight.w500),

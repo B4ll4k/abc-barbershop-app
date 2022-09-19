@@ -21,15 +21,17 @@ class AppointmentsPage extends StatelessWidget {
         "$appointmentType Appointments",
         style: TextStyle(color: Theme.of(context).colorScheme.secondary),
       )),
-      body: Column(
-        children: [
-          SizedBox(
-            height: getProportionateScreenHeight(30),
-          ),
-          Container(
-              height: SizeConfig.screenHeight * 0.78,
-              child: _buildAppointments(context)),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: getProportionateScreenHeight(30),
+            ),
+            Container(
+                height: SizeConfig.screenHeight * 0.78,
+                child: _buildAppointments(context)),
+          ],
+        ),
       ),
     );
   }
@@ -46,7 +48,7 @@ class AppointmentsPage extends StatelessWidget {
             itemCount: appointments.length,
             itemBuilder: (context, i) => Container(
               width: getProportionateScreenWidth(460),
-              height: getProportionateScreenHeight(430),
+              height: getProportionateScreenHeight(520),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
