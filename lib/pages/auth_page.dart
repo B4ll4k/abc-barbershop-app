@@ -60,7 +60,8 @@ class _AuthPageState extends State<AuthPage> {
                         height: getProportionateScreenHeight(300),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/images/ABC_logo.png')),
+                              image:
+                                  AssetImage('assets/images/logo_white.png')),
                         ),
                       ),
                     ),
@@ -495,9 +496,9 @@ class _AuthPageState extends State<AuthPage> {
       await Provider.of<AppointmentProvider>(context, listen: false)
           .fetchHistoryAppointments(
               Provider.of<UserProvider>(context, listen: false).user.id);
-      setState(() {
-        _isLoading = false;
-      });
+      // setState(() {
+      //   _isLoading = false;
+      // });
       if (widget._redirected) {
         Navigator.pop(context);
       } else {
@@ -539,16 +540,12 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildBackBtn() {
     return widget._redirected
-        ? Positioned(
-            left: 5,
-            top: 5,
-            child: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Colors.white,
-                )),
-          )
+        ? IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            ))
         : Container();
   }
 }
