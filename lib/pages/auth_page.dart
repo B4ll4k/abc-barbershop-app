@@ -456,6 +456,7 @@ class _AuthPageState extends State<AuthPage> {
             .fetchHistoryAppointments(
                 Provider.of<UserProvider>(context, listen: false).user.id);
       });
+      Future.delayed(Duration(seconds: 5));
       if (widget._redirected) {
         Navigator.pop(context);
       } else {

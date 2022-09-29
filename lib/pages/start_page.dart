@@ -94,7 +94,7 @@ class StartPage extends StatelessWidget {
         itemBuilder: (context, index) => Container(
               child: Container(
                 width: SizeConfig.screenWidth * 0.2,
-                height: SizeConfig.screenHeight * 0.255,
+                height: SizeConfig.screenHeight * 0.26,
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth * 0.12,
                     vertical: SizeConfig.screenWidth * 0.04),
@@ -119,7 +119,7 @@ class StartPage extends StatelessWidget {
                       Text(
                         services[index].name,
                         style: TextStyle(
-                            fontSize: SizeConfig.screenWidth * 0.06,
+                            fontSize: SizeConfig.screenWidth * 0.052,
                             fontWeight: FontWeight.bold),
                       ),
                     ]),

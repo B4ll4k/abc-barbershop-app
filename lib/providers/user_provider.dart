@@ -15,6 +15,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
+    logout();
     final Map<String, dynamic> user = {'email': email, 'password': password};
     try {
       final response = await http.post(
