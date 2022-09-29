@@ -7,13 +7,14 @@ import '../models/http_exception.dart';
 import '../models/env.dart';
 
 class ServicesProvider with ChangeNotifier {
-  final List<Service> _services = [];
+  List<Service> _services = [];
 
   List<Service> get services {
     return [..._services];
   }
 
   Future<void> fetchServices() async {
+    _services = [];
     try {
       final response =
           await http.get(Uri.parse(EnviromentVariables.baseUrl + "services"));

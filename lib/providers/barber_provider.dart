@@ -8,13 +8,13 @@ import '../models/env.dart';
 import '../models/http_exception.dart';
 
 class BarberProvider with ChangeNotifier {
-  final List<Barber> _barbers = [];
+  List<Barber> _barbers = [];
 
-  final List<Map<String, dynamic>> _workingTime = [];
+  List<Map<String, dynamic>> _workingTime = [];
 
   String workingHours = "";
 
-  final List<int> _freeWeekdays = [];
+  List<int> _freeWeekdays = [];
 
   List<int> get freeWeekdays {
     return [..._freeWeekdays];
@@ -25,6 +25,7 @@ class BarberProvider with ChangeNotifier {
   }
 
   Future<void> fetchBarbers() async {
+    _barbers = [];
     try {
       final response =
           await http.get(Uri.parse(EnviromentVariables.baseUrl + "barbers"));
@@ -52,6 +53,7 @@ class BarberProvider with ChangeNotifier {
   }
 
   Future<void> fetchFreeWeekdays() async {
+    _freeWeekdays = [];
     try {
       final response = await http
           .get(Uri.parse(EnviromentVariables.baseUrl + "freeweekdays/"));
@@ -87,7 +89,7 @@ class BarberProvider with ChangeNotifier {
           startDate = startDate.add(const Duration(days: 1));
           dates.add(startDate);
         }
-
+        _barbers.firstWhere((element) => element.id == barberId).daysoff = [];
         for (var date in dates) {
           _barbers
               .firstWhere((element) => element.id == barberId)
@@ -102,6 +104,7 @@ class BarberProvider with ChangeNotifier {
   }
 
   Future<void> fetchWorkingTime() async {
+    _workingTime = [];
     try {
       final response = await http
           .get(Uri.parse(EnviromentVariables.baseUrl + "workingtime/"));
