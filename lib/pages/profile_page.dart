@@ -7,10 +7,16 @@ import '../providers/appointment_provider.dart';
 import '../providers/user_provider.dart';
 import 'auth_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   static String routeName = "/profilePage";
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +119,38 @@ class ProfilePage extends StatelessWidget {
               ),
             );
           }),
+          const SizedBox(height: 30),
+          _isLoading
+              ? CircularProgressIndicator(
+                  value: 30,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : _buildMenuOptions(
+                  context,
+                  "Delete account!",
+                  Icon(
+                    Icons.delete_forever,
+                    size: 36,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ), () {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  Provider.of<AppointmentProvider>(context, listen: false)
+                      .setActiveAppointment([]);
+                  Provider.of<AppointmentProvider>(context, listen: false)
+                      .setHistoryAppointment([]);
+                  print("gebtual");
+                  Provider.of<UserProvider>(context, listen: false)
+                      .deleteAccount();
+                  Provider.of<UserProvider>(context, listen: false).logout();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => AuthPage(true)),
+                    ),
+                  );
+                }),
           const SizedBox(height: 30),
         ],
       ),

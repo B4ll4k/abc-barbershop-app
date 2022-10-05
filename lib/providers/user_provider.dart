@@ -141,6 +141,19 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<void> deleteAccount() async {
+    final emailData = {'email': _user!.email};
+    try {
+      final response = await http.post(
+          Uri.parse(EnviromentVariables.baseUrl + "delete"),
+          body: jsonEncode(emailData));
+      print(response.body);
+    } catch (e) {
+      print(e);
+      throw HttpException(e.toString());
+    }
+  }
+
   void logout() async {
     final prefs = await SharedPreferences.getInstance();
     _user = null;
