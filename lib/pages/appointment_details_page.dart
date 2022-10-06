@@ -20,7 +20,6 @@ class AppointmentDetailsPage extends StatefulWidget {
 }
 
 class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
-  bool _isBookBtnLoading = false;
   Appointment? appointment;
   @override
   Widget build(BuildContext context) {

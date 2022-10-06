@@ -147,9 +147,7 @@ class UserProvider with ChangeNotifier {
       final response = await http.post(
           Uri.parse(EnviromentVariables.baseUrl + "delete"),
           body: jsonEncode(emailData));
-      print(response.body);
     } catch (e) {
-      print(e);
       throw HttpException(e.toString());
     }
   }

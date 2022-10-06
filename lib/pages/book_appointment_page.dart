@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 import '../size_config.dart';
 
@@ -30,7 +29,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   int _selectedTimeIndex = -1;
 
-  bool _isBookBtnLoading = false;
+  final _isBookBtnLoading = false;
 
   bool _isWorkingDay = true;
 

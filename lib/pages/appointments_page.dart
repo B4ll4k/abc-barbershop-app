@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../providers/barber_provider.dart';
-import '../widgets/fonts/barber_icon_icons.dart';
 import '../size_config.dart';
 
 class AppointmentsPage extends StatelessWidget {

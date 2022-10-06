@@ -16,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,37 +119,61 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }),
           const SizedBox(height: 30),
-          _isLoading
-              ? CircularProgressIndicator(
-                  value: 30,
-                  color: Theme.of(context).colorScheme.secondary,
-                )
-              : _buildMenuOptions(
-                  context,
-                  "Delete account!",
-                  Icon(
-                    Icons.delete_forever,
-                    size: 36,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ), () {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  Provider.of<AppointmentProvider>(context, listen: false)
-                      .setActiveAppointment([]);
-                  Provider.of<AppointmentProvider>(context, listen: false)
-                      .setHistoryAppointment([]);
-                  print("gebtual");
-                  Provider.of<UserProvider>(context, listen: false)
-                      .deleteAccount();
-                  Provider.of<UserProvider>(context, listen: false).logout();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => AuthPage(true)),
+          _buildMenuOptions(
+              context,
+              "Delete account!",
+              Icon(
+                Icons.delete_forever,
+                size: 36,
+                color: Theme.of(context).colorScheme.secondary,
+              ), () {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: Text(
+                  'Alert',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                content:
+                    const Text('Are you sure you want to delete your account?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
                     ),
-                  );
-                }),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Provider.of<AppointmentProvider>(context, listen: false)
+                          .setActiveAppointment([]);
+                      Provider.of<AppointmentProvider>(context, listen: false)
+                          .setHistoryAppointment([]);
+                      Provider.of<UserProvider>(context, listen: false)
+                          .deleteAccount();
+                      Provider.of<UserProvider>(context, listen: false)
+                          .logout();
+                      Navigator.pop(context, 'Cancel');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => AuthPage(true)),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
           const SizedBox(height: 30),
         ],
       ),

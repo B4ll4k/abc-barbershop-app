@@ -307,7 +307,6 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                   } on HttpException catch (e) {
                     _showDialog(e.toString());
                   } catch (e) {
-                    print(e.toString());
                     _showDialog("Ooops something went wrong!");
                   }
                   setState(() {
