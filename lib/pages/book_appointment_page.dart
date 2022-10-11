@@ -33,11 +33,25 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   bool _isWorkingDay = true;
 
+  bool _isDayAdded = false;
+
   @override
   Widget build(BuildContext context) {
     _barberId = widget.barberId;
-    _workingTime = {};
-    _isWorkingDay = true;
+    // setState(() {
+    //   _workingTime = {};
+    //   _isWorkingDay = true;
+    //   _selectedTime = "";
+    //   _selectedTimeIndex = -1;
+    // });
+
+    if (_selectedDate.value.weekday == 6) {
+      _isDayAdded = true;
+      _selectedDate.value = _selectedDate.value.add(const Duration(days: 2));
+    } else if (_selectedDate.value.weekday == 7) {
+      _isDayAdded = true;
+      _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
+    }
 
     final barberProvider = Provider.of<BarberProvider>(context);
     final times = barberProvider.findWorkingTime(
@@ -56,56 +70,128 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         _isWorkingDay = false;
       }
     }
-    for (var element in times) {
-      String startTime = element["startTime"].toString().substring(0, 5);
-      String endTime = element["endTime"].toString().substring(0, 5);
-      String breakStartTime =
-          element["breakStartTime"].toString().substring(0, 5);
-      String breakEndTime = element["breakEndTime"].toString().substring(0, 5);
-      while (startTime != breakStartTime) {
-        if (_selectedTime == startTime) {
-          _workingTime.addAll({startTime: true});
-        } else {
-          if (DateTime.now().hour > int.parse(startTime.substring(0, 2))) {
-            _workingTime.addAll({startTime: true});
+    if (_isDayAdded) {
+      print("ezi geba belegn!");
+      for (var element in times) {
+        String startTimeString =
+            element["startTime"].toString().substring(0, 5);
+        String endTimeString = element["endTime"].toString().substring(0, 5);
+        String breakStartTimeString =
+            element["breakStartTime"].toString().substring(0, 5);
+        String breakEndTimeString =
+            element["breakEndTime"].toString().substring(0, 5);
+        while (startTimeString != breakStartTimeString) {
+          // if (_selectedTime == startTimeString) {
+          //   _workingTime.addAll({startTimeString: true});
+          // } else {
+          //   DateTime startTime = DateTime.now();
+          //   if (startTime.hour > int.parse(startTimeString.substring(0, 2))) {
+          //     _workingTime.addAll({startTimeString: true});
+          //   } else {
+          //     _workingTime.addAll({startTimeString: !_isWorkingDay});
+          //   }
+          // }
+
+          _workingTime.addAll({startTimeString: !_isWorkingDay});
+
+          if (startTimeString[3] == "0") {
+            startTimeString = startTimeString.replaceRange(3, 4, "3");
           } else {
-            _workingTime.addAll({startTime: !_isWorkingDay});
+            int f = int.parse(startTimeString.substring(0, 2));
+            f = f + 1;
+            startTimeString = startTimeString.replaceRange(3, 4, "0");
+            if (f < 10) {
+              startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            } else {
+              startTimeString = startTimeString.replaceRange(0, 2, "$f");
+            }
           }
         }
+        while (breakEndTimeString != endTimeString) {
+          // if (_selectedTime == breakEndTimeString) {
+          //   _workingTime.addAll({breakEndTimeString: true});
+          // } else {
+          //   if (DateTime.now().hour >
+          //       int.parse(breakEndTimeString.substring(0, 2))) {
+          //     _workingTime.addAll({breakEndTimeString: true});
+          //   } else {
+          //     _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
+          //   }
+          // }
 
-        if (startTime[3] == "0") {
-          startTime = startTime.replaceRange(3, 4, "3");
-        } else {
-          int f = int.parse(startTime.substring(0, 2));
-          f = f + 1;
-          startTime = startTime.replaceRange(3, 4, "0");
-          if (f < 10) {
-            startTime = startTime.replaceRange(0, 2, "0$f");
+          _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
+
+          if (breakEndTimeString[3] == "0") {
+            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
           } else {
-            startTime = startTime.replaceRange(0, 2, "$f");
+            int f = int.parse(breakEndTimeString.substring(0, 2));
+            f = f + 1;
+            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
+            if (f < 10) {
+              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "0$f");
+            } else {
+              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "$f");
+            }
           }
         }
       }
-      while (breakEndTime != endTime) {
-        if (_selectedTime == breakEndTime) {
-          _workingTime.addAll({breakEndTime: true});
-        } else {
-          if (DateTime.now().hour > int.parse(breakEndTime.substring(0, 2))) {
-            _workingTime.addAll({breakEndTime: true});
+    } else {
+      print(_isDayAdded);
+      for (var element in times) {
+        String startTimeString =
+            element["startTime"].toString().substring(0, 5);
+        String endTimeString = element["endTime"].toString().substring(0, 5);
+        String breakStartTimeString =
+            element["breakStartTime"].toString().substring(0, 5);
+        String breakEndTimeString =
+            element["breakEndTime"].toString().substring(0, 5);
+        while (startTimeString != breakStartTimeString) {
+          if (_selectedTime == startTimeString) {
+            _workingTime.addAll({startTimeString: true});
           } else {
-            _workingTime.addAll({breakEndTime: !_isWorkingDay});
+            DateTime startTime = DateTime.now();
+            if (startTime.hour > int.parse(startTimeString.substring(0, 2))) {
+              _workingTime.addAll({startTimeString: true});
+            } else {
+              _workingTime.addAll({startTimeString: !_isWorkingDay});
+            }
+          }
+
+          if (startTimeString[3] == "0") {
+            startTimeString = startTimeString.replaceRange(3, 4, "3");
+          } else {
+            int f = int.parse(startTimeString.substring(0, 2));
+            f = f + 1;
+            startTimeString = startTimeString.replaceRange(3, 4, "0");
+            if (f < 10) {
+              startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            } else {
+              startTimeString = startTimeString.replaceRange(0, 2, "$f");
+            }
           }
         }
-        if (breakEndTime[3] == "0") {
-          breakEndTime = breakEndTime.replaceRange(3, 4, "3");
-        } else {
-          int f = int.parse(breakEndTime.substring(0, 2));
-          f = f + 1;
-          breakEndTime = breakEndTime.replaceRange(3, 4, "0");
-          if (f < 10) {
-            breakEndTime = breakEndTime.replaceRange(0, 2, "0$f");
+        while (breakEndTimeString != endTimeString) {
+          if (_selectedTime == breakEndTimeString) {
+            _workingTime.addAll({breakEndTimeString: true});
           } else {
-            breakEndTime = breakEndTime.replaceRange(0, 2, "$f");
+            if (DateTime.now().hour >
+                int.parse(breakEndTimeString.substring(0, 2))) {
+              _workingTime.addAll({breakEndTimeString: true});
+            } else {
+              _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
+            }
+          }
+          if (breakEndTimeString[3] == "0") {
+            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
+          } else {
+            int f = int.parse(breakEndTimeString.substring(0, 2));
+            f = f + 1;
+            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
+            if (f < 10) {
+              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "0$f");
+            } else {
+              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "$f");
+            }
           }
         }
       }
@@ -348,6 +434,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     BuildContext context,
     Object? arguments,
   ) {
+    DateTime initialDate = DateTime.now();
     return DialogRoute<DateTime>(
       context: context,
       builder: (BuildContext context) {
@@ -371,8 +458,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               initialEntryMode: DatePickerEntryMode.calendarOnly,
               initialDate:
                   DateTime.fromMillisecondsSinceEpoch(arguments! as int),
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 90)),
+              firstDate: initialDate,
+              lastDate: initialDate.add(const Duration(days: 90)),
               selectableDayPredicate: (DateTime val) {
                 final barberProvider =
                     Provider.of<BarberProvider>(context, listen: false);
@@ -399,11 +486,15 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   void _selectDate(DateTime? newSelectedDate) {
+    print("ere menden new gudu");
     final workingTime = _workingTime.keys.toList();
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
         if (_selectedTimeIndex > 0) {
+          for (var key in _workingTime.keys) {
+            _workingTime[key] = false;
+          }
           _workingTime[workingTime[_selectedTimeIndex]] = false;
           _selectedTime = "";
           _selectedTimeIndex = -1;
