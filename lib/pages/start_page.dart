@@ -7,6 +7,7 @@ import '../providers/user_provider.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 import '../size_config.dart';
+import 'package:blur/blur.dart';
 
 class StartPage extends StatelessWidget {
   StartPage({Key? key}) : super(key: key);
@@ -65,23 +66,38 @@ class StartPage extends StatelessWidget {
   }
 
   Widget _buildBackgroundImage() {
-    return ShaderMask(
-      shaderCallback: (bounds) => const LinearGradient(
-        colors: [Colors.black, Colors.black12],
-        begin: Alignment.bottomCenter,
-        end: Alignment.center,
-      ).createShader(bounds),
-      blendMode: BlendMode.darken,
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black12, BlendMode.color),
+    return Blur(
+      blur: 1.5,
+      blurColor: Color.fromARGB(255, 138, 133, 133),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/bg.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
     );
+    // return ShaderMask(
+    //   shaderCallback: (bounds) => const LinearGradient(
+    //     colors: [Colors.black, Colors.black12],
+    //     begin: Alignment.bottomCenter,
+    //     end: Alignment.center,
+    //   ).createShader(bounds),
+    //   blendMode: BlendMode.darken,
+    //   child: Container(
+    //     decoration: const BoxDecoration(
+    //       image: DecorationImage(
+    //         image: AssetImage('assets/images/bg.jpg'),
+    //         fit: BoxFit.cover,
+    //         colorFilter: ColorFilter.mode(Colors.black12, BlendMode.color),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _categoriesBuilder(BuildContext context) {
@@ -108,8 +124,11 @@ class StartPage extends StatelessWidget {
                     );
                   },
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: BorderSide(color: Colors.white)),
                     elevation: 8.0,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withOpacity(1),
                     child: Column(children: [
                       Image.network(
                         services[index].pictureUrl,
