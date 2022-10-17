@@ -1,4 +1,5 @@
 import 'package:abc_barbershop/pages/confirmation_page.dart';
+import 'package:abc_barbershop/providers/appointment_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -35,167 +36,172 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   bool _isDayAdded = false;
 
+  bool _isFirstTime = true;
+
+  List<String> activeAppointments = [];
+
   @override
   Widget build(BuildContext context) {
     _barberId = widget.barberId;
-    // setState(() {
-    //   _workingTime = {};
-    //   _isWorkingDay = true;
-    //   _selectedTime = "";
-    //   _selectedTimeIndex = -1;
-    // });
 
-    if (_selectedDate.value.weekday == 6) {
-      _isDayAdded = true;
-      _selectedDate.value = _selectedDate.value.add(const Duration(days: 2));
-    } else if (_selectedDate.value.weekday == 7) {
-      _isDayAdded = true;
-      _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
-    }
-
-    final barberProvider = Provider.of<BarberProvider>(context);
-    final times = barberProvider.findWorkingTime(
-        widget.barberId, _selectedDate.value.weekday.toString());
-
-    for (var element in barberProvider.freeWeekdays) {
-      if (_selectedDate.value.weekday == element) {
-        _isWorkingDay = false;
+    if (_isFirstTime) {
+      if (_selectedDate.value.weekday == 6) {
+        _isDayAdded = true;
+        _selectedDate.value = _selectedDate.value.add(const Duration(days: 2));
+      } else if (_selectedDate.value.weekday == 7) {
+        _isDayAdded = true;
+        _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
       }
-    }
 
-    for (var element in barberProvider.barbers
-        .firstWhere((element) => element.id == _barberId)
-        .daysoff) {
-      if (_selectedDate.value == element) {
-        _isWorkingDay = false;
-      }
-    }
-    if (_isDayAdded) {
-      print("ezi geba belegn!");
-      for (var element in times) {
-        String startTimeString =
-            element["startTime"].toString().substring(0, 5);
-        String endTimeString = element["endTime"].toString().substring(0, 5);
-        String breakStartTimeString =
-            element["breakStartTime"].toString().substring(0, 5);
-        String breakEndTimeString =
-            element["breakEndTime"].toString().substring(0, 5);
-        while (startTimeString != breakStartTimeString) {
-          // if (_selectedTime == startTimeString) {
-          //   _workingTime.addAll({startTimeString: true});
-          // } else {
-          //   DateTime startTime = DateTime.now();
-          //   if (startTime.hour > int.parse(startTimeString.substring(0, 2))) {
-          //     _workingTime.addAll({startTimeString: true});
-          //   } else {
-          //     _workingTime.addAll({startTimeString: !_isWorkingDay});
-          //   }
-          // }
+      final barberProvider = Provider.of<BarberProvider>(context);
+      final times = barberProvider.findWorkingTime(
+          widget.barberId, _selectedDate.value.weekday.toString());
 
-          _workingTime.addAll({startTimeString: !_isWorkingDay});
-
-          if (startTimeString[3] == "0") {
-            startTimeString = startTimeString.replaceRange(3, 4, "3");
-          } else {
-            int f = int.parse(startTimeString.substring(0, 2));
-            f = f + 1;
-            startTimeString = startTimeString.replaceRange(3, 4, "0");
-            if (f < 10) {
-              startTimeString = startTimeString.replaceRange(0, 2, "0$f");
-            } else {
-              startTimeString = startTimeString.replaceRange(0, 2, "$f");
-            }
-          }
-        }
-        while (breakEndTimeString != endTimeString) {
-          // if (_selectedTime == breakEndTimeString) {
-          //   _workingTime.addAll({breakEndTimeString: true});
-          // } else {
-          //   if (DateTime.now().hour >
-          //       int.parse(breakEndTimeString.substring(0, 2))) {
-          //     _workingTime.addAll({breakEndTimeString: true});
-          //   } else {
-          //     _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
-          //   }
-          // }
-
-          _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
-
-          if (breakEndTimeString[3] == "0") {
-            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
-          } else {
-            int f = int.parse(breakEndTimeString.substring(0, 2));
-            f = f + 1;
-            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
-            if (f < 10) {
-              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "0$f");
-            } else {
-              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "$f");
-            }
-          }
+      for (var element in barberProvider.freeWeekdays) {
+        if (_selectedDate.value.weekday == element) {
+          _isWorkingDay = false;
         }
       }
-    } else {
-      print(_isDayAdded);
-      for (var element in times) {
-        String startTimeString =
-            element["startTime"].toString().substring(0, 5);
-        String endTimeString = element["endTime"].toString().substring(0, 5);
-        String breakStartTimeString =
-            element["breakStartTime"].toString().substring(0, 5);
-        String breakEndTimeString =
-            element["breakEndTime"].toString().substring(0, 5);
-        while (startTimeString != breakStartTimeString) {
-          if (_selectedTime == startTimeString) {
-            _workingTime.addAll({startTimeString: true});
-          } else {
-            DateTime startTime = DateTime.now();
-            if (startTime.hour > int.parse(startTimeString.substring(0, 2))) {
+      final activeAppointmentsOriginal =
+          Provider.of<AppointmentProvider>(context).activeAppointments;
+      for (var appointment in activeAppointmentsOriginal) {
+        if (appointment.bookingStart.month == _selectedDate.value.month &&
+            appointment.bookingStart.day == _selectedDate.value.day) {
+          activeAppointments
+              .add(appointment.bookingStart.toString().substring(11, 16));
+        }
+      }
+
+      for (var element in barberProvider.barbers
+          .firstWhere((element) => element.id == _barberId)
+          .daysoff) {
+        if (_selectedDate.value == element) {
+          _isWorkingDay = false;
+        }
+      }
+      if (_isDayAdded || _selectedDate.value.day != DateTime.now().day) {
+        for (var element in times) {
+          String startTimeString =
+              element["startTime"].toString().substring(0, 5);
+          String endTimeString = element["endTime"].toString().substring(0, 5);
+          String breakStartTimeString =
+              element["breakStartTime"].toString().substring(0, 5);
+          String breakEndTimeString =
+              element["breakEndTime"].toString().substring(0, 5);
+
+          while (startTimeString != breakStartTimeString) {
+            if (_selectedTime == startTimeString ||
+                activeAppointments.contains(startTimeString)) {
               _workingTime.addAll({startTimeString: true});
             } else {
               _workingTime.addAll({startTimeString: !_isWorkingDay});
             }
-          }
 
-          if (startTimeString[3] == "0") {
-            startTimeString = startTimeString.replaceRange(3, 4, "3");
-          } else {
-            int f = int.parse(startTimeString.substring(0, 2));
-            f = f + 1;
-            startTimeString = startTimeString.replaceRange(3, 4, "0");
-            if (f < 10) {
-              startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            if (startTimeString[3] == "0") {
+              startTimeString = startTimeString.replaceRange(3, 4, "3");
             } else {
-              startTimeString = startTimeString.replaceRange(0, 2, "$f");
+              int f = int.parse(startTimeString.substring(0, 2));
+              f = f + 1;
+              startTimeString = startTimeString.replaceRange(3, 4, "0");
+              if (f < 10) {
+                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+              } else {
+                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+              }
             }
           }
-        }
-        while (breakEndTimeString != endTimeString) {
-          if (_selectedTime == breakEndTimeString) {
-            _workingTime.addAll({breakEndTimeString: true});
-          } else {
-            if (DateTime.now().hour >
-                int.parse(breakEndTimeString.substring(0, 2))) {
+          while (breakEndTimeString != endTimeString) {
+            if (_selectedTime == breakEndTimeString ||
+                activeAppointments.contains(breakEndTimeString)) {
               _workingTime.addAll({breakEndTimeString: true});
             } else {
               _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
             }
-          }
-          if (breakEndTimeString[3] == "0") {
-            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
-          } else {
-            int f = int.parse(breakEndTimeString.substring(0, 2));
-            f = f + 1;
-            breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
-            if (f < 10) {
-              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "0$f");
+
+            if (breakEndTimeString[3] == "0") {
+              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
             } else {
-              breakEndTimeString = breakEndTimeString.replaceRange(0, 2, "$f");
+              int f = int.parse(breakEndTimeString.substring(0, 2));
+              f = f + 1;
+              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
+              if (f < 10) {
+                breakEndTimeString =
+                    breakEndTimeString.replaceRange(0, 2, "0$f");
+              } else {
+                breakEndTimeString =
+                    breakEndTimeString.replaceRange(0, 2, "$f");
+              }
+            }
+          }
+        }
+      } else {
+        for (var element in times) {
+          String startTimeString =
+              element["startTime"].toString().substring(0, 5);
+          String endTimeString = element["endTime"].toString().substring(0, 5);
+          String breakStartTimeString =
+              element["breakStartTime"].toString().substring(0, 5);
+          String breakEndTimeString =
+              element["breakEndTime"].toString().substring(0, 5);
+          while (startTimeString != breakStartTimeString) {
+            if (_selectedTime == startTimeString ||
+                activeAppointments.contains(startTimeString)) {
+              _workingTime.addAll({startTimeString: true});
+            } else {
+              DateTime startTime = DateTime.now();
+              if (startTime.hour > int.parse(startTimeString.substring(0, 2))) {
+                _workingTime.addAll({startTimeString: true});
+              } else {
+                _workingTime.addAll({startTimeString: !_isWorkingDay});
+              }
+            }
+
+            if (startTimeString[3] == "0") {
+              startTimeString = startTimeString.replaceRange(3, 4, "3");
+            } else {
+              int f = int.parse(startTimeString.substring(0, 2));
+              f = f + 1;
+              startTimeString = startTimeString.replaceRange(3, 4, "0");
+              if (f < 10) {
+                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+              } else {
+                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+              }
+            }
+          }
+          while (breakEndTimeString != endTimeString) {
+            if (_selectedTime == breakEndTimeString) {
+              _workingTime.addAll({breakEndTimeString: true});
+            } else {
+              if (DateTime.now().hour >
+                      int.parse(breakEndTimeString.substring(0, 2)) ||
+                  activeAppointments.contains(breakEndTimeString)) {
+                _workingTime.addAll({breakEndTimeString: true});
+              } else {
+                _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
+              }
+            }
+            if (breakEndTimeString[3] == "0") {
+              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
+            } else {
+              int f = int.parse(breakEndTimeString.substring(0, 2));
+              f = f + 1;
+              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
+              if (f < 10) {
+                breakEndTimeString =
+                    breakEndTimeString.replaceRange(0, 2, "0$f");
+              } else {
+                breakEndTimeString =
+                    breakEndTimeString.replaceRange(0, 2, "$f");
+              }
             }
           }
         }
       }
     }
+
+    _isFirstTime = true;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -218,6 +224,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             _buildCalendar(context),
             const SizedBox(height: 50.0),
             _buildTimeFrame(context),
+            const SizedBox(height: 100.0),
           ],
         ),
       ),
@@ -323,30 +330,21 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                   );
                   final bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
-                  if (DateTime.now().hour >
-                      int.parse(_selectedTime.substring(0, 2))) {
-                    setState(() {
-                      _workingTime[workingTime[_selectedTimeIndex]] = false;
-                      _selectedTime = "";
-                      _selectedTimeIndex = -1;
-                    });
-                    _showDialog("Please, select another time!", false);
-                  } else {
-                    setState(() {
-                      _workingTime[workingTime[_selectedTimeIndex]] = false;
-                      _selectedTime = "";
-                      _selectedTimeIndex = -1;
-                    });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ConfirmationPage(
-                              barberId: widget.barberId,
-                              serviceId: widget.serviceId,
-                              bookingStart: bookingStart,
-                              bookingEnd: bookingEnd),
-                        ));
-                  }
+
+                  setState(() {
+                    _workingTime[workingTime[_selectedTimeIndex]] = false;
+                    _selectedTime = "";
+                    _selectedTimeIndex = -1;
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmationPage(
+                            barberId: widget.barberId,
+                            serviceId: widget.serviceId,
+                            bookingStart: bookingStart,
+                            bookingEnd: bookingEnd),
+                      ));
                 }
               },
               child: Text(
@@ -373,7 +371,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget _buildTimeFrame(BuildContext context) {
     final workingTime = _workingTime.keys.toList();
     return Container(
-      height: getProportionateScreenHeight(420),
+      padding: EdgeInsets.only(bottom: getProportionateScreenHeight(170)),
+      height: getProportionateScreenHeight(400),
       child: GridView.builder(
         itemCount: workingTime.length,
         gridDelegate:
@@ -486,11 +485,12 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   void _selectDate(DateTime? newSelectedDate) {
-    print("ere menden new gudu");
+    _isFirstTime = true;
     final workingTime = _workingTime.keys.toList();
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
+        activeAppointments = [];
         if (_selectedTimeIndex > 0) {
           for (var key in _workingTime.keys) {
             _workingTime[key] = false;
@@ -500,6 +500,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           _selectedTimeIndex = -1;
         }
       });
+      print(activeAppointments.length);
     }
   }
 
