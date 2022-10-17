@@ -447,16 +447,15 @@ class _AuthPageState extends State<AuthPage> {
 
     try {
       await Provider.of<UserProvider>(context, listen: false)
-          .login(_formData['email'], _formData['password'])
-          .then((value) async {
-        await Provider.of<AppointmentProvider>(context, listen: false)
+          .login(_formData['email'], _formData['password']);
+      Future.wait({
+        Provider.of<AppointmentProvider>(context, listen: false)
             .fetchActiveAppointments(
-                Provider.of<UserProvider>(context, listen: false).user.id);
-        await Provider.of<AppointmentProvider>(context, listen: false)
+                Provider.of<UserProvider>(context, listen: false).user.id),
+        Provider.of<AppointmentProvider>(context, listen: false)
             .fetchHistoryAppointments(
-                Provider.of<UserProvider>(context, listen: false).user.id);
+                Provider.of<UserProvider>(context, listen: false).user.id),
       });
-      Future.delayed(Duration(seconds: 5));
       if (widget._redirected) {
         Navigator.pop(context);
       } else {
