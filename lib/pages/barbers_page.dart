@@ -57,7 +57,7 @@ class BarberPage extends StatelessWidget {
                     height: 85.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         image: NetworkImage(barbers[i].pictureUrl.isEmpty
                             ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                             : barbers[i].pictureUrl),
