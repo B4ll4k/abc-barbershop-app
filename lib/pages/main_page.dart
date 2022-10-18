@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,14 +51,15 @@ class _HomePageState extends State<MainPage> {
       selectedItemColor: Theme.of(context).colorScheme.secondary,
       unselectedItemColor: Colors.black.withOpacity(0.6),
       elevation: 40.0,
-      items: const [
+      items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           backgroundColor: Colors.white,
-          label: 'Home',
+          label: translation(context).home,
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.perm_identity), label: 'Profile'),
+            icon: Icon(Icons.perm_identity),
+            label: translation(context).profile),
       ],
       onTap: (int index) {
         setState(() {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,9 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               duration: const Duration(minutes: 15),
-              content: const Text('Failed to estasblish connection!'),
+              content: Text(translation(context).connectionFailed
+                  // 'Failed to estasblish connection!'
+                  ),
               action: SnackBarAction(
-                label: 'Retry',
+                label: translation(context).retry,
                 onPressed: () async {
                   await _checkConnection(context);
                 },
@@ -69,9 +72,9 @@ class _SplashScreenState extends State<SplashScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(minutes: 15),
-            content: const Text('Failed to estasblish connection!'),
+            content: Text(translation(context).connectionFailed),
             action: SnackBarAction(
-              label: 'Retry',
+              label: translation(context).retry,
               onPressed: () async {
                 await _checkConnection(context);
               },
@@ -83,9 +86,9 @@ class _SplashScreenState extends State<SplashScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(minutes: 15),
-          content: const Text('Failed to estasblish connection!'),
+          content: Text(translation(context).connectionFailed),
           action: SnackBarAction(
-            label: 'Retry',
+            label: translation(context).retry,
             onPressed: () async {
               await _checkConnection(context);
             },

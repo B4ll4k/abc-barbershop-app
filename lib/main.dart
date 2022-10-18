@@ -1,7 +1,10 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//import 'package:flutter_locales/flutter_locales.dart';
 
 import './pages/auth_page.dart';
 import './pages/main_page.dart';
@@ -15,6 +18,7 @@ import './pages/update_profile_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // await Locales.init(['en', 'fr']);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -27,8 +31,31 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(newLocale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    getLocale().then((locale) => {setLocale(locale)});
+    super.didChangeDependencies();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -41,6 +68,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => BarberProvider()),
       ],
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: _locale,
         home: const SplashScreen(),
         debugShowCheckedModeBanner: false,
         title: 'BarberShop Booking',

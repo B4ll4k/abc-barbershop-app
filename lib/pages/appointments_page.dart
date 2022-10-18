@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/appointment_details_page.dart';
 import 'package:abc_barbershop/providers/appointment_provider.dart';
 import 'package:abc_barbershop/providers/services_provider.dart';
@@ -195,7 +196,8 @@ class AppointmentsPage extends StatelessWidget {
           )
         : Center(
             child: Text(
-            "No Appointments!",
+            translation(context).noAppointments,
+            // "No Appointments!",
             style: TextStyle(
                 fontSize: 20, color: Theme.of(context).colorScheme.secondary),
           ));

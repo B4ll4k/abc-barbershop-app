@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/models/appointments.dart';
 import 'package:abc_barbershop/providers/appointment_provider.dart';
 import 'package:abc_barbershop/providers/services_provider.dart';
@@ -32,8 +33,9 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text(
-          "Appointment Details",
+        title: Text(
+          translation(context).appointmentDetails,
+          // "Appointment Details",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -56,7 +58,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
               height: getProportionateScreenHeight(10),
             ),
             Text(
-              "Thank you for booking!",
+              translation(context).thanks,
+              //"Thank you for booking!",
               style: TextStyle(fontSize: getProportionateScreenHeight(20)),
             ),
             SizedBox(
@@ -142,7 +145,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Service Chosen",
+                translation(context).serviceChosen,
+                //"Service Chosen",
                 style: TextStyle(
                     fontSize: getProportionateScreenHeight(15),
                     fontWeight: FontWeight.bold),
@@ -166,7 +170,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Student Price",
+                    translation(context).studentPrice,
+                    //"Student Price",
                     style: TextStyle(
                         fontSize: getProportionateScreenHeight(15),
                         fontWeight: FontWeight.bold),
@@ -188,7 +193,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Normal Price",
+                    translation(context).normalPrice,
+                    // "Normal Price",
                     style: TextStyle(
                         fontSize: getProportionateScreenHeight(15),
                         fontWeight: FontWeight.bold),
