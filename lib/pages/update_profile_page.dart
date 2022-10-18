@@ -149,12 +149,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
             child: ListView(
               children: [
-                buildTextField("First Name", user!.firstName, "First Name"),
-                buildTextField('Last Name', user!.lastName, "Last Name"),
-                buildPhoneTextField('PhoneNo', user!.phoneNum),
-                buildPasswordTextField('New Password', '********', false, true),
+                buildTextField(translation(context).firstName, user!.firstName,
+                    "First Name"),
+                buildTextField(
+                    translation(context).lastName, user!.lastName, "Last Name"),
+                buildPhoneTextField(
+                    translation(context).phoneNo, user!.phoneNum),
                 buildPasswordTextField(
-                    "Confirm Password", '********', true, false),
+                    translation(context).newPassword, '********', false, true),
+                buildPasswordTextField(translation(context).confirmPassword,
+                    '********', true, false),
                 const SizedBox(
                   height: 30,
                 ),

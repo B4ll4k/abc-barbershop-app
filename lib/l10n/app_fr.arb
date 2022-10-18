@@ -53,6 +53,7 @@
     "checkPhoneNumber":"Veuillez vérifier votre numéro de téléphone !",
     "valDigits":"La valeur doit comporter au moins 3 chiffres",
     "passwordShort":"Le mot de passe est trop court!",
-    "passwordMustMatch":"Le mot de passe doit correspondre!"
+    "passwordMustMatch":"Le mot de passe doit correspondre!",
+    "newPassword":"nouveau mot de passe"
     
 }

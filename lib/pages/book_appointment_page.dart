@@ -46,7 +46,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     _barberId = widget.barberId;
 
     if (_isFirstTime) {
-      if (_selectedDate.value.weekday == 6) {
+      if (_selectedDate.value.weekday == 3) {
         _isDayAdded = true;
         _selectedDate.value = _selectedDate.value.add(const Duration(days: 2));
       } else if (_selectedDate.value.weekday == 7) {

@@ -53,5 +53,6 @@
     "checkPhoneNumber":"Please check your phone number!",
     "valDigits":"Value must be at least 3 digits",
     "passwordShort":"Password is too short!",
-    "passwordMustMatch":"Password must match!"
+    "passwordMustMatch":"Password must match!",
+    "newPassword":"New Password"
     }
