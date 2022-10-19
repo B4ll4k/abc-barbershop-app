@@ -84,12 +84,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           String startTimeString =
               element["startTime"].toString().substring(0, 5);
           String endTimeString = element["endTime"].toString().substring(0, 5);
-          String breakStartTimeString =
-              element["breakStartTime"].toString().substring(0, 5);
-          String breakEndTimeString =
-              element["breakEndTime"].toString().substring(0, 5);
-
-          while (startTimeString != breakStartTimeString) {
+          while (startTimeString != endTimeString) {
             if (_selectedTime == startTimeString ||
                 activeAppointments.contains(startTimeString)) {
               _workingTime.addAll({startTimeString: true});
@@ -110,40 +105,13 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               }
             }
           }
-          while (breakEndTimeString != endTimeString) {
-            if (_selectedTime == breakEndTimeString ||
-                activeAppointments.contains(breakEndTimeString)) {
-              _workingTime.addAll({breakEndTimeString: true});
-            } else {
-              _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
-            }
-
-            if (breakEndTimeString[3] == "0") {
-              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(breakEndTimeString.substring(0, 2));
-              f = f + 1;
-              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                breakEndTimeString =
-                    breakEndTimeString.replaceRange(0, 2, "0$f");
-              } else {
-                breakEndTimeString =
-                    breakEndTimeString.replaceRange(0, 2, "$f");
-              }
-            }
-          }
         }
       } else {
         for (var element in times) {
           String startTimeString =
               element["startTime"].toString().substring(0, 5);
           String endTimeString = element["endTime"].toString().substring(0, 5);
-          String breakStartTimeString =
-              element["breakStartTime"].toString().substring(0, 5);
-          String breakEndTimeString =
-              element["breakEndTime"].toString().substring(0, 5);
-          while (startTimeString != breakStartTimeString) {
+          while (startTimeString != endTimeString) {
             if (_selectedTime == startTimeString ||
                 activeAppointments.contains(startTimeString)) {
               _workingTime.addAll({startTimeString: true});
@@ -166,33 +134,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 startTimeString = startTimeString.replaceRange(0, 2, "0$f");
               } else {
                 startTimeString = startTimeString.replaceRange(0, 2, "$f");
-              }
-            }
-          }
-          while (breakEndTimeString != endTimeString) {
-            if (_selectedTime == breakEndTimeString) {
-              _workingTime.addAll({breakEndTimeString: true});
-            } else {
-              if (DateTime.now().hour >
-                      int.parse(breakEndTimeString.substring(0, 2)) ||
-                  activeAppointments.contains(breakEndTimeString)) {
-                _workingTime.addAll({breakEndTimeString: true});
-              } else {
-                _workingTime.addAll({breakEndTimeString: !_isWorkingDay});
-              }
-            }
-            if (breakEndTimeString[3] == "0") {
-              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(breakEndTimeString.substring(0, 2));
-              f = f + 1;
-              breakEndTimeString = breakEndTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                breakEndTimeString =
-                    breakEndTimeString.replaceRange(0, 2, "0$f");
-              } else {
-                breakEndTimeString =
-                    breakEndTimeString.replaceRange(0, 2, "$f");
               }
             }
           }
