@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +19,9 @@ class BarberPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text(
-          'Barbers',
+        title: Text(
+          translation(context).barbers,
+          // 'Barbers',
           style: TextStyle(
               fontSize: 19.0, fontWeight: FontWeight.w400, color: Colors.white),
         ),

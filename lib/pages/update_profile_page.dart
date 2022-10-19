@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,15 +59,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text(
-          'An Error Occurred!',
+        title: Text(
+          translation(context).errorOccured,
+          // 'An Error Occurred!',
           style: TextStyle(color: Colors.red),
         ),
         content: Text(message),
         actions: <Widget>[
           TextButton(
             child: Text(
-              'Okay',
+              translation(context).okay,
+              //'Okay',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {
@@ -82,12 +85,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     await showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Successful!'),
-        content: const Text('Profile Successfuly Updated'),
+        title: Text(translation(context).successful),
+        content: Text(translation(context).profileUpdated),
         actions: <Widget>[
           TextButton(
             child: Text(
-              'Okay',
+              translation(context).okay,
+              // 'Okay',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {
@@ -106,7 +110,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: AppBar(
         elevation: 1,
         title: Text(
-          "Edit Profile",
+          translation(context).editProfile,
+          //"Edit Profile",
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
         leading: IconButton(
@@ -144,12 +149,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
             child: ListView(
               children: [
-                buildTextField("First Name", user!.firstName, "First Name"),
-                buildTextField('Last Name', user!.lastName, "Last Name"),
-                buildPhoneTextField('PhoneNo', user!.phoneNum),
-                buildPasswordTextField('New Password', '********', false, true),
+                buildTextField(translation(context).firstName, user!.firstName,
+                    "First Name"),
+                buildTextField(
+                    translation(context).lastName, user!.lastName, "Last Name"),
+                buildPhoneTextField(
+                    translation(context).phoneNo, user!.phoneNum),
                 buildPasswordTextField(
-                    "Confirm Password", '********', true, false),
+                    translation(context).newPassword, '********', false, true),
+                buildPasswordTextField(translation(context).confirmPassword,
+                    '********', true, false),
                 const SizedBox(
                   height: 30,
                 ),
@@ -272,7 +281,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               value.length < 10 ||
               value.isEmpty ||
               value.substring(0, 2).compareTo('41') != 0) {
-            return 'Please check your phone number!';
+            return translation(context).checkPhoneNumber;
           }
           return null;
         },
@@ -294,21 +303,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String? nameValidator(String? value) {
     if (value == null || value.length < 3) {
-      return 'Value must be at least 3 digits';
+      return translation(context).valDigits;
+      // 'Value must be at least 3 digits';
     }
     return null;
   }
 
   String? passwordValidator(String? value) {
     if (value == null || value.length < 8 || value.isEmpty) {
-      return 'Password is too short!';
+      return translation(context).passwordShort;
+      // 'Password is too short!';
     }
     return null;
   }
 
   String? confirmPasswordValidator(String? value) {
     if (value == null || value != _passwordController.text) {
-      return 'Password must match!';
+      return translation(context).passwordMustMatch;
+      // 'Password must match!';
     }
     return null;
   }

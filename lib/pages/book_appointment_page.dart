@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/confirmation_page.dart';
 import 'package:abc_barbershop/providers/appointment_provider.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     _barberId = widget.barberId;
 
     if (_isFirstTime) {
-      if (_selectedDate.value.weekday == 6) {
+      if (_selectedDate.value.weekday == 3) {
         _isDayAdded = true;
         _selectedDate.value = _selectedDate.value.add(const Duration(days: 2));
       } else if (_selectedDate.value.weekday == 7) {
@@ -146,8 +147,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text(
-          "Booking Page",
+        title: Text(
+          translation(context).bookingP,
+          //"Booking Page",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -289,7 +291,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 }
               },
               child: Text(
-                "Continue",
+                translation(context).cont,
+                // "Continue",
                 style: TextStyle(
                     color: _isWorkingDay
                         ? Colors.white
@@ -449,7 +452,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(isSuccess ? 'Successful' : 'An Error Occurred!'),
+        title: Text(isSuccess
+            ? translation(context).successful
+            : translation(context).error),
         content: Row(children: [
           Icon(
             isSuccess ? Icons.check_circle : Icons.error,
@@ -467,7 +472,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         actions: <Widget>[
           TextButton(
             child: Text(
-              'Okay',
+              translation(context).okay,
+              // 'Okay',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {

@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +15,11 @@ class ServicesPage extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Padding(
+        title: Padding(
           padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
           child: Text(
-            'Home',
+            translation(context).home,
+            // 'Home',
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,

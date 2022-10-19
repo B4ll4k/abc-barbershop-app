@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -121,8 +122,8 @@ class _AuthPageState extends State<AuthPage> {
                                     )),
                                     child: Text(
                                       _authMode == AuthMode.logIn
-                                          ? 'Create New Account'
-                                          : "Already have an account?",
+                                          ? translation(context).creatAccount
+                                          : translation(context).haveAccount,
                                       style: kBodyText,
                                     ),
                                   ),
@@ -176,7 +177,7 @@ class _AuthPageState extends State<AuthPage> {
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "Password",
+            hintText: translation(context).password,
             prefixIcon: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -192,7 +193,7 @@ class _AuthPageState extends State<AuthPage> {
           textInputAction: TextInputAction.done,
           validator: (String? value) {
             if (value!.isEmpty || value.length < 6) {
-              return 'Password invalid';
+              return translation(context).invalidPassword;
             }
             return null;
           },
@@ -213,10 +214,10 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "Confirm Password",
+            hintText: translation(context).confirmPassword,
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -232,7 +233,8 @@ class _AuthPageState extends State<AuthPage> {
           textInputAction: TextInputAction.done,
           validator: (String? value) {
             if (_passwordController.text != value) {
-              return 'Password does not match!';
+              return translation(context).passwordDoesnotMatch;
+              // 'Password does not match!';
             }
             return null;
           },
@@ -250,10 +252,10 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "Email",
+            hintText: translation(context).email,
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -272,7 +274,7 @@ class _AuthPageState extends State<AuthPage> {
                 !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
                     .hasMatch(value) ||
                 value.isEmpty) {
-              return 'Invalid email!';
+              return translation(context).invalidEmail;
             }
             return null;
           },
@@ -293,10 +295,10 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "First Name",
+            hintText: translation(context).firstName,
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -312,7 +314,7 @@ class _AuthPageState extends State<AuthPage> {
           textInputAction: TextInputAction.next,
           validator: (String? value) {
             if (value!.isEmpty || value.length < 3) {
-              return 'name is invalid';
+              return translation(context).invalidName;
             }
             return null;
           },
@@ -333,10 +335,10 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "Last Name",
+            hintText: translation(context).lastName,
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -352,7 +354,7 @@ class _AuthPageState extends State<AuthPage> {
           textInputAction: TextInputAction.next,
           validator: (String? value) {
             if (value!.isEmpty || value.length < 3) {
-              return 'Invalid name';
+              return translation(context).invalidName;
             }
             return null;
           },
@@ -373,10 +375,10 @@ class _AuthPageState extends State<AuthPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: TextFormField(
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 20),
             border: InputBorder.none,
-            hintText: "Phone No",
+            hintText: translation(context).phoneNo,
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(
@@ -392,7 +394,7 @@ class _AuthPageState extends State<AuthPage> {
           textInputAction: TextInputAction.next,
           validator: (String? value) {
             if (value == null || value.length <= 9 || value.isEmpty) {
-              return 'Invalid Phone no';
+              return translation(context).invalidPhoneNo;
             }
             return null;
           },
@@ -428,7 +430,9 @@ class _AuthPageState extends State<AuthPage> {
                 padding: EdgeInsets.symmetric(
                     vertical: getProportionateScreenHeight(2)),
                 child: Text(
-                  _authMode == AuthMode.logIn ? "LogIn" : "SignUp",
+                  _authMode == AuthMode.logIn
+                      ? translation(context).login
+                      : translation(context).signup,
                   style: TextStyle(fontSize: getProportionateScreenHeight(20)),
                 ),
               ),
@@ -470,7 +474,9 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog('Something went wrong!');
+      _showErrorDialog(translation(context).swr
+          //'Something went wrong!'
+          );
     }
   }
 
@@ -513,7 +519,7 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog('Something went wrong!');
+      _showErrorDialog(translation(context).swr);
     }
   }
 
@@ -521,12 +527,13 @@ class _AuthPageState extends State<AuthPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('An Error Occurred!'),
+        title: Text(translation(context).errorOccured),
         content: Text(message),
         actions: <Widget>[
           TextButton(
             child: Text(
-              'Okay',
+              translation(context).okay,
+              // 'Okay',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {

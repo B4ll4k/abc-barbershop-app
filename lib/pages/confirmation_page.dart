@@ -1,3 +1,4 @@
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/appointment_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,8 +38,9 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text(
-          "Confirmation",
+        title: Text(
+          translation(context).confirmation,
+          // "Confirmation",
           style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
@@ -134,7 +136,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Service Chosen",
+                translation(context).serviceChosen,
+                // "Service Chosen",
                 style: TextStyle(
                     fontSize: getProportionateScreenHeight(15),
                     fontWeight: FontWeight.bold),
@@ -158,7 +161,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Student Price",
+                    translation(context).studentPrice,
+                    //"Student Price",
                     style: TextStyle(
                         fontSize: getProportionateScreenHeight(15),
                         fontWeight: FontWeight.bold),
@@ -180,7 +184,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Normal Price",
+                    translation(context).normalPrice,
+                    // "Normal Price",
                     style: TextStyle(
                         fontSize: getProportionateScreenHeight(15),
                         fontWeight: FontWeight.bold),
@@ -307,15 +312,18 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                   } on HttpException catch (e) {
                     _showDialog(e.toString());
                   } catch (e) {
-                    _showDialog("Ooops something went wrong!");
+                    _showDialog(translation(context).oops
+                        //"Ooops something went wrong!"
+                        );
                   }
                   setState(() {
                     _isBookBtnLoading = false;
                   });
                 }
               },
-              child: const Text(
-                "Book",
+              child: Text(
+                translation(context).book,
+                // "Book",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               style: ButtonStyle(
@@ -330,7 +338,10 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('An Error Occurred!'),
+        title: Text(
+          translation(context).errorOccured,
+          //  'An Error Occurred!'
+        ),
         content: Row(children: [
           const Icon(
             Icons.error,
@@ -348,7 +359,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         actions: <Widget>[
           TextButton(
             child: Text(
-              'Okay',
+              translation(context).okay,
+              // 'Okay',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             onPressed: () {
@@ -365,16 +377,20 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(
-          'Alert',
+          translation(context).alert,
+          //  'Alert',
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
-        content: const Text(
-            'In order to continue you must login or register first!'),
+        content: Text(
+          translation(context).regFirst,
+          // 'In order to continue you must login or register first!'
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
             child: Text(
-              'Cancel',
+              translation(context).cancel,
+              //  'Cancel',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
@@ -384,7 +400,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               builder: (context) => AuthPage(true),
             )),
             child: Text(
-              'OK',
+              translation(context).okay,
+              //  'OK',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
           ),

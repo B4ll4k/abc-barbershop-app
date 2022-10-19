@@ -1,3 +1,5 @@
+//import 'package:abc_barbershop/pages/setting_page.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +23,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Profile',
+          translation(context).profile,
+
+          //'Profile',
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
       ),
@@ -36,7 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 50),
           _buildMenuOptions(
               context,
-              "My Account",
+              translation(context).myAccount,
+              // "My Account",
               Icon(
                 Icons.person_outline_rounded,
                 size: 36,
@@ -48,7 +53,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "Active Appointments",
+              translation(context).activeAppointments,
+              //  "Active Appointments",
               Icon(
                 Icons.local_activity_outlined,
                 size: 36,
@@ -63,7 +69,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "History Appointments",
+              translation(context).historyAppointments,
+              // "History Appointments",
               Icon(
                 Icons.history,
                 size: 36,
@@ -75,10 +82,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   builder: (context) => AppointmentsPage("History"),
                 ));
           }),
+          // const SizedBox(height: 30),
+          // _buildMenuOptions(
+          //     context,
+          //     "language",
+          //     Icon(
+          //       Icons.history,
+          //       size: 36,
+          //       color: Theme.of(context).colorScheme.secondary,
+          //     ), () {
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => SettingScreen(),
+          //       ));
+          // }),
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "Privacy",
+              translation(context).privacy,
+              //"Privacy",
               Icon(
                 Icons.privacy_tip_outlined,
                 size: 36,
@@ -89,7 +112,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "About",
+              translation(context).about,
+              //"About",
               Icon(
                 Icons.abc_outlined,
                 size: 36,
@@ -100,7 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "LogOut",
+              translation(context).logout,
+              // "LogOut",
               Icon(
                 Icons.logout,
                 size: 36,
@@ -121,7 +146,8 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,
-              "Delete account!",
+              translation(context).deleteAccount,
+              // "Delete account!",
               Icon(
                 Icons.delete_forever,
                 size: 36,
@@ -131,17 +157,21 @@ class _ProfilePageState extends State<ProfilePage> {
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 title: Text(
-                  'Alert',
+                  translation(context).alert,
+                  // 'Alert',
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
-                content:
-                    const Text('Are you sure you want to delete your account?'),
+                content: Text(
+                  translation(context).deleteConfirmation,
+                  // 'Are you sure you want to delete your account?'
+                ),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'Cancel'),
                     child: Text(
-                      'Cancel',
+                      translation(context).cancel,
+                      // 'Cancel',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary),
                     ),
@@ -165,7 +195,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     child: Text(
-                      'OK',
+                      translation(context).okay,
+                      //'OK',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary),
                     ),
