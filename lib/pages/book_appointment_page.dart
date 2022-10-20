@@ -301,8 +301,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     int.parse(_selectedTime.substring(0, 2)),
                     int.parse(_selectedTime.substring(3)),
                   );
-                  final bookingEnd =
+                  DateTime bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
+                  if (widget.serviceId == 4.toString()) {
+                    bookingEnd = bookingStart.add(const Duration(minutes: 60));
+                  }
 
                   setState(() {
                     _workingTime[workingTime[_selectedTimeIndex]] = false;
