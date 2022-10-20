@@ -71,6 +71,13 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             widget.barberId == appointment.barberId) {
           activeAppointments
               .add(appointment.bookingStart.toString().substring(11, 16));
+          if (appointment.bookingStart.toString().substring(14, 16) == "00" &&
+              appointment.bookingEnd.toString().substring(14, 16) == "00") {
+            activeAppointments.add(appointment.bookingStart
+                .toString()
+                .replaceRange(14, 16, "30")
+                .substring(11, 16));
+          }
         }
       }
 
