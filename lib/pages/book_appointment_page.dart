@@ -93,17 +93,31 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             } else {
               _workingTime.addAll({startTimeString: !_isWorkingDay});
             }
-
-            if (startTimeString[3] == "0") {
-              startTimeString = startTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(startTimeString.substring(0, 2));
-              f = f + 1;
-              startTimeString = startTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            if (widget.serviceId == 4.toString()) {
+              if (startTimeString[3] == "3") {
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
               } else {
-                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
+              }
+            } else {
+              if (startTimeString[3] == "0") {
+                startTimeString = startTimeString.replaceRange(3, 4, "3");
+              } else {
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
               }
             }
           }
@@ -126,16 +140,31 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               }
             }
 
-            if (startTimeString[3] == "0") {
-              startTimeString = startTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(startTimeString.substring(0, 2));
-              f = f + 1;
-              startTimeString = startTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            if (widget.serviceId == 4.toString()) {
+              if (startTimeString[3] == "3") {
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
               } else {
-                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
+              }
+            } else {
+              if (startTimeString[3] == "0") {
+                startTimeString = startTimeString.replaceRange(3, 4, "3");
+              } else {
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
               }
             }
           }
