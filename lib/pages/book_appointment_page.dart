@@ -67,7 +67,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           Provider.of<AppointmentProvider>(context).activeAppointments;
       for (var appointment in activeAppointmentsOriginal) {
         if (appointment.bookingStart.month == _selectedDate.value.month &&
-            appointment.bookingStart.day == _selectedDate.value.day) {
+            appointment.bookingStart.day == _selectedDate.value.day &&
+            widget.barberId == appointment.barberId) {
           activeAppointments
               .add(appointment.bookingStart.toString().substring(11, 16));
         }
@@ -444,7 +445,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           _selectedTimeIndex = -1;
         }
       });
-      print(activeAppointments.length);
     }
   }
 
