@@ -71,6 +71,13 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             widget.barberId == appointment.barberId) {
           activeAppointments
               .add(appointment.bookingStart.toString().substring(11, 16));
+          if (appointment.bookingStart.toString().substring(14, 16) == "00" &&
+              appointment.bookingEnd.toString().substring(14, 16) == "00") {
+            activeAppointments.add(appointment.bookingStart
+                .toString()
+                .replaceRange(14, 16, "30")
+                .substring(11, 16));
+          }
         }
       }
 
@@ -93,17 +100,31 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             } else {
               _workingTime.addAll({startTimeString: !_isWorkingDay});
             }
-
-            if (startTimeString[3] == "0") {
-              startTimeString = startTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(startTimeString.substring(0, 2));
-              f = f + 1;
-              startTimeString = startTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            if (widget.serviceId == 4.toString()) {
+              if (startTimeString[3] == "3") {
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
               } else {
-                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
+              }
+            } else {
+              if (startTimeString[3] == "0") {
+                startTimeString = startTimeString.replaceRange(3, 4, "3");
+              } else {
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
               }
             }
           }
@@ -126,16 +147,31 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               }
             }
 
-            if (startTimeString[3] == "0") {
-              startTimeString = startTimeString.replaceRange(3, 4, "3");
-            } else {
-              int f = int.parse(startTimeString.substring(0, 2));
-              f = f + 1;
-              startTimeString = startTimeString.replaceRange(3, 4, "0");
-              if (f < 10) {
-                startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+            if (widget.serviceId == 4.toString()) {
+              if (startTimeString[3] == "3") {
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
               } else {
-                startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
+              }
+            } else {
+              if (startTimeString[3] == "0") {
+                startTimeString = startTimeString.replaceRange(3, 4, "3");
+              } else {
+                int f = int.parse(startTimeString.substring(0, 2));
+                f = f + 1;
+                startTimeString = startTimeString.replaceRange(3, 4, "0");
+                if (f < 10) {
+                  startTimeString = startTimeString.replaceRange(0, 2, "0$f");
+                } else {
+                  startTimeString = startTimeString.replaceRange(0, 2, "$f");
+                }
               }
             }
           }
@@ -272,8 +308,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     int.parse(_selectedTime.substring(0, 2)),
                     int.parse(_selectedTime.substring(3)),
                   );
-                  final bookingEnd =
+                  DateTime bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
+                  if (widget.serviceId == 4.toString()) {
+                    bookingEnd = bookingStart.add(const Duration(minutes: 60));
+                  }
 
                   setState(() {
                     _workingTime[workingTime[_selectedTimeIndex]] = false;
