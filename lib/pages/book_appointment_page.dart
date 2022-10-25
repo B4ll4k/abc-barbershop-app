@@ -73,16 +73,17 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               .add(appointment.bookingStart.toString().substring(11, 16));
           if (appointment.bookingStart.toString().substring(14, 16) == "00" &&
               appointment.bookingEnd.toString().substring(14, 16) == "00") {
-            // activeAppointments.add(appointment.bookingStart
+            //  activeAppointments.add(appointment.bookingEnd
             //     .toString()
             //     .replaceRange(14, 16, "30")
             //     .substring(11, 16));
-            activeAppointments.add(appointment.bookingEnd
+
+            activeAppointments.add(appointment.bookingStart
                 .toString()
                 .replaceRange(14, 16, "30")
                 .substring(11, 16));
-          }
-          if (appointment.bookingStart.toString().substring(14, 16) == "30" &&
+          } else if (appointment.bookingStart.toString().substring(14, 16) ==
+                  "30" &&
               appointment.bookingEnd.toString().substring(14, 16) == "30") {
             activeAppointments.add(appointment.bookingEnd
                 .toString()
@@ -93,7 +94,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             //     .toString()
             //     .replaceRange(14, 16, "00")
             //     .substring(11, 16));
-
           }
         }
       }
