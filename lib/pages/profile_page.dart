@@ -82,21 +82,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   builder: (context) => AppointmentsPage("History"),
                 ));
           }),
-          // const SizedBox(height: 30),
-          // _buildMenuOptions(
-          //     context,
-          //     "language",
-          //     Icon(
-          //       Icons.history,
-          //       size: 36,
-          //       color: Theme.of(context).colorScheme.secondary,
-          //     ), () {
-          //   Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => SettingScreen(),
-          //       ));
-          // }),
           const SizedBox(height: 30),
           _buildMenuOptions(
               context,

@@ -82,7 +82,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     return Container(
       // padding: EdgeInsets.only(top: 30.0),
       width: MediaQuery.of(context).size.width,
-      height: getProportionateScreenHeight(180),
+      height: getProportionateScreenHeight(200),
       child: Column(children: <Widget>[
         ClipOval(
           child: Container(

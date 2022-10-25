@@ -182,7 +182,7 @@ class AppointmentsPage extends StatelessWidget {
                                             .barbers
                                             .firstWhere((element) => element.id == appointments[i].barberId)
                                             .pictureUrl),
-                                    fit: BoxFit.cover),
+                                    fit: BoxFit.fill),
                               ),
                             ),
                           ),

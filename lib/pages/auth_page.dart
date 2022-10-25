@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +10,8 @@ import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
 import '../providers/appointment_provider.dart';
 import '../size_config.dart';
+import '../models/env.dart';
+import 'package:http/http.dart' as http;
 
 enum AuthMode { logIn, signUp }
 
@@ -114,18 +118,24 @@ class _AuthPageState extends State<AuthPage> {
                                       }
                                     });
                                   },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                        border: Border(
-                                      bottom: BorderSide(
-                                          color: Colors.white, width: 1),
-                                    )),
-                                    child: Text(
-                                      _authMode == AuthMode.logIn
-                                          ? translation(context).creatAccount
-                                          : translation(context).haveAccount,
-                                      style: kBodyText,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                            border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.white, width: 1),
+                                        )),
+                                        child: Text(
+                                          _authMode == AuthMode.logIn
+                                              ? translation(context)
+                                                  .creatAccount
+                                              : translation(context)
+                                                  .haveAccount,
+                                          style: kBodyText,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

@@ -86,7 +86,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     image: NetworkImage(barber!.pictureUrl.isEmpty
                         ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                         : barber.pictureUrl),
-                    fit: BoxFit.cover),
+                    fit: BoxFit.fill),
                 boxShadow: const [
                   BoxShadow(
                       color: Colors.black26,

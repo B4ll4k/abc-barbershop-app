@@ -54,5 +54,6 @@
     "valDigits":"Value must be at least 3 digits",
     "passwordShort":"Password is too short!",
     "passwordMustMatch":"Password must match!",
-    "newPassword":"New Password"
+    "newPassword":"New Password",
+    "forgetPassword":"Forget Password?"
     }

@@ -54,6 +54,7 @@
     "valDigits":"La valeur doit comporter au moins 3 chiffres",
     "passwordShort":"Le mot de passe est trop court!",
     "passwordMustMatch":"Le mot de passe doit correspondre!",
-    "newPassword":"nouveau mot de passe"
+    "newPassword":"nouveau mot de passe",
+    "forgetPassword":"mot de passe oublié ?"
     
 }

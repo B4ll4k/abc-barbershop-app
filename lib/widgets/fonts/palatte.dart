@@ -10,3 +10,11 @@ const TextStyle kBodyText = TextStyle(
   fontSize: 22,
   color: Colors.white,
 );
+const TextStyle kBodyText2 = TextStyle(
+  fontSize: 14,
+  color: Colors.white,
+);
+const TextStyle kBodyText3 = TextStyle(
+  fontSize: 12,
+  color: Color.fromRGBO(172, 128, 39, 1.0),
+);
