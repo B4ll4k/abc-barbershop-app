@@ -82,8 +82,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 .toString()
                 .replaceRange(14, 16, "30")
                 .substring(11, 16));
-          } else if (appointment.bookingStart.toString().substring(14, 16) ==
-                  "30" &&
+          }
+          if (appointment.bookingStart.toString().substring(14, 16) == "30" &&
               appointment.bookingEnd.toString().substring(14, 16) == "30") {
             activeAppointments.add(appointment.bookingEnd
                 .toString()

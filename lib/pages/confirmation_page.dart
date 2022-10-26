@@ -289,8 +289,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                       servicePrice:
                           Provider.of<ServicesProvider>(context, listen: false)
                               .services
-                              .firstWhereOrNull(
-                                  (element) => element.id == widget.serviceId)!
+                              .firstWhere(
+                                  (element) => element.id == widget.serviceId)
                               .normalPrice,
                       bookingStart: widget.bookingStart.toString(),
                       bookingEnd: widget.bookingEnd.toString(),
