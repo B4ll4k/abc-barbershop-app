@@ -18,6 +18,17 @@ class AppointmentProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<Appointment> _allActiveAppointments = [];
+
+  List<Appointment> get allActiveAppointments {
+    return [..._allActiveAppointments];
+  }
+
+  void setAllActiveAppointment(List<Appointment> newAllActiveAppointment) {
+    _allActiveAppointments = newAllActiveAppointment;
+    notifyListeners();
+  }
+
   List<Appointment> _historyAppointments = [];
 
   List<Appointment> get historyAppointments {
@@ -78,6 +89,38 @@ class AppointmentProvider with ChangeNotifier {
           ),
         );
         notifyListeners();
+      }
+      notifyListeners();
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
+  }
+
+  Future<void> fetchAllActiveAppointments() async {
+    _allActiveAppointments = [];
+    try {
+      final response = await http.get(
+        Uri.parse(EnviromentVariables.baseUrl + "allappointments"),
+      );
+
+      final responseData = jsonDecode(response.body) as List<dynamic>;
+
+      for (var data in responseData) {
+        var appointment = data as Map<String, dynamic>;
+
+        if (DateTime.now()
+            .isBefore(DateTime.parse(appointment["bookingStart"]))) {
+          _allActiveAppointments.add(
+            Appointment(
+              id: appointment["id"].toString(),
+              bookingStart: DateTime.parse(appointment["bookingStart"]),
+              bookingEnd: DateTime.parse(appointment["bookingEnd"]),
+              serviceId: appointment["serviceId"].toString(),
+              barberId: appointment["providerId"].toString(),
+            ),
+          );
+          notifyListeners();
+        }
       }
       notifyListeners();
     } catch (e) {

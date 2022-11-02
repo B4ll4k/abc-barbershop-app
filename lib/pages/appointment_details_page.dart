@@ -70,6 +70,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
           ],
         ),
       ),
+      bottomSheet: _buildBookBtn(context),
     );
   }
 
@@ -257,6 +258,59 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildBookBtn(BuildContext context) {
+    // final workingTime = _workingTime.keys.toList();
+    return Container(
+      width: double.infinity,
+      height: 55,
+      child: ElevatedButton(
+        onPressed: () async {
+          // if (_selectedTimeIndex >= 0 && _isWorkingDay) {
+          //   final bookingStart = DateTime(
+          //     _selectedDate.value.year,
+          //     _selectedDate.value.month,
+          //     _selectedDate.value.day,
+          //     int.parse(_selectedTime.substring(0, 2)),
+          //     int.parse(_selectedTime.substring(3)),
+          //   );
+
+          //   print("booking start: ");
+          //   print(bookingStart);
+          //   DateTime bookingEnd =
+          //       bookingStart.add(const Duration(minutes: 30));
+          //   if (widget.serviceId == 4.toString()) {
+          //     bookingEnd = bookingStart.add(const Duration(minutes: 60));
+          //   }
+
+          //   setState(() {
+          //     _workingTime[workingTime[_selectedTimeIndex]] = false;
+          //     _selectedTime = "";
+          //     _selectedTimeIndex = -1;
+          //   });
+          //   Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => ConfirmationPage(
+          //             barberId: widget.barberId,
+          //             serviceId: widget.serviceId,
+          //             bookingStart: bookingStart,
+          //             bookingEnd: bookingEnd),
+          //       ));
+          // }
+        },
+        child: Text(
+          translation(context).cancel,
+          // "Cancel",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith(
+              (states) => Theme.of(context).colorScheme.secondary),
+        ),
+      ),
     );
   }
 }

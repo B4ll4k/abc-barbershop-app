@@ -55,5 +55,6 @@
     "passwordShort":"Password is too short!",
     "passwordMustMatch":"Password must match!",
     "newPassword":"New Password",
-    "forgetPassword":"Forget Password?"
+    "forgetPassword":"Forget Password?",
+    "cancel":"Cancel"
     }

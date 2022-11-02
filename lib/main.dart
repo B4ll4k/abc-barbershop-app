@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//import 'package:flutter_locales/flutter_locales.dart';
 
 import './pages/auth_page.dart';
 import './pages/main_page.dart';
@@ -18,7 +17,6 @@ import './pages/update_profile_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Locales.init(['en', 'fr']);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,

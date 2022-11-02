@@ -298,13 +298,14 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     await Provider.of<AppointmentProvider>(context,
                             listen: false)
                         .fetchActiveAppointments(userProvider.user.id);
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AppointmentDetailsPage(
                               Provider.of<AppointmentProvider>(context,
                                       listen: false)
-                                  .activeAppointments
+                                  .allActiveAppointments
                                   .last
                                   .id,
                               true),

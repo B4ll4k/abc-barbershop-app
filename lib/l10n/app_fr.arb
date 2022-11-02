@@ -55,6 +55,7 @@
     "passwordShort":"Le mot de passe est trop court!",
     "passwordMustMatch":"Le mot de passe doit correspondre!",
     "newPassword":"nouveau mot de passe",
-    "forgetPassword":"mot de passe oublié ?"
+    "forgetPassword":"mot de passe oublié ?",
+    "cancel":"Annuler"
     
 }

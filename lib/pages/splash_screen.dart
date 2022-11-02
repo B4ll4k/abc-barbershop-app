@@ -109,6 +109,8 @@ class _SplashScreenState extends State<SplashScreen> {
         .fetchWorkingTime();
     await Provider.of<BarberProvider>(context, listen: false)
         .fetchWorkingHours();
+    await Provider.of<AppointmentProvider>(context, listen: false)
+        .fetchAllActiveAppointments();
   }
 
   @override
