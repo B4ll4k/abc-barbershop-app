@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:http/http.dart' as http;
 
 import '../providers/barber_provider.dart';
 import '../size_config.dart';
@@ -77,7 +78,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Widget _barberProfilePic(BuildContext context) {
     final barberProvider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = barberProvider.barbers;
-    final barber = barbers.firstWhereOrNull(
+    final barber = barbers.firstWhere(
       (element) => element.id == appointment!.barberId,
     );
     return Container(
@@ -133,6 +134,9 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
         .firstWhereOrNull((element) => element.id == appointment!.serviceId);
+    // print("appoiitmentID: ");
+    // print(appointment!.id);
+
     return Container(
       margin: const EdgeInsets.all(15),
       child: Column(
@@ -262,43 +266,28 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   }
 
   Widget _buildBookBtn(BuildContext context) {
-    // final workingTime = _workingTime.keys.toList();
+    final snackBar = SnackBar(
+      content: const Text('deleted successfully'),
+      action: SnackBarAction(
+        label: 'ok',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+
     return Container(
       width: double.infinity,
       height: 55,
       child: ElevatedButton(
-        onPressed: () async {
-          // if (_selectedTimeIndex >= 0 && _isWorkingDay) {
-          //   final bookingStart = DateTime(
-          //     _selectedDate.value.year,
-          //     _selectedDate.value.month,
-          //     _selectedDate.value.day,
-          //     int.parse(_selectedTime.substring(0, 2)),
-          //     int.parse(_selectedTime.substring(3)),
-          //   );
-
-          //   print("booking start: ");
-          //   print(bookingStart);
-          //   DateTime bookingEnd =
-          //       bookingStart.add(const Duration(minutes: 30));
-          //   if (widget.serviceId == 4.toString()) {
-          //     bookingEnd = bookingStart.add(const Duration(minutes: 60));
-          //   }
-
-          //   setState(() {
-          //     _workingTime[workingTime[_selectedTimeIndex]] = false;
-          //     _selectedTime = "";
-          //     _selectedTimeIndex = -1;
-          //   });
-          //   Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => ConfirmationPage(
-          //             barberId: widget.barberId,
-          //             serviceId: widget.serviceId,
-          //             bookingStart: bookingStart,
-          //             bookingEnd: bookingEnd),
-          //       ));
+        onPressed: () {
+          Provider.of<AppointmentProvider>(context, listen: false)
+              .cancelAppointment(appointment!.id, context);
+          // if (== 200 || res ==201) {
+          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //   print("Deleted successful");
+          // } else {
+          //   print("Failed to delete");
           // }
         },
         child: Text(

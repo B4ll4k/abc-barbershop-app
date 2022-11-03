@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:abc_barbershop/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -128,6 +129,34 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
+  Future<void> cancelAppointment(String id, BuildContext context) async {
+    final snackBar = SnackBar(
+      content: const Text('deleted successfully'),
+      action: SnackBarAction(
+          label: 'ok',
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    );
+    try {
+      final response = await http.post(
+        Uri.parse(EnviromentVariables.baseUrl + "cancel"),
+        body: jsonEncode(<String, String>{
+          'id': id,
+        }),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        print("deleted");
+      }
+
+      notifyListeners();
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
+  }
+
   Future<void> bookAppointment(
       {required String userId,
       required String barberId,
@@ -144,6 +173,7 @@ class AppointmentProvider with ChangeNotifier {
         'bookingStart': bookingStart,
         'bookingEnd': bookingEnd
       };
+
       final response = await http.post(
         Uri.parse(EnviromentVariables.baseUrl + 'bookappointments'),
         body: jsonEncode(bodyMap),

@@ -40,6 +40,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   bool _isFirstTime = true;
 
   List<String> activeAppointments = [];
+  var activeApp;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +66,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
       }
       final activeAppointmentsOriginal =
           Provider.of<AppointmentProvider>(context).allActiveAppointments;
+      activeApp = activeAppointmentsOriginal;
       for (var appointment in activeAppointmentsOriginal) {
         if (appointment.bookingStart.month == _selectedDate.value.month &&
             appointment.bookingStart.day == _selectedDate.value.day &&
@@ -138,8 +140,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         }
       } else {
         for (var element in times) {
-          print(element);
-          print(" object");
           String startTimeString =
               element["startTime"].toString().substring(0, 5);
           String endTimeString = element["endTime"].toString().substring(0, 5);
@@ -301,6 +301,16 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   }
 
   Widget _buildBookBtn(BuildContext context) {
+    final snackBar = SnackBar(
+      content: const Text('ALREADY BOOKED'),
+      action: SnackBarAction(
+        label: 'ok',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+    bool isalready = false;
     final workingTime = _workingTime.keys.toList();
     return _isBookBtnLoading
         ? const CircularProgressIndicator()
@@ -309,6 +319,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             height: 55,
             child: ElevatedButton(
               onPressed: () async {
+                // final activeAppointmentsOriginal =
+                //     Provider.of<AppointmentProvider>(context)
+                //         .allActiveAppointments;
                 if (_selectedTimeIndex >= 0 && _isWorkingDay) {
                   final bookingStart = DateTime(
                     _selectedDate.value.year,
@@ -318,28 +331,39 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     int.parse(_selectedTime.substring(3)),
                   );
 
-                  print("booking start: ");
-                  print(bookingStart);
                   DateTime bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
                   if (widget.serviceId == 4.toString()) {
                     bookingEnd = bookingStart.add(const Duration(minutes: 60));
                   }
-
-                  setState(() {
-                    _workingTime[workingTime[_selectedTimeIndex]] = false;
-                    _selectedTime = "";
-                    _selectedTimeIndex = -1;
-                  });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ConfirmationPage(
-                            barberId: widget.barberId,
-                            serviceId: widget.serviceId,
-                            bookingStart: bookingStart,
-                            bookingEnd: bookingEnd),
-                      ));
+                  for (var appointment in activeApp) {
+                    if (appointment.barberId == widget.barberId &&
+                        appointment.bookingStart == bookingStart) {
+                      isalready = true;
+                    }
+                  }
+                  if (bookingStart.isBefore(DateTime.now())) {
+                    isalready = true;
+                  }
+                  if (isalready == true) {
+                    print("already booked! please choose another time.");
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    setState(() {
+                      _workingTime[workingTime[_selectedTimeIndex]] = false;
+                      _selectedTime = "";
+                      _selectedTimeIndex = -1;
+                    });
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConfirmationPage(
+                              barberId: widget.barberId,
+                              serviceId: widget.serviceId,
+                              bookingStart: bookingStart,
+                              bookingEnd: bookingEnd),
+                        ));
+                  }
                 }
               },
               child: Text(
