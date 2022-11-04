@@ -56,5 +56,6 @@
     "passwordMustMatch":"Password must match!",
     "newPassword":"New Password",
     "forgetPassword":"Forget Password?",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "alreadyBooked":"already booked! please choose another time. "
     }

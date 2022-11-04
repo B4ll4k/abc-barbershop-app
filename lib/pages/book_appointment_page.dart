@@ -302,9 +302,12 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   Widget _buildBookBtn(BuildContext context) {
     final snackBar = SnackBar(
-      content: const Text('ALREADY BOOKED'),
+      duration: const Duration(seconds: 5),
+      content: Text(translation(context).alreadyBooked
+          // 'ALREADY BOOKED'
+          ),
       action: SnackBarAction(
-        label: 'ok',
+        label: translation(context).okay,
         onPressed: () {
           Navigator.pop(context);
         },
@@ -319,9 +322,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             height: 55,
             child: ElevatedButton(
               onPressed: () async {
-                // final activeAppointmentsOriginal =
-                //     Provider.of<AppointmentProvider>(context)
-                //         .allActiveAppointments;
                 if (_selectedTimeIndex >= 0 && _isWorkingDay) {
                   final bookingStart = DateTime(
                     _selectedDate.value.year,
@@ -341,12 +341,46 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                         appointment.bookingStart == bookingStart) {
                       isalready = true;
                     }
+
+                    if (appointment.barberId == widget.barberId &&
+                        appointment.bookingStart.toString().substring(14, 16) ==
+                            "00" &&
+                        appointment.bookingEnd.toString().substring(14, 16) ==
+                            "00") {
+                      if (appointment.bookingStart
+                              .toString()
+                              .replaceRange(14, 16, "30")
+                              .substring(11, 16) ==
+                          bookingStart
+                              .toString()
+                              .replaceRange(14, 16, "30")
+                              .substring(11, 16)) {
+                        isalready = true;
+                      }
+                    }
+                    if (appointment.barberId == widget.barberId &&
+                        appointment.bookingStart.toString().substring(14, 16) ==
+                            "30" &&
+                        appointment.bookingEnd.toString().substring(14, 16) ==
+                            "30") {
+                      if (appointment.bookingEnd
+                              .toString()
+                              .replaceRange(14, 16, "00")
+                              .substring(11, 16) ==
+                          bookingEnd
+                              .toString()
+                              .replaceRange(14, 16, "00")
+                              .substring(11, 16)) {
+                        isalready = true;
+                      }
+                    }
                   }
+
                   if (bookingStart.isBefore(DateTime.now())) {
                     isalready = true;
                   }
+
                   if (isalready == true) {
-                    print("already booked! please choose another time.");
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
                     setState(() {

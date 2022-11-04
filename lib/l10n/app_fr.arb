@@ -56,6 +56,7 @@
     "passwordMustMatch":"Le mot de passe doit correspondre!",
     "newPassword":"nouveau mot de passe",
     "forgetPassword":"mot de passe oublié ?",
-    "cancel":"Annuler"
+    "cancel":"Annuler",
+    "alreadyBooked":"déjà réservé! veuillez choisir une autre heure."
     
 }

@@ -94,7 +94,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.25), BlendMode.multiply),
-                    image: NetworkImage(barber!.pictureUrl.isEmpty
+                    image: NetworkImage(barber.pictureUrl.isEmpty
                         ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                         : barber.pictureUrl),
                     fit: BoxFit.cover),
@@ -134,9 +134,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
         .firstWhereOrNull((element) => element.id == appointment!.serviceId);
-    // print("appoiitmentID: ");
-    // print(appointment!.id);
-
     return Container(
       margin: const EdgeInsets.all(15),
       child: Column(
@@ -283,12 +280,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
         onPressed: () {
           Provider.of<AppointmentProvider>(context, listen: false)
               .cancelAppointment(appointment!.id, context);
-          // if (== 200 || res ==201) {
-          //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //   print("Deleted successful");
-          // } else {
-          //   print("Failed to delete");
-          // }
         },
         child: Text(
           translation(context).cancel,
