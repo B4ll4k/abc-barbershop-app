@@ -57,5 +57,7 @@
     "newPassword":"New Password",
     "forgetPassword":"Forget Password?",
     "cancel":"Cancel",
-    "alreadyBooked":"already booked! please choose another time. "
+    "alreadyBooked":"already booked! please choose another time.",
+    "appointmentCancelled":"Appointment Cancelled",
+    "forget":"forget"
     }

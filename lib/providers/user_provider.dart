@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../localization/language_constraints.dart';
 import '../models/env.dart';
 import '../models/user.dart';
 import '../models/http_exception.dart';
+import '../pages/auth_page.dart';
 
 class UserProvider with ChangeNotifier {
   User? _user;
@@ -139,6 +141,52 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> forgetPassword(String email, BuildContext context) async {
+    // final snackBar = SnackBar(
+    //   duration: const Duration(seconds: 20),
+    //   content: Text("forget"),
+    //   action: SnackBarAction(
+    //       label: translation(context).okay,
+    //       onPressed: () {
+    //         Navigator.pushAndRemoveUntil(
+    //             context,
+    //             MaterialPageRoute<void>(
+    //                 builder: (BuildContext context) => AuthPage(false)),
+    //             (route) => false);
+    //       }),
+    // );
+
+    try {
+      final response = await http.post(
+        Uri.parse(EnviromentVariables.baseUrl + "forget"),
+        body: jsonEncode(<String, String>{
+          'email': email,
+        }),
+      );
+      final responseBody = (json.decode(response.body) as Map<String, dynamic>);
+      if (responseBody['Success'] == null) {
+        String error = responseBody['Failure'];
+        throw HttpException(error);
+      } else {
+        await fetchUserInfo(email);
+      }
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+
+    // if (response.statusCode == 200 || response.statusCode == 201) {
+    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    //   print("forget");
+    // }
+
+    //   notifyListeners();
+    // } catch (e) {
+    //   throw HttpException(e.toString());
+    // }
+    notifyListeners();
   }
 
   Future<void> deleteAccount() async {

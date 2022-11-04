@@ -78,7 +78,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Widget _barberProfilePic(BuildContext context) {
     final barberProvider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = barberProvider.barbers;
-    final barber = barbers.firstWhere(
+    final barber = barbers.firstWhereOrNull(
       (element) => element.id == appointment!.barberId,
     );
     return Container(
@@ -94,7 +94,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 image: DecorationImage(
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.25), BlendMode.multiply),
-                    image: NetworkImage(barber.pictureUrl.isEmpty
+                    image: NetworkImage(barber!.pictureUrl.isEmpty
                         ? "https://media.istockphoto.com/photos/male-barber-cutting-sideburns-of-client-in-barber-shop-picture-id1301256896?b=1&k=20&m=1301256896&s=170667a&w=0&h=LHqIUomhTGZjpUY12vWg9Ki0lUGz2F0FfXSicsmSpR8="
                         : barber.pictureUrl),
                     fit: BoxFit.cover),

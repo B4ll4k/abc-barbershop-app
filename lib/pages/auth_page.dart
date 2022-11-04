@@ -13,7 +13,7 @@ import '../size_config.dart';
 import '../models/env.dart';
 import 'package:http/http.dart' as http;
 
-enum AuthMode { logIn, signUp }
+enum AuthMode { logIn, signUp, forget }
 
 class AuthPage extends StatefulWidget {
   bool _redirected;
@@ -89,7 +89,9 @@ class _AuthPageState extends State<AuthPage> {
                                     ? _buildPhoneNoTextField()
                                     : Container(),
                                 _buildEmailTextField(),
-                                _buildPasswordTextField(),
+                                _authMode != AuthMode.forget
+                                    ? _buildPasswordTextField()
+                                    : Container(),
                                 _authMode == AuthMode.signUp
                                     ? _buildConfirmPasswordTextField()
                                     : Container(),
@@ -108,36 +110,65 @@ class _AuthPageState extends State<AuthPage> {
                                       ? getProportionateScreenHeight(20)
                                       : getProportionateScreenHeight(30),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (_authMode == AuthMode.logIn) {
-                                        _authMode = AuthMode.signUp;
-                                      } else {
-                                        _authMode = AuthMode.logIn;
-                                      }
-                                    });
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                            border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.white, width: 1),
-                                        )),
-                                        child: Text(
+                                _authMode != AuthMode.forget
+                                    ? Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                if (_authMode ==
+                                                    AuthMode.logIn) {
+                                                  _authMode = AuthMode.signUp;
+                                                } else {
+                                                  _authMode = AuthMode.logIn;
+                                                }
+                                              });
+                                            },
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  border: Border(
+                                                bottom: BorderSide(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                              )),
+                                              child: Text(
+                                                _authMode == AuthMode.logIn
+                                                    ? translation(context)
+                                                        .creatAccount
+                                                    : translation(context)
+                                                        .haveAccount,
+                                                style: kBodyText3,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
                                           _authMode == AuthMode.logIn
-                                              ? translation(context)
-                                                  .creatAccount
-                                              : translation(context)
-                                                  .haveAccount,
-                                          style: kBodyText,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _authMode =
+                                                          AuthMode.forget;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            border: Border(
+                                                      bottom: BorderSide(
+                                                          color: Colors.white,
+                                                          width: 1),
+                                                    )),
+                                                    child: Text(
+                                                      translation(context)
+                                                          .forgetPassword,
+                                                      style: kBodyText3,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ],
+                                      )
+                                    : Container(),
                               ],
                             )
                           ],
@@ -430,7 +461,9 @@ class _AuthPageState extends State<AuthPage> {
             ),
             child: TextButton(
               onPressed: () {
-                if (_authMode == AuthMode.logIn) {
+                if (_authMode == AuthMode.forget) {
+                  _forget();
+                } else if (_authMode == AuthMode.logIn) {
                   _login();
                 } else {
                   _signup();
@@ -440,9 +473,11 @@ class _AuthPageState extends State<AuthPage> {
                 padding: EdgeInsets.symmetric(
                     vertical: getProportionateScreenHeight(2)),
                 child: Text(
-                  _authMode == AuthMode.logIn
-                      ? translation(context).login
-                      : translation(context).signup,
+                  _authMode == AuthMode.forget
+                      ? translation(context).forget
+                      : _authMode == AuthMode.logIn
+                          ? translation(context).login
+                          : translation(context).signup,
                   style: TextStyle(fontSize: getProportionateScreenHeight(20)),
                 ),
               ),
@@ -515,6 +550,43 @@ class _AuthPageState extends State<AuthPage> {
       // setState(() {
       //   _isLoading = false;
       // });
+      if (widget._redirected) {
+        Navigator.pop(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
+      }
+    } on HttpException catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorDialog(error.toString());
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorDialog(translation(context).swr);
+    }
+  }
+
+  Future<void> _forget() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await Provider.of<UserProvider>(context, listen: false)
+          .forgetPassword(_formData["email"], context);
+      // await Provider.of<AppointmentProvider>(context, listen: false)
+      //     .fetchActiveAppointments(
+      //         Provider.of<UserProvider>(context, listen: false).user.id);
+      // await Provider.of<AppointmentProvider>(context, listen: false)
+      //     .fetchHistoryAppointments(
+      //         Provider.of<UserProvider>(context, listen: false).user.id);
+
       if (widget._redirected) {
         Navigator.pop(context);
       } else {

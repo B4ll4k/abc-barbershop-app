@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -131,9 +132,10 @@ class AppointmentProvider with ChangeNotifier {
 
   Future<void> cancelAppointment(String id, BuildContext context) async {
     final snackBar = SnackBar(
-      content: const Text('deleted successfully'),
+      duration: const Duration(seconds: 20),
+      content: Text(translation(context).appointmentCancelled),
       action: SnackBarAction(
-          label: 'ok',
+          label: translation(context).okay,
           onPressed: () {
             Navigator.pop(context);
           }),
@@ -147,14 +149,13 @@ class AppointmentProvider with ChangeNotifier {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        print("deleted");
       }
 
       notifyListeners();
     } catch (e) {
       throw HttpException(e.toString());
     }
+    notifyListeners();
   }
 
   Future<void> bookAppointment(

@@ -57,6 +57,8 @@
     "newPassword":"nouveau mot de passe",
     "forgetPassword":"mot de passe oublié ?",
     "cancel":"Annuler",
-    "alreadyBooked":"déjà réservé! veuillez choisir une autre heure."
+    "alreadyBooked":"déjà réservé! veuillez choisir une autre heure.",
+    "appointmentCancelled":"Rendez-vous annulé avec succès",
+    "forget":"Oubliez"
     
 }
