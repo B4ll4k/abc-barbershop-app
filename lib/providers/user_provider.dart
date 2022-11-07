@@ -144,19 +144,22 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> forgetPassword(String email, BuildContext context) async {
-    // final snackBar = SnackBar(
-    //   duration: const Duration(seconds: 20),
-    //   content: Text("forget"),
-    //   action: SnackBarAction(
-    //       label: translation(context).okay,
-    //       onPressed: () {
-    //         Navigator.pushAndRemoveUntil(
-    //             context,
-    //             MaterialPageRoute<void>(
-    //                 builder: (BuildContext context) => AuthPage(false)),
-    //             (route) => false);
-    //       }),
-    // );
+    final snackBar = SnackBar(
+      duration: const Duration(seconds: 20),
+      content: Text("forget"),
+      action: SnackBarAction(
+          label: translation(context).okay,
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true)
+                .pushReplacementNamed('home');
+
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     MaterialPageRoute<void>(
+            //         builder: (BuildContext context) => AuthPage(false)),
+            //     (route) => false);
+          }),
+    );
 
     try {
       final response = await http.post(
@@ -170,7 +173,8 @@ class UserProvider with ChangeNotifier {
         String error = responseBody['Failure'];
         throw HttpException(error);
       } else {
-        await fetchUserInfo(email);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        // await fetchUserInfo(email);
       }
       notifyListeners();
     } catch (e) {

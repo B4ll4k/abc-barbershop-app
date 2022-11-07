@@ -122,7 +122,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   Widget _buildDetails() {
     final service = Provider.of<ServicesProvider>(context, listen: false)
         .services
-        .firstWhereOrNull((element) => element.id == widget.serviceId);
+        .firstWhere((element) => element.id == widget.serviceId);
     return Container(
       margin: const EdgeInsets.all(15),
       child: Column(
@@ -146,7 +146,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 height: getProportionateScreenHeight(5),
               ),
               Text(
-                service!.name,
+                service.name,
                 style: TextStyle(fontSize: getProportionateScreenHeight(14)),
               )
             ],

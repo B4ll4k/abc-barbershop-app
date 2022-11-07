@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,8 +8,6 @@ import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
 import '../providers/appointment_provider.dart';
 import '../size_config.dart';
-import '../models/env.dart';
-import 'package:http/http.dart' as http;
 
 enum AuthMode { logIn, signUp, forget }
 
