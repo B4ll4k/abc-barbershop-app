@@ -298,7 +298,9 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     await Provider.of<AppointmentProvider>(context,
                             listen: false)
                         .fetchActiveAppointments(userProvider.user.id);
-
+                    await Provider.of<AppointmentProvider>(context,
+                            listen: false)
+                        .fetchAllActiveAppointments();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

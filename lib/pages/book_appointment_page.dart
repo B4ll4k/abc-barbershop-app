@@ -65,7 +65,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         }
       }
       final activeAppointmentsOriginal =
-          Provider.of<AppointmentProvider>(context).activeAppointments;
+          Provider.of<AppointmentProvider>(context).allActiveAppointments;
       activeApp = activeAppointmentsOriginal;
       for (var appointment in activeAppointmentsOriginal) {
         if (appointment.bookingStart.month == _selectedDate.value.month &&

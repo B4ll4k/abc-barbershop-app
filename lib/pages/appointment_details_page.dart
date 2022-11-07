@@ -9,6 +9,7 @@ import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 
 import '../providers/barber_provider.dart';
+import '../providers/user_provider.dart';
 import '../size_config.dart';
 
 class AppointmentDetailsPage extends StatefulWidget {
@@ -22,6 +23,18 @@ class AppointmentDetailsPage extends StatefulWidget {
 }
 
 class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
+  // Future refreshAppointments() async {
+  //   bool isAuth = Provider.of<UserProvider>(context, listen: false).isAuth();
+  //   if (isAuth) {
+  //     await Provider.of<AppointmentProvider>(context, listen: false)
+  //         .fetchActiveAppointments(
+  //             Provider.of<UserProvider>(context, listen: false).user.id);
+  //     await Provider.of<AppointmentProvider>(context, listen: false)
+  //         .fetchHistoryAppointments(
+  //             Provider.of<UserProvider>(context, listen: false).user.id);
+  //   }
+  // }
+
   Appointment? appointment;
   @override
   Widget build(BuildContext context) {
@@ -280,6 +293,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
         onPressed: () {
           Provider.of<AppointmentProvider>(context, listen: false)
               .cancelAppointment(appointment!.id, context);
+          // refreshAppointments();
         },
         child: Text(
           translation(context).cancel,

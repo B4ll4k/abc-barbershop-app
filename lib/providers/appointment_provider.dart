@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:abc_barbershop/pages/main_page.dart';
+import 'package:abc_barbershop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import '../models/env.dart';
 import '../models/http_exception.dart';
@@ -130,6 +132,18 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
+  Future refreshAppointments(BuildContext context) async {
+    bool isAuth = Provider.of<UserProvider>(context, listen: false).isAuth();
+    if (isAuth) {
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchActiveAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchHistoryAppointments(
+              Provider.of<UserProvider>(context, listen: false).user.id);
+    }
+  }
+
   Future<void> cancelAppointment(String id, BuildContext context) async {
     final snackBar = SnackBar(
       duration: const Duration(seconds: 20),
@@ -137,6 +151,7 @@ class AppointmentProvider with ChangeNotifier {
       action: SnackBarAction(
           label: translation(context).okay,
           onPressed: () {
+            refreshAppointments(context);
             Navigator.pop(context);
           }),
     );
