@@ -15,7 +15,9 @@ import '../size_config.dart';
 class AppointmentDetailsPage extends StatefulWidget {
   String appointmentId;
   final bool _isBooking;
-  AppointmentDetailsPage(this.appointmentId, this._isBooking, {Key? key})
+  final bool _iscancel;
+  AppointmentDetailsPage(this.appointmentId, this._isBooking, this._iscancel,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -71,11 +73,14 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
-            Text(
-              translation(context).thanks,
-              //"Thank you for booking!",
-              style: TextStyle(fontSize: getProportionateScreenHeight(20)),
-            ),
+            widget._iscancel
+                ? Container()
+                : Text(
+                    translation(context).thanks,
+                    //"Thank you for booking!",
+                    style:
+                        TextStyle(fontSize: getProportionateScreenHeight(20)),
+                  ),
             SizedBox(
               height: getProportionateScreenHeight(10),
             ),
@@ -84,7 +89,11 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
           ],
         ),
       ),
-      bottomSheet: _buildBookBtn(context),
+      bottomSheet: widget._iscancel
+          ? _buildCancelBtn(context)
+          : Container(
+              child: Text(""),
+            ),
     );
   }
 
@@ -275,11 +284,11 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     );
   }
 
-  Widget _buildBookBtn(BuildContext context) {
+  Widget _buildCancelBtn(BuildContext context) {
     final snackBar = SnackBar(
-      content: const Text('deleted successfully'),
+      content: Text(translation(context).appointmentCancelled),
       action: SnackBarAction(
-        label: 'ok',
+        label: translation(context).okay,
         onPressed: () {
           Navigator.pop(context);
         },
@@ -290,11 +299,43 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       width: double.infinity,
       height: 55,
       child: ElevatedButton(
-        onPressed: () {
-          Provider.of<AppointmentProvider>(context, listen: false)
-              .cancelAppointment(appointment!.id, context);
-          // refreshAppointments();
-        },
+        onPressed: () => showDialog<String>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context2) => AlertDialog(
+            content: Text(translation(context).cancelAlert),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Provider.of<AppointmentProvider>(context, listen: false)
+                      .cancelAppointment(appointment!.id, context);
+                  Navigator.pop(context2);
+                },
+                child: Text(
+                  translation(context).yes,
+                  style: TextStyle(
+                    color: Color.fromRGBO(172, 128, 39, 1.0),
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context2),
+                child: Text(
+                  translation(context).no,
+                  style: TextStyle(
+                    color: Color.fromRGBO(172, 128, 39, 1.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        //  () {
+        //   Provider.of<AppointmentProvider>(context, listen: false)
+        //       .cancelAppointment(appointment!.id, context);
+        //   // refreshAppointments();
+        // },
         child: Text(
           translation(context).cancel,
           // "Cancel",

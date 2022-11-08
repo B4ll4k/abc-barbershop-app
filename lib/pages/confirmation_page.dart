@@ -310,7 +310,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                                   .allActiveAppointments
                                   .last
                                   .id,
-                              true),
+                              true,
+                              false),
                         ));
                   } on HttpException catch (e) {
                     _showDialog(e.toString());

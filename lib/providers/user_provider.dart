@@ -145,14 +145,16 @@ class UserProvider with ChangeNotifier {
 
   Future<void> forgetPassword(String email, BuildContext context) async {
     final snackBar = SnackBar(
-      duration: const Duration(seconds: 20),
-      content: Text("forget"),
+      //duration: const Duration(seconds: 20),
+      content: Text("please check your email to reset your password"),
       action: SnackBarAction(
           label: translation(context).okay,
           onPressed: () {
-            Navigator.of(context, rootNavigator: true)
-                .pushReplacementNamed('home');
+            // Navigator.of(context, rootNavigator: true)
+            //     .pushReplacementNamed('home');
+            print("object FORGET");
 
+            Navigator.pop(context);
             // Navigator.pushAndRemoveUntil(
             //     context,
             //     MaterialPageRoute<void>(

@@ -59,5 +59,8 @@
     "cancel":"Cancel",
     "alreadyBooked":"already booked! please choose another time.",
     "appointmentCancelled":"Appointment Cancelled",
-    "forget":"forget"
+    "forget":"forget",
+    "cancelAlert":"are you sure you want to cancel the appointment?",
+    "yes":"Yes",
+    "no":"No"
     }

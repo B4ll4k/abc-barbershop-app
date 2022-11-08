@@ -75,8 +75,8 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              AppointmentDetailsPage(appointments[i].id, false),
+                          builder: (context) => AppointmentDetailsPage(
+                              appointments[i].id, false, true),
                         ));
                   },
                   child: LayoutBuilder(
