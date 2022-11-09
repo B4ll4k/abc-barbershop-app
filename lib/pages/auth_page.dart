@@ -585,10 +585,9 @@ class _AuthPageState extends State<AuthPage> {
 
       if (widget._redirected) {
         Navigator.pop(context);
+      } else {
+        Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
       }
-      // else {
-      //   Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
-      // }
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;

@@ -306,6 +306,15 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
             content: Text(translation(context).cancelAlert),
             actions: <Widget>[
               TextButton(
+                onPressed: () => Navigator.pop(context2),
+                child: Text(
+                  translation(context).no,
+                  style: const TextStyle(
+                    color: Color.fromRGBO(172, 128, 39, 1.0),
+                  ),
+                ),
+              ),
+              TextButton(
                 onPressed: () {
                   Provider.of<AppointmentProvider>(context, listen: false)
                       .cancelAppointment(appointment!.id, context);
@@ -313,16 +322,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 },
                 child: Text(
                   translation(context).yes,
-                  style: TextStyle(
-                    color: Color.fromRGBO(172, 128, 39, 1.0),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context2),
-                child: Text(
-                  translation(context).no,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color.fromRGBO(172, 128, 39, 1.0),
                   ),
                 ),

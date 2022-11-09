@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:abc_barbershop/localization/language_constraints.dart';
-import 'package:abc_barbershop/pages/main_page.dart';
 import 'package:abc_barbershop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -134,24 +133,24 @@ class AppointmentProvider with ChangeNotifier {
 
   Future refreshAppointments(BuildContext context) async {
     bool isAuth = Provider.of<UserProvider>(context, listen: false).isAuth();
+
     if (isAuth) {
       await Provider.of<AppointmentProvider>(context, listen: false)
           .fetchActiveAppointments(
-              Provider.of<UserProvider>(context, listen: false).user.id);
-      await Provider.of<AppointmentProvider>(context, listen: false)
-          .fetchHistoryAppointments(
               Provider.of<UserProvider>(context, listen: false).user.id);
     }
   }
 
   Future<void> cancelAppointment(String id, BuildContext context) async {
     final snackBar = SnackBar(
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 30),
       content: Text(translation(context).appointmentCancelled),
       action: SnackBarAction(
           label: translation(context).okay,
           onPressed: () {
             refreshAppointments(context);
+            Provider.of<AppointmentProvider>(context, listen: false)
+                .fetchAllActiveAppointments();
             Navigator.pop(context);
           }),
     );
