@@ -576,18 +576,6 @@ class _AuthPageState extends State<AuthPage> {
     try {
       await Provider.of<UserProvider>(context, listen: false)
           .forgetPassword(_formData["email"], context);
-      // await Provider.of<AppointmentProvider>(context, listen: false)
-      //     .fetchActiveAppointments(
-      //         Provider.of<UserProvider>(context, listen: false).user.id);
-      // await Provider.of<AppointmentProvider>(context, listen: false)
-      //     .fetchHistoryAppointments(
-      //         Provider.of<UserProvider>(context, listen: false).user.id);
-
-      if (widget._redirected) {
-        Navigator.pop(context);
-      } else {
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed('home');
-      }
     } on HttpException catch (error) {
       setState(() {
         _isLoading = false;

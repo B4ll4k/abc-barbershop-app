@@ -145,21 +145,16 @@ class UserProvider with ChangeNotifier {
 
   Future<void> forgetPassword(String email, BuildContext context) async {
     final snackBar = SnackBar(
-      //duration: const Duration(seconds: 20),
-      content: Text("please check your email to reset your password"),
+      duration: const Duration(seconds: 20),
+      content: Text(translation(context).checkEmail),
       action: SnackBarAction(
           label: translation(context).okay,
           onPressed: () {
-            // Navigator.of(context, rootNavigator: true)
-            //     .pushReplacementNamed('home');
-            print("object FORGET");
-
-            Navigator.pop(context);
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute<void>(
-            //         builder: (BuildContext context) => AuthPage(false)),
-            //     (route) => false);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => AuthPage(false)),
+                (route) => false);
           }),
     );
 
@@ -172,10 +167,18 @@ class UserProvider with ChangeNotifier {
       );
       final responseBody = (json.decode(response.body) as Map<String, dynamic>);
       if (responseBody['Success'] == null) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        //Navigator.pop(context);
+        //print("SUCCESSFUL");
+        // print("not successful");
+        // String error = responseBody['Failure'];
+        // throw HttpException(error);
+      } else {
+        //print("not successful");
         String error = responseBody['Failure'];
         throw HttpException(error);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        //  ScaffoldMessenger.of(context).showSnackBar(snackBar);
         // await fetchUserInfo(email);
       }
       notifyListeners();

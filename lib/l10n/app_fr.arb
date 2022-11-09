@@ -62,6 +62,7 @@
     "forget":"Oubliez",
     "cancelAlert":"Êtes-vous sûr de vouloir annuler le rendez-vous ?",
     "yes":"Oui",
-    "no":"Non"
+    "no":"Non",
+    "checkEmail":"veuillez vérifier votre e-mail pour réinitialiser votre mot de passe"
     
 }

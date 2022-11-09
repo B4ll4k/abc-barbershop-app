@@ -62,5 +62,6 @@
     "forget":"forget",
     "cancelAlert":"are you sure you want to cancel the appointment?",
     "yes":"Yes",
-    "no":"No"
+    "no":"No",
+    "checkEmail":"please check your email to reset your password"
     }
