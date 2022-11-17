@@ -33,6 +33,12 @@ class _AuthPageState extends State<AuthPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // @override
+  // void setState(VoidCallback cb) {
+  //   if (mounted) {
+  //     super.setState(cb);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -515,9 +521,7 @@ class _AuthPageState extends State<AuthPage> {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog(translation(context).swr
-          //'Something went wrong!'
-          );
+      _showErrorDialog(translation(context).swr);
     }
   }
 
@@ -543,9 +547,6 @@ class _AuthPageState extends State<AuthPage> {
       await Provider.of<AppointmentProvider>(context, listen: false)
           .fetchHistoryAppointments(
               Provider.of<UserProvider>(context, listen: false).user.id);
-      // setState(() {
-      //   _isLoading = false;
-      // });
       if (widget._redirected) {
         Navigator.pop(context);
       } else {

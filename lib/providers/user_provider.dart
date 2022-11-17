@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../localization/language_constraints.dart';
 import '../models/env.dart';
@@ -157,44 +158,37 @@ class UserProvider with ChangeNotifier {
                 (route) => false);
           }),
     );
-
+    final requestData = {"email": email};
     try {
       final response = await http.post(
-        Uri.parse(EnviromentVariables.baseUrl + "forget"),
-        body: jsonEncode(<String, String>{
-          'email': email,
-        }),
+        Uri.parse(EnviromentVariables.baseUrl + "user"),
+        body: json.encode(requestData),
       );
-      final responseBody = (json.decode(response.body) as Map<String, dynamic>);
-      if (responseBody['Success'] == null) {
+      final responseList = json.decode(response.body) as List<dynamic>;
+      if (responseList.isNotEmpty) {
+        final responseForget = await http.post(
+          Uri.parse(EnviromentVariables.baseUrl + "forget"),
+          body: jsonEncode(<String, String>{
+            'email': email,
+          }),
+        );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        //Navigator.pop(context);
-        //print("SUCCESSFUL");
-        // print("not successful");
-        // String error = responseBody['Failure'];
-        // throw HttpException(error);
+        notifyListeners();
       } else {
-        //print("not successful");
-        String error = responseBody['Failure'];
-        throw HttpException(error);
-        //  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        // await fetchUserInfo(email);
+        Fluttertoast.showToast(
+            msg: translation(context).emailDoesntExist,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            textColor: Theme.of(context).colorScheme.secondary);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => AuthPage(false)),
+            (route) => false);
       }
-      notifyListeners();
     } catch (e) {
       rethrow;
     }
-
-    // if (response.statusCode == 200 || response.statusCode == 201) {
-    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    //   print("forget");
-    // }
-
-    //   notifyListeners();
-    // } catch (e) {
-    //   throw HttpException(e.toString());
-    // }
     notifyListeners();
   }
 
