@@ -476,7 +476,7 @@ class _AuthPageState extends State<AuthPage> {
                     vertical: getProportionateScreenHeight(2)),
                 child: Text(
                   _authMode == AuthMode.forget
-                      ? translation(context).forget
+                      ? translation(context).reset
                       : _authMode == AuthMode.logIn
                           ? translation(context).login
                           : translation(context).signup,

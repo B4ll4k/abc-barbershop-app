@@ -59,7 +59,7 @@
     "cancel":"Annuler",
     "alreadyBooked":"déjà réservé! veuillez choisir une autre heure.",
     "appointmentCancelled":"Rendez-vous annulé avec succès",
-    "forget":"Oubliez",
+    "reset":"réinitialiser",
     "cancelAlert":"Êtes-vous sûr de vouloir annuler le rendez-vous ?",
     "yes":"Oui",
     "no":"Non",
