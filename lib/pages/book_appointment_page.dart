@@ -109,20 +109,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
             } else {
               _workingTime.addAll({startTimeString: !_isWorkingDay});
             }
-            // if (widget.serviceId == 4.toString()) {
-            //   if (startTimeString[3] == "3") {
-            //     startTimeString = startTimeString.replaceRange(3, 4, "0");
-            //   } else {
-            //     int f = int.parse(startTimeString.substring(0, 2));
-            //     f = f + 1;
-            //     startTimeString = startTimeString.replaceRange(3, 4, "0");
-            //     if (f < 10) {
-            //       startTimeString = startTimeString.replaceRange(0, 2, "0$f");
-            //     } else {
-            //       startTimeString = startTimeString.replaceRange(0, 2, "$f");
-            //     }
-            //   }
-            // } else {
+
             if (startTimeString[3] == "0") {
               startTimeString = startTimeString.replaceRange(3, 4, "3");
             } else {
@@ -155,21 +142,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 _workingTime.addAll({startTimeString: !_isWorkingDay});
               }
             }
-
-            // if (widget.serviceId == 4.toString()) {
-            //   if (startTimeString[3] == "3") {
-            //     startTimeString = startTimeString.replaceRange(3, 4, "0");
-            //   } else {
-            //     int f = int.parse(startTimeString.substring(0, 2));
-            //     f = f + 1;
-            //     startTimeString = startTimeString.replaceRange(3, 4, "0");
-            //     if (f < 10) {
-            //       startTimeString = startTimeString.replaceRange(0, 2, "0$f");
-            //     } else {
-            //       startTimeString = startTimeString.replaceRange(0, 2, "$f");
-            //     }
-            //   }
-            // } else {
             if (startTimeString[3] == "0") {
               startTimeString = startTimeString.replaceRange(3, 4, "3");
             } else {
@@ -341,36 +313,22 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                         appointment.bookingStart == bookingStart) {
                       isalready = true;
                     }
+                    if (appointment.barberId == widget.barberId &&
+                        bookingStart.add(const Duration(minutes: 30)) ==
+                            appointment.bookingStart &&
+                        bookingEnd ==
+                            appointment.bookingStart
+                                .add(const Duration(minutes: 30))) {
+                      isalready = true;
+                    }
 
                     if (appointment.barberId == widget.barberId &&
-                        appointment.bookingStart.toString().substring(14, 16) ==
-                            "00" &&
-                        appointment.bookingEnd.toString().substring(14, 16) ==
-                            "00") {
-                      if (appointment.bookingStart
-                              .toString()
-                              .replaceRange(14, 16, "30")
-                              .substring(11, 16) ==
-                          bookingStart
-                              .toString()
-                              .replaceRange(14, 16, "30")
-                              .substring(11, 16)) {
-                        isalready = true;
-                      }
-                    }
-                    if (appointment.barberId == widget.barberId &&
-                        appointment.bookingStart.toString().substring(14, 16) ==
-                            "30" &&
-                        appointment.bookingEnd.toString().substring(14, 16) ==
-                            "30") {
-                      if (appointment.bookingEnd
-                              .toString()
-                              .replaceRange(14, 16, "00")
-                              .substring(11, 16) ==
-                          bookingEnd
-                              .toString()
-                              .replaceRange(14, 16, "00")
-                              .substring(11, 16)) {
+                        appointment.bookingStart
+                                .add(const Duration(minutes: 60)) ==
+                            appointment.bookingEnd) {
+                      if (bookingStart ==
+                          appointment.bookingStart
+                              .add(const Duration(minutes: 30))) {
                         isalready = true;
                       }
                     }
@@ -388,6 +346,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                       _selectedTime = "";
                       _selectedTimeIndex = -1;
                     });
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(
