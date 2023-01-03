@@ -46,14 +46,23 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget build(BuildContext context) {
     _barberId = widget.barberId;
 
+    final freeweekdays = Provider.of<BarberProvider>(context).freeWeekdays;
+
     if (_isFirstTime) {
-      if (_selectedDate.value.weekday == 3) {
-        _isDayAdded = true;
-        _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
-      } else if (_selectedDate.value.weekday == 7) {
+      // if (_selectedDate.value.weekday == 3) {
+      //   _isDayAdded = true;
+      //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
+      // } else
+
+      if (freeweekdays.contains(_selectedDate.value.weekday)) {
         _isDayAdded = true;
         _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
       }
+
+      // if (_selectedDate.value.weekday == 7) {
+      //   _isDayAdded = true;
+      //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
+      // }
 
       final barberProvider = Provider.of<BarberProvider>(context);
       final times = barberProvider.findWorkingTime(
