@@ -68,7 +68,7 @@ class _AuthPageState extends State<AuthPage> {
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
-                                  'assets/images/icon-removebg-preview.png')),
+                                  'assets/images/Capture-removebg-preview.png')),
                         ),
                       ),
                     ),
