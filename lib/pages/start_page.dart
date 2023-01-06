@@ -44,15 +44,13 @@ class StartPage extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          title: Padding(
-            padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
-            child: Text(
-              translation(context).home,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w400),
-            ),
+          centerTitle: true,
+          title: Text(
+            translation(context).home,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w400),
           ),
           elevation: 0.0,
         ),
