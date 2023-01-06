@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kentechno.abc_barbershop">
+    package="com.kentechno.geneva_barbers">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="ABC Barbershop"
+        android:label="Geneva Barbers"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

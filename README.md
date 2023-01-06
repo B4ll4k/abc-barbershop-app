@@ -1,6 +1,6 @@
-# abc_barbershop
+# geneva_barbers
 
-Abc Barbershop's MOBILE APP.
+geneva barbers MOBILE APP.
 
 ## Getting Started
 

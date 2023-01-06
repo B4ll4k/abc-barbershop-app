@@ -1,5 +1,5 @@
 //import 'package:abc_barbershop/pages/setting_page.dart';
-import 'package:abc_barbershop/localization/language_constraints.dart';
+import 'package:geneva_barbers/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
