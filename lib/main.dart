@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
               brightness: Brightness.light,
               primary: Colors.white,
               onPrimary: Colors.black,
-              secondary: Color.fromRGBO(172, 128, 39, 1.0),
+              secondary: Color.fromRGBO(28, 79, 26, 1.0),
               onSecondary: Colors.white,
               error: Colors.red,
               onError: Colors.white,
@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
               surface: Colors.white,
               onSurface: Colors.black),
           bottomAppBarTheme: const BottomAppBarTheme(
-            color: Color.fromRGBO(172, 128, 39, 1.0),
+            color: Color.fromRGBO(28, 79, 26, 1.0),
           ),
         ),
       ),

@@ -67,8 +67,8 @@ class _AuthPageState extends State<AuthPage> {
                         height: getProportionateScreenHeight(300),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/logo_white.png')),
+                              image: AssetImage(
+                                  'assets/images/icon-removebg-preview.png')),
                         ),
                       ),
                     ),

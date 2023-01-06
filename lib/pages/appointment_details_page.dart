@@ -25,18 +25,6 @@ class AppointmentDetailsPage extends StatefulWidget {
 }
 
 class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
-  // Future refreshAppointments() async {
-  //   bool isAuth = Provider.of<UserProvider>(context, listen: false).isAuth();
-  //   if (isAuth) {
-  //     await Provider.of<AppointmentProvider>(context, listen: false)
-  //         .fetchActiveAppointments(
-  //             Provider.of<UserProvider>(context, listen: false).user.id);
-  //     await Provider.of<AppointmentProvider>(context, listen: false)
-  //         .fetchHistoryAppointments(
-  //             Provider.of<UserProvider>(context, listen: false).user.id);
-  //   }
-  // }
-
   Appointment? appointment;
   @override
   Widget build(BuildContext context) {
@@ -309,8 +297,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 onPressed: () => Navigator.pop(context2),
                 child: Text(
                   translation(context).no,
-                  style: const TextStyle(
-                    color: Color.fromRGBO(172, 128, 39, 1.0),
+                  style: TextStyle(
+                    color: Theme.of(context2).colorScheme.secondary,
                   ),
                 ),
               ),
@@ -322,20 +310,14 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                 },
                 child: Text(
                   translation(context).yes,
-                  style: const TextStyle(
-                    color: Color.fromRGBO(172, 128, 39, 1.0),
+                  style: TextStyle(
+                    color: Theme.of(context2).colorScheme.secondary,
                   ),
                 ),
               ),
             ],
           ),
         ),
-
-        //  () {
-        //   Provider.of<AppointmentProvider>(context, listen: false)
-        //       .cancelAppointment(appointment!.id, context);
-        //   // refreshAppointments();
-        // },
         child: Text(
           translation(context).cancel,
           // "Cancel",

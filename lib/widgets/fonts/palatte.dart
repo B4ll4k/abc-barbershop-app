@@ -16,5 +16,5 @@ const TextStyle kBodyText2 = TextStyle(
 );
 const TextStyle kBodyText3 = TextStyle(
   fontSize: 12,
-  color: Color.fromRGBO(172, 128, 39, 1.0),
+  color: Color.fromRGBO(28, 79, 26, 1.0),
 );
