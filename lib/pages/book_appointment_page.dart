@@ -46,33 +46,26 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget build(BuildContext context) {
     _barberId = widget.barberId;
 
-    final freeweekdays = Provider.of<BarberProvider>(context).freeWeekdays;
+    //final freeweekdays = Provider.of<BarberProvider>(context).freeWeekdays;
 
     if (_isFirstTime) {
-      // if (_selectedDate.value.weekday == 3) {
+    
+      // if (freeweekdays.contains(_selectedDate.value.weekday)) {
       //   _isDayAdded = true;
       //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
-      // } else
-
-      if (freeweekdays.contains(_selectedDate.value.weekday)) {
-        _isDayAdded = true;
-        _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
-      }
-
-      // if (_selectedDate.value.weekday == 7) {
-      //   _isDayAdded = true;
-      //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
+      //   _isWorkingDay = false;
       // }
+ 
 
       final barberProvider = Provider.of<BarberProvider>(context);
       final times = barberProvider.findWorkingTime(
           widget.barberId, _selectedDate.value.weekday.toString());
 
-      for (var element in barberProvider.freeWeekdays) {
-        if (_selectedDate.value.weekday == element) {
-          _isWorkingDay = false;
-        }
-      }
+      // for (var element in barberProvider.freeWeekdays) {
+      //   if (_selectedDate.value.weekday == element) {
+      //     _isWorkingDay = false;
+      //   }
+      // }
       final activeAppointmentsOriginal =
           Provider.of<AppointmentProvider>(context).allActiveAppointments;
       activeApp = activeAppointmentsOriginal;
@@ -132,6 +125,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               }
             }
             // }
+
           }
         }
       } else {
@@ -486,10 +480,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     Provider.of<BarberProvider>(context, listen: false);
                 final barber = barberProvider.barbers
                     .firstWhere((element) => element.id == _barberId);
-                final freeWeekDays = barberProvider.freeWeekdays;
-
-                if (freeWeekDays.contains(val.weekday) ||
-                    barber.daysoff.contains(val)) {
+               // final freeWeekDays = barberProvider.freeWeekdays;
+                    // final workingTimes = barberProvider.findWorkingTime(_barberId, weekDay) 
+                         // final workingday = barberProvider.findWorkingTime(
+          _barberId);
+                if (barber.daysoff.contains(val)) {
                   return false;
                 }
                 return true;
