@@ -23,8 +23,8 @@ class StartPage extends StatelessWidget {
             .fetchBarbers();
         await Provider.of<BarberProvider>(context, listen: false)
             .fetchDaysoff();
-        await Provider.of<BarberProvider>(context, listen: false)
-            .fetchFreeWeekdays();
+        // await Provider.of<BarberProvider>(context, listen: false)
+        //     .fetchFreeWeekdays();
         await Provider.of<BarberProvider>(context, listen: false)
             .fetchWorkingTime();
 

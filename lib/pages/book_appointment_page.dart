@@ -49,13 +49,19 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     //final freeweekdays = Provider.of<BarberProvider>(context).freeWeekdays;
 
     if (_isFirstTime) {
-    
       // if (freeweekdays.contains(_selectedDate.value.weekday)) {
       //   _isDayAdded = true;
       //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
       //   _isWorkingDay = false;
       // }
- 
+      final barberprovider =
+          Provider.of<BarberProvider>(context, listen: false);
+      final workingday = barberprovider.findWorkingDays(_barberId);
+      for (var element in workingday) {
+        if (_selectedDate.value != element['weekDay']) {
+          _isWorkingDay = false;
+        }
+      }
 
       final barberProvider = Provider.of<BarberProvider>(context);
       final times = barberProvider.findWorkingTime(
@@ -480,10 +486,22 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     Provider.of<BarberProvider>(context, listen: false);
                 final barber = barberProvider.barbers
                     .firstWhere((element) => element.id == _barberId);
-               // final freeWeekDays = barberProvider.freeWeekdays;
-                    // final workingTimes = barberProvider.findWorkingTime(_barberId, weekDay) 
-                         // final workingday = barberProvider.findWorkingTime(
-          _barberId);
+                // final freeWeekDays = barberProvider.freeWeekdays;
+
+                final workingday = barberProvider.findWorkingDays(_barberId);
+
+                List<int> workingweekdays = [];
+                for (var element in workingday) {
+                  workingweekdays.add(int.parse(element['weekDay'] as String));
+                }
+                if (!workingweekdays.contains(val.weekday)) {
+                  return false;
+                }
+                // for (var element in workingday) {
+                //   if (val.weekday != element['weekDay']) {
+                //     return false;
+                //   }
+                // }
                 if (barber.daysoff.contains(val)) {
                   return false;
                 }

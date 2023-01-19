@@ -64,6 +64,7 @@
     "yes":"Oui",
     "no":"Non",
     "checkEmail":"veuillez vérifier votre e-mail pour réinitialiser votre mot de passe",
-    "emailDoesntExist":"Impossible de trouver votre e-mail dans notre base de données. Veuillez vous inscrire si vous avez déjà un compte !"
+    "emailDoesntExist":"Impossible de trouver votre e-mail dans notre base de données. Veuillez vous inscrire si vous avez déjà un compte !",
+    "newVersion":"Il y a eu quelques modifications apportées à l'application. Veuillez mettre à jour l'application !!"
     
 }

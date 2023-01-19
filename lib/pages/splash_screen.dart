@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:geneva_barbers/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,8 @@ import '../providers/appointment_provider.dart';
 import '../providers/services_provider.dart';
 import '../providers/barber_provider.dart';
 import '../size_config.dart';
+
+import 'package:new_version/new_version.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,8 +25,34 @@ class _SplashScreenState extends State<SplashScreen> {
   bool? _isConnected;
   @override
   void initState() {
+    _checkVersion();
     Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
+
     super.initState();
+  }
+
+  void _checkVersion() async {
+    final newVersion = NewVersion(
+        androidId: "com.kentechno.geneva_barbers",
+        iOSId: "com.kentechno.genevaBarbers");
+
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: "UPDATE!!!",
+        dismissButtonText: "Skip",
+        dialogText: translation(context).newVersion,
+        dismissAction: () {
+          SystemNavigator.pop();
+        },
+        updateButtonText: "Lets update",
+      );
+      print("DEVICE : " + status.localVersion);
+      print("STORE : " + status.storeVersion);
+      print("DEVICE : " + status.appStoreLink);
+    }
   }
 
   Future _checkConnection(BuildContext context) async {
@@ -103,12 +132,12 @@ class _SplashScreenState extends State<SplashScreen> {
     await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
     await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
     await Provider.of<BarberProvider>(context, listen: false).fetchDaysoff();
-    await Provider.of<BarberProvider>(context, listen: false)
-        .fetchFreeWeekdays();
+    // await Provider.of<BarberProvider>(context, listen: false)
+    //     .fetchFreeWeekdays();
     await Provider.of<BarberProvider>(context, listen: false)
         .fetchWorkingTime();
-    await Provider.of<BarberProvider>(context, listen: false)
-        .fetchWorkingHours();
+    // await Provider.of<BarberProvider>(context, listen: false)
+    //     .fetchWorkingHours();
     await Provider.of<AppointmentProvider>(context, listen: false)
         .fetchAllActiveAppointments();
   }

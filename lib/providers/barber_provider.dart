@@ -14,11 +14,11 @@ class BarberProvider with ChangeNotifier {
 
   String workingHours = "";
 
-  List<int> _freeWeekdays = [];
+  // List<int> _freeWeekdays = [];
 
-  List<int> get freeWeekdays {
-    return [..._freeWeekdays];
-  }
+  // List<int> get freeWeekdays {
+  //   return [..._freeWeekdays];
+  // }
 
   List<Barber> get barbers {
     return [..._barbers];
@@ -52,22 +52,22 @@ class BarberProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchFreeWeekdays() async {
-    _freeWeekdays = [];
-    try {
-      final response = await http
-          .get(Uri.parse(EnviromentVariables.baseUrl + "freeweekdays/"));
-      final resposeData = json.decode(response.body) as List<dynamic>;
+  // Future<void> fetchFreeWeekdays() async {
+  //   _freeWeekdays = [];
+  //   try {
+  //     final response = await http
+  //         .get(Uri.parse(EnviromentVariables.baseUrl + "freeweekdays/"));
+  //     final resposeData = json.decode(response.body) as List<dynamic>;
 
-      for (var elementData in resposeData) {
-        var element = elementData as Map<String, dynamic>;
-        _freeWeekdays.add(int.parse(element["weekday_off"] as String));
-      }
-      notifyListeners();
-    } catch (e) {
-      throw HttpException(e.toString());
-    }
-  }
+  //     for (var elementData in resposeData) {
+  //       var element = elementData as Map<String, dynamic>;
+  //       _freeWeekdays.add(int.parse(element["weekday_off"] as String));
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     throw HttpException(e.toString());
+  //   }
+  // }
 
   Future<void> fetchDaysoff() async {
     try {
@@ -127,20 +127,25 @@ class BarberProvider with ChangeNotifier {
         .toList();
   }
 
-  Future<void> fetchWorkingHours() async {
-    try {
-      final response = await http
-          .get(Uri.parse(EnviromentVariables.baseUrl + "workinghours/"));
-      final responseData = json.decode(response.body) as List<dynamic>;
-
-      String startTime =
-          responseData[0]["startTime"].toString().substring(0, 5);
-      String endTime = responseData[0]["endTime"].toString().substring(0, 5);
-
-      workingHours = startTime + " - " + endTime;
-      notifyListeners();
-    } catch (e) {
-      throw HttpException(e.toString());
-    }
+  List<Map<String, dynamic>> findWorkingDays(String barberId) {
+    return _workingTime
+        .where((element) => element["userId"] == barberId)
+        .toList();
   }
+  // Future<void> fetchWorkingHours() async {
+  //   try {
+  //     final response = await http
+  //         .get(Uri.parse(EnviromentVariables.baseUrl + "workinghours/"));
+  //     final responseData = json.decode(response.body) as List<dynamic>;
+
+  //     String startTime =
+  //         responseData[0]["startTime"].toString().substring(0, 5);
+  //     String endTime = responseData[0]["endTime"].toString().substring(0, 5);
+
+  //     workingHours = startTime + " - " + endTime;
+  //     notifyListeners();
+  //   } catch (e) {
+  //     throw HttpException(e.toString());
+  //   }
+  // }
 }

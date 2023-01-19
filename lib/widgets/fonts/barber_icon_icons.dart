@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/BarberIcon.ttf
 ///
-/// 
+///
 ///
 import 'package:flutter/widgets.dart';
 
