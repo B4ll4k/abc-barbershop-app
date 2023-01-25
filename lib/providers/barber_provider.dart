@@ -52,7 +52,7 @@ class BarberProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> fetchFreeWeekdays() async {
+  // Future<void> R() async {
   //   _freeWeekdays = [];
   //   try {
   //     final response = await http

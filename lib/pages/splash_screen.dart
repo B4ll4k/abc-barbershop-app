@@ -25,35 +25,36 @@ class _SplashScreenState extends State<SplashScreen> {
   bool? _isConnected;
   @override
   void initState() {
-    _checkVersion();
+    // _checkVersion();
     Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
 
     super.initState();
   }
 
-  void _checkVersion() async {
-    final newVersion = NewVersion(
-        androidId: "com.kentechno.geneva_barbers",
-        iOSId: "com.kentechno.genevaBarbers");
+  // void _checkVersion() async {
+  //   final newVersion = NewVersion(
+  //       androidId: "com.kentechno.geneva_barbers",
+  //       iOSId: "com.kentechno.genevaBarbers");
 
-    final status = await newVersion.getVersionStatus();
-    if (status != null) {
-      newVersion.showUpdateDialog(
-        context: context,
-        versionStatus: status,
-        dialogTitle: "UPDATE!!!",
-        dismissButtonText: "Skip",
-        dialogText: translation(context).newVersion,
-        dismissAction: () {
-          SystemNavigator.pop();
-        },
-        updateButtonText: "Lets update",
-      );
-      print("DEVICE : " + status.localVersion);
-      print("STORE : " + status.storeVersion);
-      print("DEVICE : " + status.appStoreLink);
-    }
-  }
+  //   final status = await newVersion.getVersionStatus();
+  //   if (status != null) {
+  //     print("hello version");
+  //     newVersion.showUpdateDialog(
+  //       context: context,
+  //       versionStatus: status,
+  //       dialogTitle: "UPDATE!!!",
+  //       dismissButtonText: "Skip",
+  //       dialogText: translation(context).newVersion,
+  //       dismissAction: () {
+  //         SystemNavigator.pop();
+  //       },
+  //       updateButtonText: "  update",
+  //     );
+  //     // print("DEVICE : " + status.localVersion);
+  //     // print("STORE : " + status.storeVersion);
+  //     // print("DEVICE : " + status.appStoreLink);
+  //   }
+  // }
 
   Future _checkConnection(BuildContext context) async {
     try {
@@ -132,8 +133,6 @@ class _SplashScreenState extends State<SplashScreen> {
     await Provider.of<ServicesProvider>(context, listen: false).fetchServices();
     await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
     await Provider.of<BarberProvider>(context, listen: false).fetchDaysoff();
-    // await Provider.of<BarberProvider>(context, listen: false)
-    //     .fetchFreeWeekdays();
     await Provider.of<BarberProvider>(context, listen: false)
         .fetchWorkingTime();
     // await Provider.of<BarberProvider>(context, listen: false)

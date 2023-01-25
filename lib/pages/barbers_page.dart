@@ -117,7 +117,7 @@ class BarberPage extends StatelessWidget {
                           child: Text(
                             Provider.of<BarberProvider>(context).workingHours ==
                                     ""
-                                ? '9:30am - 8:30pm'
+                                ? '9:00am - 1:00pm'
                                 : Provider.of<BarberProvider>(context)
                                     .workingHours,
                             style: const TextStyle(

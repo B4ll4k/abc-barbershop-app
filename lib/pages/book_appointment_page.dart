@@ -46,32 +46,24 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   Widget build(BuildContext context) {
     _barberId = widget.barberId;
 
-    //final freeweekdays = Provider.of<BarberProvider>(context).freeWeekdays;
-
     if (_isFirstTime) {
-      // if (freeweekdays.contains(_selectedDate.value.weekday)) {
-      //   _isDayAdded = true;
-      //   _selectedDate.value = _selectedDate.value.add(const Duration(days: 1));
-      //   _isWorkingDay = false;
-      // }
       final barberprovider =
           Provider.of<BarberProvider>(context, listen: false);
       final workingday = barberprovider.findWorkingDays(_barberId);
+
+      List<int> workingweekdays = [];
       for (var element in workingday) {
-        if (_selectedDate.value != element['weekDay']) {
-          _isWorkingDay = false;
-        }
+        workingweekdays.add(int.parse(element['weekDay'] as String));
+      }
+
+      if (!workingweekdays.contains(_selectedDate.value.weekday)) {
+        _isWorkingDay = false;
       }
 
       final barberProvider = Provider.of<BarberProvider>(context);
       final times = barberProvider.findWorkingTime(
           widget.barberId, _selectedDate.value.weekday.toString());
 
-      // for (var element in barberProvider.freeWeekdays) {
-      //   if (_selectedDate.value.weekday == element) {
-      //     _isWorkingDay = false;
-      //   }
-      // }
       final activeAppointmentsOriginal =
           Provider.of<AppointmentProvider>(context).allActiveAppointments;
       activeApp = activeAppointmentsOriginal;
@@ -130,8 +122,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 startTimeString = startTimeString.replaceRange(0, 2, "$f");
               }
             }
-            // }
-
           }
         }
       } else {
@@ -486,7 +476,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     Provider.of<BarberProvider>(context, listen: false);
                 final barber = barberProvider.barbers
                     .firstWhere((element) => element.id == _barberId);
-                // final freeWeekDays = barberProvider.freeWeekdays;
 
                 final workingday = barberProvider.findWorkingDays(_barberId);
 
@@ -494,18 +483,10 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 for (var element in workingday) {
                   workingweekdays.add(int.parse(element['weekDay'] as String));
                 }
-                if (!workingweekdays.contains(val.weekday)) {
-                  return false;
-                }
-                // for (var element in workingday) {
-                //   if (val.weekday != element['weekDay']) {
-                //     return false;
-                //   }
-                // }
-                if (barber.daysoff.contains(val)) {
-                  return false;
-                }
-                return true;
+                return !workingweekdays.contains(val.weekday) ||
+                        barber.daysoff.contains(val)
+                    ? false
+                    : true;
               }),
         );
       },
