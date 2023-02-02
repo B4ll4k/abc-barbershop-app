@@ -132,20 +132,21 @@ class BarberProvider with ChangeNotifier {
         .where((element) => element["userId"] == barberId)
         .toList();
   }
-  // Future<void> fetchWorkingHours() async {
-  //   try {
-  //     final response = await http
-  //         .get(Uri.parse(EnviromentVariables.baseUrl + "workinghours/"));
-  //     final responseData = json.decode(response.body) as List<dynamic>;
 
-  //     String startTime =
-  //         responseData[0]["startTime"].toString().substring(0, 5);
-  //     String endTime = responseData[0]["endTime"].toString().substring(0, 5);
+  Future<void> fetchWorkingHours() async {
+    try {
+      final response = await http
+          .get(Uri.parse(EnviromentVariables.baseUrl + "workinghours/"));
+      final responseData = json.decode(response.body) as List<dynamic>;
 
-  //     workingHours = startTime + " - " + endTime;
-  //     notifyListeners();
-  //   } catch (e) {
-  //     throw HttpException(e.toString());
-  //   }
-  // }
+      String startTime =
+          responseData[0]["startTime"].toString().substring(0, 5);
+      String endTime = responseData[0]["endTime"].toString().substring(0, 5);
+
+      workingHours = startTime + " - " + endTime;
+      notifyListeners();
+    } catch (e) {
+      throw HttpException(e.toString());
+    }
+  }
 }

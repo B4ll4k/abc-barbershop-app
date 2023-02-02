@@ -12,7 +12,7 @@ import '../providers/services_provider.dart';
 import '../providers/barber_provider.dart';
 import '../size_config.dart';
 
-import 'package:new_version/new_version.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -22,39 +22,65 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String time = "";
   bool? _isConnected;
+  bool nonewversion = false;
   @override
   void initState() {
-    // _checkVersion();
-    Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
+    // Timer mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    //   DateTime timenow = DateTime.now(); //get current date and time
+    //   time = timenow.hour.toString() +
+    //       ":" +
+    //       timenow.minute.toString() +
+    //       ":" +
+    //       timenow.second.toString();
+    //   setState(() {});
+    //   //mytimer.cancel() //to terminate this timer
+    // });
+    final newVersion = NewVersionPlus(
+        androidId: 'com.kentechno.abc_barbershop',
+        iOSId: "com.kentechno.genevaBarbers");
+
+    Future.delayed(Duration.zero)
+        .then((_) => {advancedStatusCheck(newVersion)});
+    // if (nonewversion) {
+    //   Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
+    // }
 
     super.initState();
   }
 
-  // void _checkVersion() async {
-  //   final newVersion = NewVersion(
-  //       androidId: "com.kentechno.geneva_barbers",
-  //       iOSId: "com.kentechno.genevaBarbers");
-
-  //   final status = await newVersion.getVersionStatus();
-  //   if (status != null) {
-  //     print("hello version");
-  //     newVersion.showUpdateDialog(
-  //       context: context,
-  //       versionStatus: status,
-  //       dialogTitle: "UPDATE!!!",
-  //       dismissButtonText: "Skip",
-  //       dialogText: translation(context).newVersion,
-  //       dismissAction: () {
-  //         SystemNavigator.pop();
-  //       },
-  //       updateButtonText: "  update",
-  //     );
-  //     // print("DEVICE : " + status.localVersion);
-  //     // print("STORE : " + status.storeVersion);
-  //     // print("DEVICE : " + status.appStoreLink);
-  //   }
-  // }
+  advancedStatusCheck(NewVersionPlus newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.canUpdate.toString());
+      if (status.canUpdate) {
+        debugPrint(status.releaseNotes);
+        debugPrint(status.appStoreLink);
+        debugPrint(status.localVersion);
+        debugPrint(status.storeVersion);
+        newVersion.showUpdateDialog(
+          context: context,
+          versionStatus: status,
+          updateButtonText: translation(context).update,
+          allowDismissal: false,
+          // dismissButtonText: "Skip",
+          dialogTitle: translation(context).updateAvailable,
+          dialogText: translation(context).newVersion,
+          // dismissAction: () {
+          //   SystemNavigator.pop();
+          // },
+        );
+      } else {
+        debugPrint("heeeeeeeeeeeeeeeeeeey");
+        Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
+        // nonewversion = true;
+      }
+    } else {
+      Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
+      nonewversion = true;
+    }
+  }
 
   Future _checkConnection(BuildContext context) async {
     try {
@@ -135,8 +161,8 @@ class _SplashScreenState extends State<SplashScreen> {
     await Provider.of<BarberProvider>(context, listen: false).fetchDaysoff();
     await Provider.of<BarberProvider>(context, listen: false)
         .fetchWorkingTime();
-    // await Provider.of<BarberProvider>(context, listen: false)
-    //     .fetchWorkingHours();
+    await Provider.of<BarberProvider>(context, listen: false)
+        .fetchWorkingHours();
     await Provider.of<AppointmentProvider>(context, listen: false)
         .fetchAllActiveAppointments();
   }
