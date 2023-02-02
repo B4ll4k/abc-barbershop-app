@@ -22,31 +22,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  String time = "";
   bool? _isConnected;
-  bool nonewversion = false;
+
   @override
   void initState() {
-    // Timer mytimer = Timer.periodic(Duration(seconds: 1), (timer) {
-    //   DateTime timenow = DateTime.now(); //get current date and time
-    //   time = timenow.hour.toString() +
-    //       ":" +
-    //       timenow.minute.toString() +
-    //       ":" +
-    //       timenow.second.toString();
-    //   setState(() {});
-    //   //mytimer.cancel() //to terminate this timer
-    // });
     final newVersion = NewVersionPlus(
         androidId: 'com.kentechno.abc_barbershop',
         iOSId: "com.kentechno.genevaBarbers");
 
     Future.delayed(Duration.zero)
         .then((_) => {advancedStatusCheck(newVersion)});
-    // if (nonewversion) {
-    //   Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
-    // }
-
     super.initState();
   }
 
@@ -72,13 +57,10 @@ class _SplashScreenState extends State<SplashScreen> {
           // },
         );
       } else {
-        debugPrint("heeeeeeeeeeeeeeeeeeey");
         Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
-        // nonewversion = true;
       }
     } else {
       Future.delayed(Duration.zero).then((_) => {_checkConnection(context)});
-      nonewversion = true;
     }
   }
 
