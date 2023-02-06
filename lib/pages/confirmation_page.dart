@@ -1,12 +1,15 @@
 import 'package:geneva_barbers/localization/language_constraints.dart';
 import 'package:geneva_barbers/pages/appointment_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:geneva_barbers/pages/start_page.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../models/http_exception.dart';
 import '../pages/auth_page.dart';
+import '../providers/appointment_provider.dart';
+import '../providers/appointment_provider.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 import '../providers/services_provider.dart';
@@ -32,35 +35,48 @@ class ConfirmationPage extends StatefulWidget {
 
 class _ConfirmationPageState extends State<ConfirmationPage> {
   bool _isBookBtnLoading = false;
+  bool canBook = true;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(
-          translation(context).confirmation,
-          // "Confirmation",
-          style: TextStyle(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async {
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: Text(
+            translation(context).confirmation,
+            // "Confirmation",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () async {
+              Provider.of<BarberProvider>(context, listen: false);
+              await Provider.of<AppointmentProvider>(context, listen: false)
+                  .fetchAllActiveAppointments();
+
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+          ),
         ),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 40.0,
+              ),
+              _barberProfilePic(context),
+              _buildDetails()
+            ],
+          ),
         ),
+        bottomSheet: _buildBookBtn(context),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 40.0,
-            ),
-            _barberProfilePic(context),
-            _buildDetails()
-          ],
-        ),
-      ),
-      bottomSheet: _buildBookBtn(context),
     );
   }
 
@@ -256,7 +272,23 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   }
 
   Widget _buildBookBtn(BuildContext context) {
+    final snackBar = SnackBar(
+      duration: const Duration(seconds: 1000000),
+      content: Text(translation(context).alreadyBooked
+          // 'ALREADY BOOKED'
+          ),
+      action: SnackBarAction(
+        label: translation(context).okay,
+        onPressed: () {
+          while (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        },
+      ),
+    );
     var userProvider = Provider.of<UserProvider>(context);
+
+    var activeAppointmentsOriginal;
     return _isBookBtnLoading
         ? Container(
             height: 55,
@@ -278,41 +310,65 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                     setState(() {
                       _isBookBtnLoading = true;
                     });
-                    await Provider.of<AppointmentProvider>(context,
-                            listen: false)
-                        .bookAppointment(
-                      userId: Provider.of<UserProvider>(context, listen: false)
-                          .user
-                          .id,
-                      barberId: widget.barberId,
-                      serviceId: widget.serviceId,
-                      servicePrice:
-                          Provider.of<ServicesProvider>(context, listen: false)
-                              .services
-                              .firstWhere(
-                                  (element) => element.id == widget.serviceId)
-                              .normalPrice,
-                      bookingStart: widget.bookingStart.toString(),
-                      bookingEnd: widget.bookingEnd.toString(),
-                    );
-                    await Provider.of<AppointmentProvider>(context,
-                            listen: false)
-                        .fetchActiveAppointments(userProvider.user.id);
+
                     await Provider.of<AppointmentProvider>(context,
                             listen: false)
                         .fetchAllActiveAppointments();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppointmentDetailsPage(
-                              Provider.of<AppointmentProvider>(context,
-                                      listen: false)
-                                  .allActiveAppointments
-                                  .last
-                                  .id,
-                              true,
-                              false),
-                        ));
+
+                    activeAppointmentsOriginal =
+                        Provider.of<AppointmentProvider>(context, listen: false)
+                            .allActiveAppointments;
+                    for (var appointment in activeAppointmentsOriginal) {
+                      if (appointment.barberId == widget.barberId &&
+                          appointment.bookingStart == widget.bookingStart) {
+                        canBook = false;
+                      }
+
+                      if (widget.bookingStart.isBefore(DateTime.now())) {
+                        canBook = false;
+                      }
+                    }
+
+                    if (canBook) {
+                      await Provider.of<AppointmentProvider>(context,
+                              listen: false)
+                          .bookAppointment(
+                        userId:
+                            Provider.of<UserProvider>(context, listen: false)
+                                .user
+                                .id,
+                        barberId: widget.barberId,
+                        serviceId: widget.serviceId,
+                        servicePrice: Provider.of<ServicesProvider>(context,
+                                listen: false)
+                            .services
+                            .firstWhere(
+                                (element) => element.id == widget.serviceId)
+                            .normalPrice,
+                        bookingStart: widget.bookingStart.toString(),
+                        bookingEnd: widget.bookingEnd.toString(),
+                      );
+                      await Provider.of<AppointmentProvider>(context,
+                              listen: false)
+                          .fetchActiveAppointments(userProvider.user.id);
+                      await Provider.of<AppointmentProvider>(context,
+                              listen: false)
+                          .fetchAllActiveAppointments();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppointmentDetailsPage(
+                                Provider.of<AppointmentProvider>(context,
+                                        listen: false)
+                                    .allActiveAppointments
+                                    .last
+                                    .id,
+                                true,
+                                false),
+                          ));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   } on HttpException catch (e) {
                     _showDialog(e.toString());
                   } catch (e) {
@@ -355,9 +411,11 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
           const SizedBox(
             width: 10,
           ),
-          Text(
-            message,
-            style: const TextStyle(color: Colors.black87),
+          Flexible(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.black87),
+            ),
           ),
         ]),
         actions: <Widget>[

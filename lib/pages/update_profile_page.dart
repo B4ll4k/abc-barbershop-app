@@ -64,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           // 'An Error Occurred!',
           style: TextStyle(color: Colors.red),
         ),
-        content: Text(message),
+        content: Flexible(child: Text(message)),
         actions: <Widget>[
           TextButton(
             child: Text(

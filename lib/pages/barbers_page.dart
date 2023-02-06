@@ -1,46 +1,79 @@
+import 'dart:async';
+
 import 'package:geneva_barbers/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/book_appointment_page.dart';
+import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
+import '../providers/services_provider.dart';
+import '../providers/user_provider.dart';
 
-class BarberPage extends StatelessWidget {
+class BarberPage extends StatefulWidget {
   String serviceId;
   BarberPage(this.serviceId, {Key? key}) : super(key: key);
 
   @override
+  State<BarberPage> createState() => _BarberPageState();
+}
+
+class _BarberPageState extends State<BarberPage> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(
-          translation(context).barbers,
-          // 'Barbers',
-          style: TextStyle(
-              fontSize: 19.0, fontWeight: FontWeight.w400, color: Colors.white),
+    Future refreshBarbers() async {
+      await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
+    }
+
+    return RefreshIndicator(
+      onRefresh: refreshBarbers,
+      child: WillPopScope(
+        onWillPop: () async {
+          await Provider.of<ServicesProvider>(context, listen: false)
+              .fetchServices();
+          return Future.value(true);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+              onPressed: () async {
+                await Provider.of<ServicesProvider>(context, listen: false)
+                    .fetchServices();
+
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            title: Text(
+              translation(context).barbers,
+              // 'Barbers',
+              style: TextStyle(
+                  fontSize: 19.0,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white),
+            ),
+            centerTitle: true,
+          ),
+          body: _buildBarberCard(context),
         ),
       ),
-      body: _buildBarberCard(context),
     );
   }
 
   Widget _buildBarberCard(BuildContext context) {
     final provider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = provider.barbers;
+
     return ListView.builder(
       itemCount: barbers.length,
       itemBuilder: (ctx, i) => GestureDetector(
         onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                BookAppointmentPage(serviceId, barbers[i].id, "appointments"),
+            builder: (context) => BookAppointmentPage(
+                widget.serviceId, barbers[i].id, "appointments"),
           ),
         ),
         child: Card(

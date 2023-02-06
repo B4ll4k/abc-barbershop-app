@@ -26,6 +26,7 @@ class AppointmentDetailsPage extends StatefulWidget {
 
 class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Appointment? appointment;
+
   @override
   Widget build(BuildContext context) {
     appointment = Provider.of<AppointmentProvider>(context, listen: false)
@@ -34,54 +35,85 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     appointment ??= Provider.of<AppointmentProvider>(context, listen: false)
         .historyAppointments
         .firstWhereOrNull((element) => element.id == widget.appointmentId);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(
-          translation(context).appointmentDetails,
-          // "Appointment Details",
-          style: TextStyle(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget._isBooking) {
+          Navigator.of(context, rootNavigator: true)
+              .pushReplacementNamed('home');
+          return Future.value(false);
+        } else {
+          await Provider.of<ServicesProvider>(context, listen: false)
+              .fetchServices();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchBarbers();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchDaysoff();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchWorkingTime();
+          await Provider.of<AppointmentProvider>(context, listen: false)
+              .fetchAllActiveAppointments();
+          return Future.value(true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: Text(
+            translation(context).appointmentDetails,
+            // "Appointment Details",
+            style: TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            onPressed: () async {
+              if (widget._isBooking) {
+                Navigator.of(context, rootNavigator: true)
+                    .pushReplacementNamed('home');
+              } else {
+                Navigator.pop(context);
+                await Provider.of<ServicesProvider>(context, listen: false)
+                    .fetchServices();
+                await Provider.of<BarberProvider>(context, listen: false)
+                    .fetchBarbers();
+                await Provider.of<BarberProvider>(context, listen: false)
+                    .fetchDaysoff();
+                await Provider.of<BarberProvider>(context, listen: false)
+                    .fetchWorkingTime();
+                await Provider.of<AppointmentProvider>(context, listen: false)
+                    .fetchAllActiveAppointments();
+              }
+            },
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+          ),
         ),
-        leading: IconButton(
-          onPressed: () {
-            if (widget._isBooking) {
-              Navigator.of(context, rootNavigator: true)
-                  .pushReplacementNamed('home');
-            } else {
-              Navigator.pop(context);
-            }
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              widget._iscancel
+                  ? Container()
+                  : Text(
+                      translation(context).thanks,
+                      //"Thank you for booking!",
+                      style:
+                          TextStyle(fontSize: getProportionateScreenHeight(20)),
+                    ),
+              SizedBox(
+                height: getProportionateScreenHeight(10),
+              ),
+              _barberProfilePic(context),
+              _buildDetails()
+            ],
+          ),
         ),
+        bottomSheet: widget._iscancel
+            ? _buildCancelBtn(context)
+            : Container(
+                child: Text(""),
+              ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: getProportionateScreenHeight(10),
-            ),
-            widget._iscancel
-                ? Container()
-                : Text(
-                    translation(context).thanks,
-                    //"Thank you for booking!",
-                    style:
-                        TextStyle(fontSize: getProportionateScreenHeight(20)),
-                  ),
-            SizedBox(
-              height: getProportionateScreenHeight(10),
-            ),
-            _barberProfilePic(context),
-            _buildDetails()
-          ],
-        ),
-      ),
-      bottomSheet: widget._iscancel
-          ? _buildCancelBtn(context)
-          : Container(
-              child: Text(""),
-            ),
     );
   }
 

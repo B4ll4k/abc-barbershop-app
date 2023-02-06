@@ -10,34 +10,37 @@ import '../providers/barber_provider.dart';
 import '../size_config.dart';
 import 'package:blur/blur.dart';
 
-class StartPage extends StatelessWidget {
+class StartPage extends StatefulWidget {
   StartPage({Key? key}) : super(key: key);
 
   @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  @override
   Widget build(BuildContext context) {
+    Future refreshAppointments() async {
+      await Provider.of<ServicesProvider>(context, listen: false)
+          .fetchServices();
+      await Provider.of<BarberProvider>(context, listen: false).fetchBarbers();
+      await Provider.of<BarberProvider>(context, listen: false).fetchDaysoff();
+      await Provider.of<BarberProvider>(context, listen: false)
+          .fetchWorkingTime();
+
+      bool isAuth = Provider.of<UserProvider>(context, listen: false).isAuth();
+      if (isAuth) {
+        await Provider.of<AppointmentProvider>(context, listen: false)
+            .fetchActiveAppointments(
+                Provider.of<UserProvider>(context, listen: false).user.id);
+        await Provider.of<AppointmentProvider>(context, listen: false)
+            .fetchHistoryAppointments(
+                Provider.of<UserProvider>(context, listen: false).user.id);
+      }
+    }
+
     return RefreshIndicator(
-      onRefresh: () async {
-        await Provider.of<ServicesProvider>(context, listen: false)
-            .fetchServices();
-        await Provider.of<BarberProvider>(context, listen: false)
-            .fetchBarbers();
-        await Provider.of<BarberProvider>(context, listen: false)
-            .fetchDaysoff();
-
-        await Provider.of<BarberProvider>(context, listen: false)
-            .fetchWorkingTime();
-
-        bool isAuth =
-            Provider.of<UserProvider>(context, listen: false).isAuth();
-        if (isAuth) {
-          await Provider.of<AppointmentProvider>(context, listen: false)
-              .fetchActiveAppointments(
-                  Provider.of<UserProvider>(context, listen: false).user.id);
-          await Provider.of<AppointmentProvider>(context, listen: false)
-              .fetchHistoryAppointments(
-                  Provider.of<UserProvider>(context, listen: false).user.id);
-        }
-      },
+      onRefresh: refreshAppointments,
       color: Theme.of(context).colorScheme.secondary,
       child: Scaffold(
         resizeToAvoidBottomInset: true,

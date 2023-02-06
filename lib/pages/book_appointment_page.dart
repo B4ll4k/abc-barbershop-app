@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/barber_provider.dart';
+import '../providers/services_provider.dart';
+import '../providers/user_provider.dart';
 import '../size_config.dart';
 
 class BookAppointmentPage extends StatefulWidget {
@@ -44,6 +46,14 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   @override
   Widget build(BuildContext context) {
+    Future refreshAppointments() async {
+      Provider.of<BarberProvider>(context, listen: false);
+      await Provider.of<AppointmentProvider>(context, listen: false)
+          .fetchAllActiveAppointments();
+      activeApp = Provider.of<AppointmentProvider>(context, listen: false)
+          .allActiveAppointments;
+    }
+
     _barberId = widget.barberId;
 
     if (_isFirstTime) {
@@ -161,34 +171,50 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
     _isFirstTime = true;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Text(
-          translation(context).bookingP,
-          //"Booking Page",
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 40.0,
+    return RefreshIndicator(
+      onRefresh: refreshAppointments,
+      child: WillPopScope(
+        onWillPop: () async {
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchBarbers();
+          return Future.value(true);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            title: Text(
+              translation(context).bookingP,
+              //"Booking Page",
+              style: TextStyle(color: Colors.white),
             ),
-            _barberProfilePic(context),
-            _buildCalendar(context),
-            const SizedBox(height: 50.0),
-            _buildTimeFrame(context),
-            const SizedBox(height: 100.0),
-          ],
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () async {
+                await Provider.of<BarberProvider>(context, listen: false)
+                    .fetchBarbers();
+
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 40.0,
+                ),
+                _barberProfilePic(context),
+                _buildCalendar(context),
+                const SizedBox(height: 50.0),
+                _buildTimeFrame(context),
+                const SizedBox(height: 100.0),
+              ],
+            ),
+          ),
+          bottomSheet: _buildBookBtn(context),
         ),
       ),
-      bottomSheet: _buildBookBtn(context),
     );
   }
 
@@ -304,9 +330,19 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
                   DateTime bookingEnd =
                       bookingStart.add(const Duration(minutes: 30));
-                  if (widget.serviceId == 4.toString()) {
+                  final service = Provider.of<ServicesProvider>(context,
+                          listen: false)
+                      .services
+                      .firstWhere((element) => element.id == widget.serviceId);
+                  if (service.durationSeconds == 3600) {
                     bookingEnd = bookingStart.add(const Duration(minutes: 60));
                   }
+
+                  //   Coupe Cheveux et Barbe
+                  // if (widget.serviceId == 4.toString()) {
+                  //   bookingEnd = bookingStart.add(const Duration(minutes: 60));
+                  // }
+
                   for (var appointment in activeApp) {
                     if (appointment.barberId == widget.barberId &&
                         appointment.bookingStart == bookingStart) {
@@ -535,9 +571,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           const SizedBox(
             width: 10,
           ),
-          Text(
-            message,
-            style: const TextStyle(color: Colors.black87),
+          Flexible(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.black87),
+            ),
           ),
         ]),
         actions: <Widget>[

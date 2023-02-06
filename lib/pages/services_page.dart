@@ -3,33 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/barbers_page.dart';
+import '../providers/appointment_provider.dart';
+import '../providers/barber_provider.dart';
 import '../providers/services_provider.dart';
+import '../providers/user_provider.dart';
 import '../size_config.dart';
 
-class ServicesPage extends StatelessWidget {
+class ServicesPage extends StatefulWidget {
   ServicesPage({Key? key}) : super(key: key);
 
   @override
+  State<ServicesPage> createState() => _ServicesPageState();
+}
+
+class _ServicesPageState extends State<ServicesPage> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: Padding(
-          padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
-          child: Text(
-            translation(context).home,
-            // 'Home',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w400),
+    Future refreshServices() async {
+      await Provider.of<ServicesProvider>(context, listen: false)
+          .fetchServices();
+    }
+
+    return RefreshIndicator(
+      onRefresh: refreshServices,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          title: Padding(
+            padding: EdgeInsets.only(left: 10.0, bottom: 20.0, top: 10.0),
+            child: Text(
+              translation(context).home,
+              // 'Home',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400),
+            ),
           ),
+          // backgroundColor: Colors.white,
+          elevation: 0.0,
         ),
-        // backgroundColor: Colors.white,
-        elevation: 0.0,
+        body: _servicesWidgetBuilder(context),
       ),
-      body: _servicesWidgetBuilder(context),
     );
   }
 

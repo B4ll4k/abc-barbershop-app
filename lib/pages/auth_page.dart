@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../models/http_exception.dart';
+import '../providers/barber_provider.dart';
+import '../providers/services_provider.dart';
 import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
 import '../providers/appointment_provider.dart';
@@ -595,7 +597,7 @@ class _AuthPageState extends State<AuthPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(translation(context).errorOccured),
-        content: Text(message),
+        content: Flexible(child: Text(message)),
         actions: <Widget>[
           TextButton(
             child: Text(

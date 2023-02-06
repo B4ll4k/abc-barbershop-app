@@ -38,12 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   advancedStatusCheck(NewVersionPlus newVersion) async {
     final status = await newVersion.getVersionStatus();
     if (status != null) {
-      debugPrint(status.canUpdate.toString());
       if (status.canUpdate) {
-        debugPrint(status.releaseNotes);
-        debugPrint(status.appStoreLink);
-        debugPrint(status.localVersion);
-        debugPrint(status.storeVersion);
         newVersion.showUpdateDialog(
           context: context,
           versionStatus: status,
@@ -147,6 +142,7 @@ class _SplashScreenState extends State<SplashScreen> {
         .fetchWorkingHours();
     await Provider.of<AppointmentProvider>(context, listen: false)
         .fetchAllActiveAppointments();
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
   @override
