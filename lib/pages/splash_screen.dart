@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     final newVersion = NewVersionPlus(
         androidId: 'com.kentechno.abc_barbershop',
-        iOSId: "com.kentechno.genevaBarbers");
+        iOSId: "com.kentechno.barbershopApp");
 
     Future.delayed(Duration.zero)
         .then((_) => {advancedStatusCheck(newVersion)});
