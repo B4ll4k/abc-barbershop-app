@@ -1,11 +1,9 @@
-import 'package:geneva_barbers/localization/language_constraints.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../models/http_exception.dart';
-import '../providers/barber_provider.dart';
-import '../providers/services_provider.dart';
 import '../providers/user_provider.dart';
 import '../widgets/fonts/palatte.dart';
 import '../providers/appointment_provider.dart';

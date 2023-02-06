@@ -1,15 +1,12 @@
-import 'package:geneva_barbers/localization/language_constraints.dart';
-import 'package:geneva_barbers/pages/appointment_details_page.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
+import 'package:abc_barbershop/pages/appointment_details_page.dart';
 import 'package:flutter/material.dart';
-import 'package:geneva_barbers/pages/start_page.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 import '../models/http_exception.dart';
 import '../pages/auth_page.dart';
-import '../providers/appointment_provider.dart';
-import '../providers/appointment_provider.dart';
 import '../providers/appointment_provider.dart';
 import '../providers/barber_provider.dart';
 import '../providers/services_provider.dart';

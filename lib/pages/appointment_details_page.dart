@@ -1,15 +1,13 @@
-import 'package:geneva_barbers/localization/language_constraints.dart';
-import 'package:geneva_barbers/models/appointments.dart';
-import 'package:geneva_barbers/providers/appointment_provider.dart';
-import 'package:geneva_barbers/providers/services_provider.dart';
+import 'package:abc_barbershop/providers/appointment_provider.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
+import 'package:abc_barbershop/models/appointments.dart';
+import 'package:abc_barbershop/providers/services_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-import 'package:http/http.dart' as http;
 
 import '../providers/barber_provider.dart';
-import '../providers/user_provider.dart';
 import '../size_config.dart';
 
 class AppointmentDetailsPage extends StatefulWidget {

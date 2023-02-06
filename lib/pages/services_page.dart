@@ -1,12 +1,9 @@
-import 'package:geneva_barbers/localization/language_constraints.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/barbers_page.dart';
-import '../providers/appointment_provider.dart';
-import '../providers/barber_provider.dart';
 import '../providers/services_provider.dart';
-import '../providers/user_provider.dart';
 import '../size_config.dart';
 
 class ServicesPage extends StatefulWidget {

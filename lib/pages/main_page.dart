@@ -1,4 +1,4 @@
-import 'package:geneva_barbers/localization/language_constraints.dart';
+import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
