@@ -29,6 +29,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   static String _barberId = "-1";
 
   String _selectedTime = "";
+  String _selectedTime2 = "";
 
   int _selectedTimeIndex = -1;
 
@@ -70,8 +71,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
       }
 
       final barberProvider = Provider.of<BarberProvider>(context);
-      final times = barberProvider.findWorkingTime(
-          widget.barberId, _selectedDate.value.weekday.toString());
 
       final activeAppointmentsOriginal =
           Provider.of<AppointmentProvider>(context).allActiveAppointments;
@@ -106,6 +105,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           _isWorkingDay = false;
         }
       }
+      final times = barberProvider.findWorkingTime(
+          widget.barberId, _selectedDate.value.weekday.toString());
       if (_isDayAdded || _selectedDate.value.day != DateTime.now().day) {
         for (var element in times) {
           String startTimeString =
@@ -113,6 +114,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           String endTimeString = element["endTime"].toString().substring(0, 5);
           while (startTimeString != endTimeString) {
             if (_selectedTime == startTimeString ||
+                _selectedTime2 == startTimeString ||
                 activeAppointments.contains(startTimeString)) {
               _workingTime.addAll({startTimeString: true});
             } else {
@@ -140,6 +142,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           String endTimeString = element["endTime"].toString().substring(0, 5);
           while (startTimeString != endTimeString) {
             if (_selectedTime == startTimeString ||
+                _selectedTime2 == startTimeString ||
                 activeAppointments.contains(startTimeString)) {
               _workingTime.addAll({startTimeString: true});
             } else {
@@ -162,7 +165,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 startTimeString = startTimeString.replaceRange(0, 2, "$f");
               }
             }
-            //  }
           }
         }
       }
@@ -333,14 +335,10 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                           listen: false)
                       .services
                       .firstWhere((element) => element.id == widget.serviceId);
+                  //   Coupe Cheveux et Barbe
                   if (service.durationSeconds == 3600) {
                     bookingEnd = bookingStart.add(const Duration(minutes: 60));
                   }
-
-                  //   Coupe Cheveux et Barbe
-                  // if (widget.serviceId == 4.toString()) {
-                  //   bookingEnd = bookingStart.add(const Duration(minutes: 60));
-                  // }
 
                   for (var appointment in activeApp) {
                     if (appointment.barberId == widget.barberId &&
@@ -378,6 +376,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                     setState(() {
                       _workingTime[workingTime[_selectedTimeIndex]] = false;
                       _selectedTime = "";
+                      _selectedTime2 = "";
                       _selectedTimeIndex = -1;
                     });
 
@@ -434,6 +433,19 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                 _workingTime[workingTime[i]] = true;
                 _selectedTimeIndex = i;
                 _selectedTime = workingTime[i];
+
+                final service = Provider.of<ServicesProvider>(context,
+                        listen: false)
+                    .services
+                    .firstWhere((element) => element.id == widget.serviceId);
+                if (service.durationSeconds == 3600) {
+                  if (_selectedTimeIndex >= 0) {
+                    _workingTime[workingTime[_selectedTimeIndex + 1]] = false;
+                  }
+                  _workingTime[workingTime[i]] = true;
+                  _selectedTimeIndex = i;
+                  _selectedTime2 = workingTime[i + 1];
+                }
               });
             }
           },
@@ -548,6 +560,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           }
           _workingTime[workingTime[_selectedTimeIndex]] = false;
           _selectedTime = "";
+          _selectedTime2 = "";
           _selectedTimeIndex = -1;
         }
       });

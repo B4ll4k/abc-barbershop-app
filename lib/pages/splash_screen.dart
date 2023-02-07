@@ -142,7 +142,6 @@ class _SplashScreenState extends State<SplashScreen> {
         .fetchWorkingHours();
     await Provider.of<AppointmentProvider>(context, listen: false)
         .fetchAllActiveAppointments();
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
   @override
