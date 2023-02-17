@@ -46,89 +46,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   List<String> activeAppointments = [];
   var activeApp;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-
-  //   // selctedDateinitial(BuildContext context) {
-  //   int no_freedays_before_WorkingDay = 0;
-  //   final barberProvider = Provider.of<BarberProvider>(context);
-
-  //   var y = DateTime.now().add(const Duration(days: 365));
-  //   for (var element in barberProvider.barbers
-  //       .firstWhere((element) => element.id == _barberId)
-  //       .daysoff) {
-  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-  //       if (i == element) {
-  //         no_freedays_before_WorkingDay++;
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   final workingday = barberProvider.findWorkingDays(_barberId);
-
-  //   List<int> workingweekdays = [];
-  //   for (var element in workingday) {
-  //     workingweekdays.add(int.parse(element['weekDay'] as String));
-  //   }
-  //   for (var workingweekday in workingweekdays) {
-  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-  //       if (i.weekday == workingweekday) {
-  //         no_freedays_before_WorkingDay++;
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   _selectedDate = RestorableDateTime(
-  //       DateTime.now().add(Duration(days: no_freedays_before_WorkingDay)));
-  //   // return Container();
-  //   // }
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   int no_freedays_before_WorkingDay = 0;
-  //   final barberProvider = Provider.of<BarberProvider>(context);
-
-  //   var y = DateTime.now().add(const Duration(days: 365));
-  //   for (var element in barberProvider.barbers
-  //       .firstWhere((element) => element.id == _barberId)
-  //       .daysoff) {
-  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-  //       if (i == element) {
-  //         no_freedays_before_WorkingDay++;
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   final workingday = barberProvider.findWorkingDays(_barberId);
-
-  //   List<int> workingweekdays = [];
-  //   for (var element in workingday) {
-  //     workingweekdays.add(int.parse(element['weekDay'] as String));
-  //   }
-  //   for (var workingweekday in workingweekdays) {
-  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-  //       if (i.weekday == workingweekday) {
-  //         no_freedays_before_WorkingDay++;
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-
-  //   _selectedDate = RestorableDateTime(
-  //       DateTime.now().add(Duration(days: no_freedays_before_WorkingDay)));
-  //   super.didChangeDependencies();
-  // }
-  // int no_freedays_before_WorkingDay = 0;
-
   @override
   Widget build(BuildContext context) {
     Future refreshAppointments() async {
@@ -138,36 +55,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
       activeApp = Provider.of<AppointmentProvider>(context, listen: false)
           .allActiveAppointments;
     }
-
-    //final barberProviderr = Provider.of<BarberProvider>(context);
-
-    // var y = DateTime.now().add(const Duration(days: 365));
-    // for (var element in barberProviderr.barbers
-    //     .firstWhere((element) => element.id == _barberId)
-    //     .daysoff) {
-    //   for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-    //     if (i == element) {
-    //       no_freedays_before_WorkingDay++;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
-    // final workingday = barberProviderr.findWorkingDays(_barberId);
-
-    // List<int> workingweekdays = [];
-    // for (var element in workingday) {
-    //   workingweekdays.add(int.parse(element['weekDay'] as String));
-    // }
-    // for (var workingweekday in workingweekdays) {
-    //   for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
-    //     if (i.weekday == workingweekday) {
-    //       no_freedays_before_WorkingDay++;
-    //     } else {
-    //       break;
-    //     }
-    //   }
-    // }
 
     _barberId = widget.barberId;
 

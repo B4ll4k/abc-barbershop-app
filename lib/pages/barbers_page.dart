@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:abc_barbershop/localization/language_constraints.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/env.dart';
 import '../pages/book_appointment_page.dart';
 import '../providers/barber_provider.dart';
 import '../providers/services_provider.dart';
@@ -68,70 +71,47 @@ class _BarberPageState extends State<BarberPage> {
     return ListView.builder(
       itemCount: barbers.length,
       itemBuilder: (ctx, i) => GestureDetector(
-        onTap: () {
-          print("PRESSEDDD");
+        onTap: () async {
+          List<DateTime> dates = [];
+          final response = await http
+              .get(Uri.parse(EnviromentVariables.baseUrl + "daysoff/"));
+          final responseData = json.decode(response.body) as List<dynamic>;
+          for (var data in responseData) {
+            var freeData = data as Map<String, dynamic>;
+            var startDate = DateTime.parse(freeData["startDate"] as String);
+            var endDate = DateTime.parse(freeData["endDate"] as String);
+            var barberId = freeData["userId"] as String;
 
-          // final barberProvider =
-          //     Provider.of<BarberProvider>(context, listen: false);
+            if (barberId == barbers[i].id) {
+              dates.add(startDate);
 
-          var y = DateTime.now().add(const Duration(days: 365));
-          // List<DateTime> dayoffs = barbers
-          //     .firstWhere((element) => element.id == barbers[i].id)
-          //     .daysoff;
-          // // bool notf = false;
-          // for (var dd in dayoffs) {
-          //   print("EEEEEEEEEEE");
-          //   print(dd);
-          // }
-          // for (var x = DateTime.now();
-          //     x.isBefore(y);
-          //     x.add(Duration(days: 1))) {
-          //   print("objectsjdbkjxaadhsf");
+              while (startDate != endDate) {
+                startDate = startDate.add(const Duration(days: 1));
+                dates.add(startDate);
+              }
+            }
+          }
 
-          //   if (dayoffs.contains(x)) {
-          //     print("FREE");
-          //     FreedaysBeforeWorkingDay++;
-          //   } else {
-          //     print("NOT FREE");
-
-          //     break;
-          //   }
-          // }
-
-          // for (var x = DateTime.now();
-          //     x.isBefore(y);
-          //     x.add(Duration(days: 1))) {
-          //   for (var element in barbers
-          //       .firstWhere((element) => element.id == barbers[i].id)
-          //       .daysoff) {
-          //     if (x == element) {
-          //       print("FREE");
-          //       FreedaysBeforeWorkingDay++;
-          //     } else {
-          //       print("NOT FREE");
-          //       notf = true;
-          //       break;
-          //     }
-          //   }
-          //   if (notf) {
-          //     break;
-          //   }
-          // }
+          List<String> dayoffss = [];
+          for (var dd in dates) {
+            dayoffss.add(dd.toString().substring(0, 10));
+          }
 
           final workingday = provider.findWorkingDays(barbers[i].id);
-          // bool notweekd = false;
 
           for (var element in workingday) {
             workingweekdays.add(int.parse(element['weekDay'] as String));
           }
 
-          for (var x = DateTime.now().weekday; x <= 7; x++) {
-            if (workingweekdays.contains(x)) {
-              print("NOT FREE WEEKD");
-              break;
-            } else {
-              print("FREE WEEKD");
+          for (var f = 0; f < 365; f++) {
+            var xg = DateTime.now().add(Duration(days: f));
+
+            if (!workingweekdays.contains(xg.weekday)) {
               FreedaysBeforeWorkingDay++;
+            } else if (dayoffss.contains(xg.toString().substring(0, 10))) {
+              FreedaysBeforeWorkingDay++;
+            } else {
+              break;
             }
           }
 

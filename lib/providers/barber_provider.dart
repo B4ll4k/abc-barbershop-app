@@ -14,7 +14,7 @@ class BarberProvider with ChangeNotifier {
 
   String workingHours = "";
 
-  // List<int> _freeWeekdays = [];
+  List<DateTime> _offdays = [];
 
   // List<int> get freeWeekdays {
   //   return [..._freeWeekdays];
@@ -51,23 +51,6 @@ class BarberProvider with ChangeNotifier {
       throw HttpException(e.toString());
     }
   }
-
-  // Future<void> R() async {
-  //   _freeWeekdays = [];
-  //   try {
-  //     final response = await http
-  //         .get(Uri.parse(EnviromentVariables.baseUrl + "freeweekdays/"));
-  //     final resposeData = json.decode(response.body) as List<dynamic>;
-
-  //     for (var elementData in resposeData) {
-  //       var element = elementData as Map<String, dynamic>;
-  //       _freeWeekdays.add(int.parse(element["weekday_off"] as String));
-  //     }
-  //     notifyListeners();
-  //   } catch (e) {
-  //     throw HttpException(e.toString());
-  //   }
-  // }
 
   Future<void> fetchDaysoff() async {
     try {
