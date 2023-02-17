@@ -13,8 +13,10 @@ class BookAppointmentPage extends StatefulWidget {
   String barberId;
   String serviceId;
   String restorationId;
+  RestorableDateTime selDate;
 
-  BookAppointmentPage(this.serviceId, this.barberId, this.restorationId,
+  BookAppointmentPage(
+      this.serviceId, this.barberId, this.selDate, this.restorationId,
       {Key? key})
       : super(key: key);
 
@@ -44,6 +46,89 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   List<String> activeAppointments = [];
   var activeApp;
 
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+
+  //   // selctedDateinitial(BuildContext context) {
+  //   int no_freedays_before_WorkingDay = 0;
+  //   final barberProvider = Provider.of<BarberProvider>(context);
+
+  //   var y = DateTime.now().add(const Duration(days: 365));
+  //   for (var element in barberProvider.barbers
+  //       .firstWhere((element) => element.id == _barberId)
+  //       .daysoff) {
+  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+  //       if (i == element) {
+  //         no_freedays_before_WorkingDay++;
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   final workingday = barberProvider.findWorkingDays(_barberId);
+
+  //   List<int> workingweekdays = [];
+  //   for (var element in workingday) {
+  //     workingweekdays.add(int.parse(element['weekDay'] as String));
+  //   }
+  //   for (var workingweekday in workingweekdays) {
+  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+  //       if (i.weekday == workingweekday) {
+  //         no_freedays_before_WorkingDay++;
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //   }
+
+  //   _selectedDate = RestorableDateTime(
+  //       DateTime.now().add(Duration(days: no_freedays_before_WorkingDay)));
+  //   // return Container();
+  //   // }
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   int no_freedays_before_WorkingDay = 0;
+  //   final barberProvider = Provider.of<BarberProvider>(context);
+
+  //   var y = DateTime.now().add(const Duration(days: 365));
+  //   for (var element in barberProvider.barbers
+  //       .firstWhere((element) => element.id == _barberId)
+  //       .daysoff) {
+  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+  //       if (i == element) {
+  //         no_freedays_before_WorkingDay++;
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   final workingday = barberProvider.findWorkingDays(_barberId);
+
+  //   List<int> workingweekdays = [];
+  //   for (var element in workingday) {
+  //     workingweekdays.add(int.parse(element['weekDay'] as String));
+  //   }
+  //   for (var workingweekday in workingweekdays) {
+  //     for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+  //       if (i.weekday == workingweekday) {
+  //         no_freedays_before_WorkingDay++;
+  //       } else {
+  //         break;
+  //       }
+  //     }
+  //   }
+
+  //   _selectedDate = RestorableDateTime(
+  //       DateTime.now().add(Duration(days: no_freedays_before_WorkingDay)));
+  //   super.didChangeDependencies();
+  // }
+  // int no_freedays_before_WorkingDay = 0;
+
   @override
   Widget build(BuildContext context) {
     Future refreshAppointments() async {
@@ -53,6 +138,36 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
       activeApp = Provider.of<AppointmentProvider>(context, listen: false)
           .allActiveAppointments;
     }
+
+    //final barberProviderr = Provider.of<BarberProvider>(context);
+
+    // var y = DateTime.now().add(const Duration(days: 365));
+    // for (var element in barberProviderr.barbers
+    //     .firstWhere((element) => element.id == _barberId)
+    //     .daysoff) {
+    //   for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+    //     if (i == element) {
+    //       no_freedays_before_WorkingDay++;
+    //     } else {
+    //       break;
+    //     }
+    //   }
+    // }
+    // final workingday = barberProviderr.findWorkingDays(_barberId);
+
+    // List<int> workingweekdays = [];
+    // for (var element in workingday) {
+    //   workingweekdays.add(int.parse(element['weekDay'] as String));
+    // }
+    // for (var workingweekday in workingweekdays) {
+    //   for (var i = DateTime.now(); i.isBefore(y); i.add(Duration(days: 1))) {
+    //     if (i.weekday == workingweekday) {
+    //       no_freedays_before_WorkingDay++;
+    //     } else {
+    //       break;
+    //     }
+    //   }
+    // }
 
     _barberId = widget.barberId;
 
@@ -66,7 +181,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         workingweekdays.add(int.parse(element['weekDay'] as String));
       }
 
-      if (!workingweekdays.contains(_selectedDate.value.weekday)) {
+      if (!workingweekdays.contains(widget.selDate.value.weekday)) {
         _isWorkingDay = false;
       }
 
@@ -76,8 +191,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
           Provider.of<AppointmentProvider>(context).allActiveAppointments;
       activeApp = activeAppointmentsOriginal;
       for (var appointment in activeAppointmentsOriginal) {
-        if (appointment.bookingStart.month == _selectedDate.value.month &&
-            appointment.bookingStart.day == _selectedDate.value.day &&
+        if (appointment.bookingStart.month == widget.selDate.value.month &&
+            appointment.bookingStart.day == widget.selDate.value.day &&
             widget.barberId == appointment.barberId) {
           activeAppointments
               .add(appointment.bookingStart.toString().substring(11, 16));
@@ -101,13 +216,13 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
       for (var element in barberProvider.barbers
           .firstWhere((element) => element.id == _barberId)
           .daysoff) {
-        if (_selectedDate.value == element) {
+        if (widget.selDate.value == element) {
           _isWorkingDay = false;
         }
       }
       final times = barberProvider.findWorkingTime(
-          widget.barberId, _selectedDate.value.weekday.toString());
-      if (_isDayAdded || _selectedDate.value.day != DateTime.now().day) {
+          widget.barberId, widget.selDate.value.weekday.toString());
+      if (_isDayAdded || widget.selDate.value.day != DateTime.now().day) {
         for (var element in times) {
           String startTimeString =
               element["startTime"].toString().substring(0, 5);
@@ -178,6 +293,12 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         onWillPop: () async {
           await Provider.of<BarberProvider>(context, listen: false)
               .fetchBarbers();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchWorkingHours();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchDaysoff();
+          await Provider.of<BarberProvider>(context, listen: false)
+              .fetchWorkingTime();
           return Future.value(true);
         },
         child: Scaffold(
@@ -206,6 +327,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
                   height: 40.0,
                 ),
                 _barberProfilePic(context),
+                //selctedDateinitial(context),
                 _buildCalendar(context),
                 const SizedBox(height: 50.0),
                 _buildTimeFrame(context),
@@ -277,7 +399,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(DateFormat('EEE, MMM d, yyyy').format(_selectedDate.value),
+            Text(DateFormat('EEE, MMM d, yyyy').format(widget.selDate.value),
                 style: const TextStyle(
                   fontSize: 20,
                 )),
@@ -322,9 +444,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
               onPressed: () async {
                 if (_selectedTimeIndex >= 0 && _isWorkingDay) {
                   final bookingStart = DateTime(
-                    _selectedDate.value.year,
-                    _selectedDate.value.month,
-                    _selectedDate.value.day,
+                    widget.selDate.value.year,
+                    widget.selDate.value.month,
+                    widget.selDate.value.day,
                     int.parse(_selectedTime.substring(0, 2)),
                     int.parse(_selectedTime.substring(3)),
                   );
@@ -476,14 +598,15 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
   @override
   String? get restorationId => widget.restorationId;
 
-  final RestorableDateTime _selectedDate = RestorableDateTime(DateTime.now());
+  // RestorableDateTime _selectedDate = widget.selDate;
+
   late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
       RestorableRouteFuture<DateTime?>(
     onComplete: _selectDate,
     onPresent: (NavigatorState navigator, Object? arguments) {
       return navigator.restorablePush(
         _datePickerRoute,
-        arguments: _selectedDate.value.millisecondsSinceEpoch,
+        arguments: widget.selDate.value.millisecondsSinceEpoch,
       );
     },
   );
@@ -542,7 +665,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(_selectedDate, 'Selected_date');
+    registerForRestoration(widget.selDate, 'Selected_date');
     registerForRestoration(
         _restorableDatePickerRouteFuture, 'date_picker_route_future');
   }
@@ -552,7 +675,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage>
     final workingTime = _workingTime.keys.toList();
     if (newSelectedDate != null) {
       setState(() {
-        _selectedDate.value = newSelectedDate;
+        widget.selDate.value = newSelectedDate;
         activeAppointments = [];
         if (_selectedTimeIndex > 0) {
           for (var key in _workingTime.keys) {

@@ -63,17 +63,89 @@ class _BarberPageState extends State<BarberPage> {
   Widget _buildBarberCard(BuildContext context) {
     final provider = Provider.of<BarberProvider>(context, listen: false);
     final barbers = provider.barbers;
-
+    int FreedaysBeforeWorkingDay = 0;
+    List<int> workingweekdays = [];
     return ListView.builder(
       itemCount: barbers.length,
       itemBuilder: (ctx, i) => GestureDetector(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BookAppointmentPage(
-                widget.serviceId, barbers[i].id, "appointments"),
-          ),
-        ),
+        onTap: () {
+          print("PRESSEDDD");
+
+          // final barberProvider =
+          //     Provider.of<BarberProvider>(context, listen: false);
+
+          var y = DateTime.now().add(const Duration(days: 365));
+          // List<DateTime> dayoffs = barbers
+          //     .firstWhere((element) => element.id == barbers[i].id)
+          //     .daysoff;
+          // // bool notf = false;
+          // for (var dd in dayoffs) {
+          //   print("EEEEEEEEEEE");
+          //   print(dd);
+          // }
+          // for (var x = DateTime.now();
+          //     x.isBefore(y);
+          //     x.add(Duration(days: 1))) {
+          //   print("objectsjdbkjxaadhsf");
+
+          //   if (dayoffs.contains(x)) {
+          //     print("FREE");
+          //     FreedaysBeforeWorkingDay++;
+          //   } else {
+          //     print("NOT FREE");
+
+          //     break;
+          //   }
+          // }
+
+          // for (var x = DateTime.now();
+          //     x.isBefore(y);
+          //     x.add(Duration(days: 1))) {
+          //   for (var element in barbers
+          //       .firstWhere((element) => element.id == barbers[i].id)
+          //       .daysoff) {
+          //     if (x == element) {
+          //       print("FREE");
+          //       FreedaysBeforeWorkingDay++;
+          //     } else {
+          //       print("NOT FREE");
+          //       notf = true;
+          //       break;
+          //     }
+          //   }
+          //   if (notf) {
+          //     break;
+          //   }
+          // }
+
+          final workingday = provider.findWorkingDays(barbers[i].id);
+          // bool notweekd = false;
+
+          for (var element in workingday) {
+            workingweekdays.add(int.parse(element['weekDay'] as String));
+          }
+
+          for (var x = DateTime.now().weekday; x <= 7; x++) {
+            if (workingweekdays.contains(x)) {
+              print("NOT FREE WEEKD");
+              break;
+            } else {
+              print("FREE WEEKD");
+              FreedaysBeforeWorkingDay++;
+            }
+          }
+
+          RestorableDateTime _selectedDate = RestorableDateTime(
+              DateTime.now().add(Duration(days: FreedaysBeforeWorkingDay)));
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BookAppointmentPage(widget.serviceId,
+                  barbers[i].id, _selectedDate, "appointments"),
+            ),
+          );
+        },
         child: Card(
           shape: const BeveledRectangleBorder(),
           margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
