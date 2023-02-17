@@ -13,7 +13,7 @@ import '../providers/barber_provider.dart';
 import '../size_config.dart';
 
 import 'package:new_version_plus/new_version_plus.dart';
-//import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    //DefaultCacheManager().emptyCache();
+    DefaultCacheManager().emptyCache();
     final newVersion = NewVersionPlus(
         androidId: 'com.kentechno.abc_barbershop',
         iOSId: "com.kentechno.barbershopApp");
