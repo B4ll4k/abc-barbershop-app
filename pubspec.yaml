@@ -47,8 +47,8 @@ dependencies:
   intl: ^0.17.0
   # flutter_autoupdate: ^1.0.0
   new_version_plus: ^0.0.9
-  dependencies:
-  flutter_cache_manager: ^3.3.0
+   
+   
 
 dev_dependencies:
   flutter_test:
